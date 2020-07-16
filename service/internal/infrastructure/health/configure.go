@@ -8,11 +8,12 @@ import (
 
 // Config represents the configuration for the healthchecks subsystem
 type Config struct {
+	components map[string]Healthchecker
 }
 
 // New creates a new instance of the configuration
-func New() Config {
-	return Config{}
+func New(components map[string]Healthchecker) Config {
+	return Config{components: components}
 }
 
 // RegisterRoutes will register the HTTP routes for the healthchecks

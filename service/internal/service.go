@@ -12,7 +12,7 @@ type Service struct {
 
 // New creates a new instance of the service
 func New() Service {
-	health := health.New()
+	health := health.New(map[string]health.Healthchecker{})
 
 	return Service{
 		server: server.New([]server.Configurer{
