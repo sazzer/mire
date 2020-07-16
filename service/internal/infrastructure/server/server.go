@@ -14,7 +14,7 @@ type Server struct {
 }
 
 // New creates a new web server
-func New() Server {
+func New(config []Configurer) Server {
 	e := echo.New()
 
 	e.Use(middleware.Logger())
@@ -24,6 +24,10 @@ func New() Server {
 		AllowCredentials: true,
 	}))
 	e.Use(middleware.RequestID())
+
+	for _, c := range config {
+		c.RegisterRoutes(e)
+	}
 
 	return Server{
 		server: e,

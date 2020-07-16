@@ -1,6 +1,9 @@
 package internal
 
-import "github.com/sazzer/mire/service/internal/infrastructure/server"
+import (
+	"github.com/sazzer/mire/service/internal/infrastructure/health"
+	"github.com/sazzer/mire/service/internal/infrastructure/server"
+)
 
 // Service represents the actual Mire service and everything within it
 type Service struct {
@@ -9,8 +12,12 @@ type Service struct {
 
 // New creates a new instance of the service
 func New() Service {
+	health := health.New()
+
 	return Service{
-		server: server.New(),
+		server: server.New([]server.Configurer{
+			health,
+		}),
 	}
 }
 
