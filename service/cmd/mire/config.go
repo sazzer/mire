@@ -10,6 +10,8 @@ import (
 type Config struct {
 	// Debug indicates if we're running in Debug or Production mode
 	Debug bool
+	// Port represents the port number to listen on
+	Port uint16 `default:"3000"`
 }
 
 // LoadConfig will load the application configuration from the environment
