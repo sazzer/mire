@@ -2,10 +2,13 @@ package server
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	loglevels "github.com/labstack/gommon/log"
 	"github.com/rs/zerolog/log"
+	"github.com/ziflex/lecho/v2"
 )
 
 // Server represents the actual web server that does the work
@@ -15,15 +18,24 @@ type Server struct {
 
 // New creates a new web server
 func New(config []Configurer) Server {
-	e := echo.New()
+	logger := lecho.New(
+		os.Stderr,
+		lecho.WithLevel(loglevels.DEBUG),
+		lecho.WithTimestamp(),
+	)
 
-	e.Use(middleware.Logger())
+	e := echo.New()
+	e.Logger = logger
+
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowCredentials: true,
 	}))
 	e.Use(middleware.RequestID())
+	e.Use(lecho.Middleware(lecho.Config{
+		Logger: logger,
+	}))
 
 	for _, c := range config {
 		c.RegisterRoutes(e)
