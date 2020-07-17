@@ -1,8 +1,10 @@
 package tests
 
 import (
+	"context"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/sazzer/mire/service/internal"
 	"github.com/stretchr/testify/assert"
@@ -34,7 +36,10 @@ func (t *TestSubject) Inject(req *http.Request) TestResponse {
 
 // Get is a helper to perform a GET request to the given URL.
 func (t *TestSubject) Get(url string) TestResponse {
-	req, err := http.NewRequest("GET", url, nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	assert.NoError(t.t, err)
 
 	return t.Inject(req)
