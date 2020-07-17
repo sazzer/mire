@@ -10,6 +10,7 @@ import (
 
 func TestHealth(t *testing.T) {
 	service := tests.NewTestSubject(t)
+	defer service.Close()
 
 	res := service.Get("/health")
 

@@ -21,6 +21,6 @@ func main() {
 
 	log.Info().Msg("Starting Mire...")
 
-	service := internal.New()
+	service := internal.New(config.DatabaseURL)
 	service.Start(config.Port)
 }

@@ -12,16 +12,24 @@ import (
 
 // TestSubject represents a wrapper around the entire service we are testing.
 type TestSubject struct {
-	t       *testing.T
-	service internal.Service
+	t        *testing.T
+	database Database
+	service  internal.Service
 }
 
 // NewTestSubject creates a new test subject for us to test.
 func NewTestSubject(t *testing.T) TestSubject {
+	database := newDatabase(t)
+
 	return TestSubject{
-		t:       t,
-		service: internal.New(),
+		t:        t,
+		database: database,
+		service:  internal.New(database.url(t)),
 	}
+}
+
+func (t *TestSubject) Close() {
+	t.database.close(t.t)
 }
 
 // Inject will send the given HTTP Request to the service and return the response.

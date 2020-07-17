@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/sazzer/mire/service/internal/infrastructure/database"
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 	healthConfig "github.com/sazzer/mire/service/internal/infrastructure/health/configure"
 	"github.com/sazzer/mire/service/internal/infrastructure/server"
@@ -12,7 +13,9 @@ type Service struct {
 }
 
 // New creates a new instance of the service.
-func New() Service {
+func New(databaseURL string) Service {
+	database.New(databaseURL)
+
 	health := healthConfig.New(map[string]health.Healthchecker{})
 
 	return Service{
