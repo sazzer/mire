@@ -16,9 +16,11 @@ func main() {
 	if config.Debug {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
 	}
+
 	log.Logger = log.With().Caller().Logger()
 
 	log.Info().Msg("Starting Mire...")
+
 	service := internal.New()
 	service.Start(config.Port)
 }

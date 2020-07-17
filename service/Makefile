@@ -12,5 +12,8 @@ run: prepare
 test: prepare
 	go test ./...
 
+check: prepare
+	golangci-lint run
+	
 build: prepare
 	go build -o output/mire cmd/mire/*

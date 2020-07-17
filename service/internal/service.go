@@ -9,7 +9,7 @@ import (
 	"github.com/sazzer/mire/service/internal/infrastructure/server"
 )
 
-// Service represents the actual Mire service and everything within it
+// Service represents the actual Mire service and everything within it.
 type Service struct {
 	server server.Server
 }
@@ -22,7 +22,7 @@ func (m MockHealthComponent) Healthcheck(ctx context.Context) error {
 	return m.error
 }
 
-// New creates a new instance of the service
+// New creates a new instance of the service.
 func New() Service {
 	health := healthConfig.New(map[string]health.Healthchecker{
 		"mock": MockHealthComponent{error: errors.New("Oops")},
@@ -35,7 +35,7 @@ func New() Service {
 	}
 }
 
-// Start will start the service listening on the given port
+// Start will start the service listening on the given port.
 func (s Service) Start(port uint16) {
 	s.server.Start(port)
 }
