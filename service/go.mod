@@ -3,6 +3,7 @@ module github.com/sazzer/mire/service
 go 1.14
 
 require (
+	github.com/bradleyjkemp/cupaloy v2.3.0+incompatible
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.1.1
