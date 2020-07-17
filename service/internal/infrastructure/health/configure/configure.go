@@ -1,7 +1,7 @@
 package configure
 
 import (
-	"github.com/labstack/echo/v4"
+	"github.com/go-chi/chi"
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 	"github.com/sazzer/mire/service/internal/infrastructure/health/endpoints"
 	"github.com/sazzer/mire/service/internal/infrastructure/health/service"
@@ -18,11 +18,11 @@ func New(components map[string]health.Healthchecker) Config {
 }
 
 // RegisterRoutes will register the HTTP routes for the healthchecks.
-func (c Config) RegisterRoutes(e *echo.Echo) error {
+func (c Config) RegisterRoutes(r chi.Router) error {
 	healthcheckService := service.New(c.components)
 	endpoints := endpoints.New(healthcheckService)
 
-	e.GET("/health", endpoints.GetHealth)
+	r.Get("/health", endpoints.GetHealth)
 
 	return nil
 }

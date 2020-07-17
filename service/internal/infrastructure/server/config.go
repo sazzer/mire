@@ -1,8 +1,10 @@
 package server
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/go-chi/chi"
+)
 
 // Configurer is an interface that any type able to configure routes will implement.
 type Configurer interface {
-	RegisterRoutes(e *echo.Echo) error
+	RegisterRoutes(r chi.Router) error
 }

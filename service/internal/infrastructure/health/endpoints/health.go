@@ -3,7 +3,7 @@ package endpoints
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/sazzer/mire/service/internal/httpresponse"
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 )
 
@@ -18,8 +18,8 @@ func New(useCase health.HealthcheckUseCase) Health {
 }
 
 // GetHealth will get the health of the system.
-func (h *Health) GetHealth(c echo.Context) error {
-	result := h.useCase.CheckHealth(c.Request().Context())
+func (h *Health) GetHealth(w http.ResponseWriter, r *http.Request) {
+	result := h.useCase.CheckHealth(r.Context())
 
 	components := map[string]ComponentHealthModel{}
 
@@ -50,5 +50,5 @@ func (h *Health) GetHealth(c echo.Context) error {
 		Components: components,
 	}
 
-	return c.JSON(statusCode, output)
+	httpresponse.RenderJSON(w, statusCode, output)
 }

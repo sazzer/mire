@@ -2,50 +2,45 @@ package server
 
 import (
 	"fmt"
-	"os"
+	"net/http"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	loglevels "github.com/labstack/gommon/log"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/rs/zerolog/log"
-	"github.com/ziflex/lecho/v2"
 )
 
 // Server represents the actual web server that does the work.
 type Server struct {
-	server *echo.Echo
+	router *chi.Mux
 }
 
 // New creates a new web server.
 func New(config []Configurer) Server {
-	logger := lecho.New(
-		os.Stderr,
-		lecho.WithLevel(loglevels.DEBUG),
-		lecho.WithTimestamp(),
-	)
+	r := chi.NewRouter()
 
-	e := echo.New()
-	e.Logger = logger
-
-	e.Use(middleware.Recover())
-	e.Use(middleware.Gzip())
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.GetHead)
+	r.Use(middleware.Compress(5))
+	r.Use(cors.Handler(cors.Options{
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
-	}))
-	e.Use(middleware.RequestID())
-	e.Use(lecho.Middleware(lecho.Config{
-		Logger: logger,
+		MaxAge:           300,
 	}))
 
 	for _, c := range config {
-		err := c.RegisterRoutes(e)
+		err := c.RegisterRoutes(r)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to register routes")
 		}
 	}
 
 	return Server{
-		server: e,
+		router: r,
 	}
 }
 
@@ -53,7 +48,7 @@ func New(config []Configurer) Server {
 func (s Server) Start(port uint16) {
 	log.Info().Uint16("port", port).Msg("Starting server")
 
-	err := s.server.Start(fmt.Sprintf(":%d", port))
+	err := http.ListenAndServe(fmt.Sprintf(":%d", port), s.router)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to start server")
 	}

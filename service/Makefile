@@ -6,14 +6,14 @@ clean:
 prepare:
 	go get ./...
 	
-run: prepare
+run: prepare check
 	go run cmd/mire/*
 
-test: prepare
+test: prepare check
 	go test ./...
 
 check: prepare
 	golangci-lint run
 	
-build: prepare
+build: prepare test
 	go build -o output/mire cmd/mire/*
