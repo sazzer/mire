@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/rs/zerolog/log"
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 )
@@ -16,10 +18,10 @@ func New(components map[string]health.Healthchecker) Service {
 }
 
 // CheckHealth will check the overall system health and return this
-func (s Service) CheckHealth() health.SystemHealth {
+func (s Service) CheckHealth(ctx context.Context) health.SystemHealth {
 	components := map[string]health.ComponentHealth{}
 	for name, component := range s.components {
-		componentHealth := component.Healthcheck()
+		componentHealth := component.Healthcheck(ctx)
 		log.Debug().
 			AnErr("status", componentHealth).
 			Bool("healthy", componentHealth == nil).

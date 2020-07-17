@@ -19,5 +19,6 @@ func New(useCase health.HealthcheckUseCase) Health {
 
 // GetHealth will get the health of the system
 func (h *Health) GetHealth(c echo.Context) error {
+	h.useCase.CheckHealth(c.Request().Context())
 	return c.String(http.StatusOK, "Hello, World!")
 }

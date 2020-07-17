@@ -1,6 +1,7 @@
 package service_test
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -13,13 +14,13 @@ type MockComponent struct {
 	error error
 }
 
-func (m MockComponent) Healthcheck() error {
+func (m MockComponent) Healthcheck(ctx context.Context) error {
 	return m.error
 }
 
 func TestEmptySystem(t *testing.T) {
 	system := service.New(map[string]health.Healthchecker{})
-	result := system.CheckHealth()
+	result := system.CheckHealth(context.Background())
 
 	assert.Equal(t, health.StatusHealthy, result.Status())
 	assert.Equal(t, map[string]health.ComponentHealth{}, result.Components())
@@ -29,7 +30,7 @@ func TestHealthySystem(t *testing.T) {
 	system := service.New(map[string]health.Healthchecker{
 		"healthy": MockComponent{error: nil},
 	})
-	result := system.CheckHealth()
+	result := system.CheckHealth(context.Background())
 
 	assert.Equal(t, health.StatusHealthy, result.Status())
 	assert.Equal(t, map[string]health.ComponentHealth{
@@ -41,7 +42,7 @@ func TestUnhealthySystem(t *testing.T) {
 	system := service.New(map[string]health.Healthchecker{
 		"unhealthy": MockComponent{error: errors.New("Oops")},
 	})
-	result := system.CheckHealth()
+	result := system.CheckHealth(context.Background())
 
 	assert.Equal(t, health.StatusUnhealthy, result.Status())
 	assert.Equal(t, map[string]health.ComponentHealth{
@@ -54,7 +55,7 @@ func TestMixedSystem(t *testing.T) {
 		"healthy":   MockComponent{error: nil},
 		"unhealthy": MockComponent{error: errors.New("Oops")},
 	})
-	result := system.CheckHealth()
+	result := system.CheckHealth(context.Background())
 
 	assert.Equal(t, health.StatusUnhealthy, result.Status())
 	assert.Equal(t, map[string]health.ComponentHealth{
