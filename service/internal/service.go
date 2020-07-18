@@ -15,6 +15,7 @@ type Service struct {
 // New creates a new instance of the service.
 func New(databaseURL string) Service {
 	database := database.New(databaseURL)
+	database.Migrate()
 
 	health := healthConfig.New(map[string]health.Healthchecker{
 		"db": database,

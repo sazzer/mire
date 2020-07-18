@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := allTests
 
-clean:
+clean: clean-packr
 	rm -rf output
 
 prepare:
@@ -23,5 +23,12 @@ allTests: prepare check test integration
 check: prepare
 	golangci-lint run
 	
-build: prepare test clean
+build: prepare test clean build-packr
 	go build -o output/mire cmd/mire/*
+
+clean-packr:
+	cd internal/infrastructure/database/ && packr2 clean
+
+build-packr:
+	cd internal/infrastructure/database/ && packr2 build
+	
