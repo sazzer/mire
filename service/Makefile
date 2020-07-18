@@ -15,6 +15,9 @@ test: prepare check
 integration: prepare check
 	go test ./tests/...
 
+integrationUpdate: prepare check
+	UPDATE_SNAPSHOTS=true go test ./tests/...
+
 allTests: prepare check test integration
 
 check: prepare
