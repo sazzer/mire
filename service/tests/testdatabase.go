@@ -15,7 +15,7 @@ type Database struct {
 	container testcontainers.Container
 }
 
-func newDatabase(t *testing.T) Database {
+func NewDatabase(t *testing.T) Database {
 	log.Info().Msg("Starting database")
 
 	ctx := context.Background()
@@ -34,7 +34,7 @@ func newDatabase(t *testing.T) Database {
 	return Database{postgres}
 }
 
-func (d Database) close(t *testing.T) {
+func (d Database) Close(t *testing.T) {
 	log.Info().Msg("Closing database")
 
 	ctx := context.Background()
@@ -42,7 +42,7 @@ func (d Database) close(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func (d Database) url(t *testing.T) string {
+func (d Database) URL(t *testing.T) string {
 	ctx := context.Background()
 	ip, err := d.container.Host(ctx)
 	assert.NoError(t, err)

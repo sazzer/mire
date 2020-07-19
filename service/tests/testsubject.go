@@ -19,17 +19,17 @@ type TestSubject struct {
 
 // NewTestSubject creates a new test subject for us to test.
 func NewTestSubject(t *testing.T) TestSubject {
-	database := newDatabase(t)
+	database := NewDatabase(t)
 
 	return TestSubject{
 		t:        t,
 		database: database,
-		service:  internal.New(database.url(t)),
+		service:  internal.New(database.URL(t)),
 	}
 }
 
 func (t *TestSubject) Close() {
-	t.database.close(t.t)
+	t.database.Close(t.t)
 }
 
 // Inject will send the given HTTP Request to the service and return the response.

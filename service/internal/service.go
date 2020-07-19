@@ -22,7 +22,7 @@ func New(databaseURL string) Service {
 		"db": database,
 	})
 
-	players := playersConfig.New()
+	players := playersConfig.New(database)
 
 	return Service{
 		server: server.New([]server.Configurer{

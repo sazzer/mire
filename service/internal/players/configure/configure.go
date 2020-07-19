@@ -2,7 +2,8 @@ package configure
 
 import (
 	"github.com/go-chi/chi"
-	"github.com/sazzer/mire/service/internal/players/database"
+	"github.com/sazzer/mire/service/internal/infrastructure/database"
+	"github.com/sazzer/mire/service/internal/players/db"
 	"github.com/sazzer/mire/service/internal/players/service"
 )
 
@@ -12,8 +13,8 @@ type Config struct {
 }
 
 // New creates a new instance of the configuration.
-func New() Config {
-	repository := database.Repository{}
+func New(database database.Database) Config {
+	repository := db.New(database)
 	service := service.New(repository)
 
 	return Config{service}
