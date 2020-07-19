@@ -9,6 +9,7 @@ require (
 	github.com/go-chi/cors v1.1.1
 	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
+	github.com/google/uuid v1.1.1
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jmoiron/sqlx v1.2.0
