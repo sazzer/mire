@@ -33,10 +33,7 @@ func New(config []Configurer) Server {
 	}))
 
 	for _, c := range config {
-		err := c.RegisterRoutes(r)
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to register routes")
-		}
+		c.RegisterRoutes(r)
 	}
 
 	return Server{

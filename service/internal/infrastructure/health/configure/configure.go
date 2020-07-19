@@ -18,11 +18,9 @@ func New(components map[string]health.Healthchecker) Config {
 }
 
 // RegisterRoutes will register the HTTP routes for the healthchecks.
-func (c Config) RegisterRoutes(r chi.Router) error {
+func (c Config) RegisterRoutes(r chi.Router) {
 	healthcheckService := service.New(c.components)
 	endpoints := endpoints.New(healthcheckService)
 
 	r.Get("/health", endpoints.GetHealth)
-
-	return nil
 }
