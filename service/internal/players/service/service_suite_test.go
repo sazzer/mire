@@ -7,30 +7,30 @@ import (
 	"github.com/sazzer/mire/service/internal/players/db"
 	"github.com/sazzer/mire/service/internal/players/service"
 	"github.com/sazzer/mire/service/tests"
-	"github.com/stretchr/testify/suite"
 )
 
 type PlayerServiceSuite struct {
-	suite.Suite
 	db       tests.Database
 	database database.Database
 	service  service.PlayerService
 }
 
-func (suite *PlayerServiceSuite) SetupTest() {
-	suite.db = tests.NewDatabase(suite.T())
+func NewSuite(t *testing.T) PlayerServiceSuite {
+	dbContainer := tests.NewDatabase(t)
 
-	suite.database = database.New(suite.db.URL(suite.T()))
-	suite.database.Migrate()
+	database := database.New(dbContainer.URL(t))
+	database.Migrate()
 
-	repo := db.New(suite.database)
-	suite.service = service.New(repo)
+	repo := db.New(database)
+	service := service.New(repo)
+
+	return PlayerServiceSuite{
+		db:       dbContainer,
+		database: database,
+		service:  service,
+	}
 }
 
-func (suite *PlayerServiceSuite) TearDownTest() {
-	suite.db.Close(suite.T())
-}
-
-func TestPlayerServiceSuite(t *testing.T) {
-	suite.Run(t, new(PlayerServiceSuite))
+func (suite *PlayerServiceSuite) Close(t *testing.T) {
+	suite.db.Close(t)
 }

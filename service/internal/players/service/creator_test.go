@@ -2,11 +2,16 @@ package service_test
 
 import (
 	"context"
+	"testing"
 
 	"github.com/sazzer/mire/service/internal/players"
+	"github.com/stretchr/testify/assert"
 )
 
-func (suite *PlayerServiceSuite) TestCreatePlayerSuccess() {
+func TestCreatePlayerSuccess(t *testing.T) {
+	suite := NewSuite(t)
+	defer suite.Close(t)
+
 	data := players.PlayerData{
 		Email:           "test@example.com",
 		DisplayName:     "Test User",
@@ -14,7 +19,7 @@ func (suite *PlayerServiceSuite) TestCreatePlayerSuccess() {
 	}
 
 	player, err := suite.service.CreatePlayer(context.Background(), data)
-	suite.NoError(err)
+	assert.NoError(t, err)
 
-	suite.Equal(data, player.Data)
+	assert.Equal(t, data, player.Data)
 }
