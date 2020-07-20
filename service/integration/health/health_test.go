@@ -5,11 +5,11 @@ import (
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/sazzer/mire/service/tests"
+	"github.com/sazzer/mire/service/integration"
 )
 
 func TestHealth(t *testing.T) {
-	service := tests.NewTestSubject(t)
+	service := integration.NewTestSubject(t)
 	defer service.Close()
 
 	res := service.Get("/health")
