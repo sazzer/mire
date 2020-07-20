@@ -1,4 +1,4 @@
-package integration
+package databasesuite
 
 import (
 	"context"
@@ -11,11 +11,11 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-type Database struct {
+type TestDatabase struct {
 	container testcontainers.Container
 }
 
-func NewDatabase(t *testing.T) Database {
+func NewDatabase(t *testing.T) TestDatabase {
 	log.Info().Msg("Starting database")
 
 	ctx := context.Background()
@@ -31,10 +31,10 @@ func NewDatabase(t *testing.T) Database {
 	})
 	assert.NoError(t, err)
 
-	return Database{postgres}
+	return TestDatabase{postgres}
 }
 
-func (d Database) Close(t *testing.T) {
+func (d TestDatabase) Close(t *testing.T) {
 	log.Info().Msg("Closing database")
 
 	ctx := context.Background()
@@ -42,7 +42,7 @@ func (d Database) Close(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func (d Database) URL(t *testing.T) string {
+func (d TestDatabase) URL(t *testing.T) string {
 	ctx := context.Background()
 	ip, err := d.container.Host(ctx)
 	assert.NoError(t, err)

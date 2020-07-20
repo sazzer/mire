@@ -7,19 +7,20 @@ import (
 	"time"
 
 	"github.com/sazzer/mire/service/internal"
+	"github.com/sazzer/mire/service/test/databasesuite"
 	"github.com/stretchr/testify/assert"
 )
 
 // TestSubject represents a wrapper around the entire service we are testing.
 type TestSubject struct {
 	t        *testing.T
-	database Database
+	database databasesuite.TestDatabase
 	service  internal.Service
 }
 
 // NewTestSubject creates a new test subject for us to test.
 func NewTestSubject(t *testing.T) TestSubject {
-	database := NewDatabase(t)
+	database := databasesuite.NewDatabase(t)
 
 	return TestSubject{
 		t:        t,
