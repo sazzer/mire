@@ -1,20 +1,20 @@
-package database
+package databasesuite
 
 import (
 	"testing"
 
-	"github.com/sazzer/mire/service/test/databasesuite"
+	"github.com/sazzer/mire/service/internal/infrastructure/database"
 )
 
 type Suite struct {
-	db       databasesuite.TestDatabase
-	Database Database
+	db       TestDatabase
+	Database database.Database
 }
 
 func NewSuite(t *testing.T) Suite {
-	dbContainer := databasesuite.NewDatabase(t)
+	dbContainer := NewDatabase(t)
 
-	database := New(dbContainer.URL(t))
+	database := database.New(dbContainer.URL(t))
 	database.Migrate()
 
 	return Suite{
