@@ -8,11 +8,28 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+var (
+	ErrNoRows       = errors.New("mire: db: no rows returned")
+	ErrMultipleRows = errors.New("mire: db: multiple errors returned")
+)
+
+type UnexpectedError struct {
+	cause error
+}
+
+func (e UnexpectedError) Error() string {
+	return "mire: db: unexpected database error"
+}
+
+func (e UnexpectedError) Unwrap() error {
+	return e.cause
+}
+
 func (d Database) queryOne(ctx context.Context, output interface{}, f func(context.Context) (*sqlx.Rows, error)) error {
 	rows, err := f(ctx)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to execute query")
-		return err
+		return UnexpectedError{err}
 	}
 
 	// Ensure the resultset is closed afterwards
@@ -26,21 +43,21 @@ func (d Database) queryOne(ctx context.Context, output interface{}, f func(conte
 	// Fail on zero rows
 	if !rows.Next() {
 		log.Warn().Err(rows.Err()).Msg("No rows returned")
-		return errors.New("no rows returned")
+		return ErrNoRows
 	}
 
 	// Parse the first row into our output object
 	err = rows.StructScan(output)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to parse result")
-		return err
+		return UnexpectedError{err}
 	}
 
 	log.Debug().Interface("result", output).Msg("Read value from database")
 
 	// Failure on 2+ rows
 	if rows.Next() {
-		return errors.New("multiple rows returned")
+		return ErrMultipleRows
 	}
 
 	return nil
