@@ -4,16 +4,14 @@ import (
 	"context"
 	"errors"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/rs/zerolog/log"
 )
 
-func (d Database) QueryOne(ctx context.Context, output interface{}, query string, binds interface{}) error {
-	log.Debug().Str("sql", query).Interface("binds", binds).Msg("Executing query")
-
-	// Actually do the query
-	rows, err := d.db.NamedQueryContext(ctx, query, binds)
+func (d Database) queryOne(ctx context.Context, output interface{}, f func(context.Context) (*sqlx.Rows, error)) error {
+	rows, err := f(ctx)
 	if err != nil {
-		log.Warn().Err(err).Str("sql", query).Interface("binds", binds).Msg("Failed to execute query")
+		log.Warn().Err(err).Msg("Failed to execute query")
 		return err
 	}
 
@@ -34,11 +32,11 @@ func (d Database) QueryOne(ctx context.Context, output interface{}, query string
 	// Parse the first row into our output object
 	err = rows.StructScan(output)
 	if err != nil {
-		log.Warn().Err(err).Str("sql", query).Interface("binds", binds).Msg("Failed to parse result")
+		log.Warn().Err(err).Msg("Failed to parse result")
 		return err
 	}
 
-	log.Debug().Str("sql", query).Interface("binds", binds).Interface("result", output).Msg("Read value from database")
+	log.Debug().Interface("result", output).Msg("Read value from database")
 
 	// Failure on 2+ rows
 	if rows.Next() {
@@ -46,4 +44,20 @@ func (d Database) QueryOne(ctx context.Context, output interface{}, query string
 	}
 
 	return nil
+}
+
+func (d Database) QueryOneNamed(ctx context.Context, output interface{}, query string, binds interface{}) error {
+	log.Debug().Str("sql", query).Interface("binds", binds).Msg("Executing query")
+
+	return d.queryOne(ctx, output, func(ctx context.Context) (*sqlx.Rows, error) {
+		return d.db.NamedQueryContext(ctx, query, binds)
+	})
+}
+
+func (d Database) QueryOneOrdered(ctx context.Context, output interface{}, query string, binds ...interface{}) error {
+	log.Debug().Str("sql", query).Interface("binds", binds).Msg("Executing query")
+
+	return d.queryOne(ctx, output, func(ctx context.Context) (*sqlx.Rows, error) {
+		return d.db.QueryxContext(ctx, query, binds...)
+	})
 }

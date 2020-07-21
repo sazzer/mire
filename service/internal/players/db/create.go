@@ -17,7 +17,7 @@ func (r Repository) CreatePlayer(ctx context.Context, data players.PlayerData) (
 
 	output := PlayerModel{}
 
-	err = r.database.QueryOne(ctx, &output,
+	err = r.database.QueryOneNamed(ctx, &output,
 		`INSERT INTO players(player_id, version, created, updated, email, display_name, authentication)
 		VALUES(:player_id, :version, :created, :updated, :email, :display_name, :authentication)
 		RETURNING *`,
