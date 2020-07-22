@@ -5,7 +5,7 @@ import (
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 	healthConfig "github.com/sazzer/mire/service/internal/infrastructure/health/configure"
 	"github.com/sazzer/mire/service/internal/infrastructure/server"
-	playersConfig "github.com/sazzer/mire/service/internal/players/configure"
+	"github.com/sazzer/mire/service/internal/players"
 )
 
 // Service represents the actual Mire service and everything within it.
@@ -22,7 +22,7 @@ func New(databaseURL string) Service {
 		"db": database,
 	})
 
-	players := playersConfig.New(database)
+	players := players.New(database)
 
 	return Service{
 		server: server.New([]server.Configurer{
