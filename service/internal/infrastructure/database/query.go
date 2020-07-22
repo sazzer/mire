@@ -2,34 +2,16 @@ package database
 
 import (
 	"context"
-	"errors"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/rs/zerolog/log"
 )
 
-var (
-	ErrNoRows       = errors.New("mire: db: no rows returned")
-	ErrMultipleRows = errors.New("mire: db: multiple errors returned")
-)
-
-type UnexpectedError struct {
-	cause error
-}
-
-func (e UnexpectedError) Error() string {
-	return "mire: db: unexpected database error"
-}
-
-func (e UnexpectedError) Unwrap() error {
-	return e.cause
-}
-
 func (d Database) queryOne(ctx context.Context, output interface{}, f func(context.Context) (*sqlx.Rows, error)) error {
 	rows, err := f(ctx)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to execute query")
-		return UnexpectedError{err}
+		return translateError(err)
 	}
 
 	// Ensure the resultset is closed afterwards
@@ -50,7 +32,7 @@ func (d Database) queryOne(ctx context.Context, output interface{}, f func(conte
 	err = rows.StructScan(output)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to parse result")
-		return UnexpectedError{err}
+		return translateError(err)
 	}
 
 	log.Debug().Interface("result", output).Msg("Read value from database")
