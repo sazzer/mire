@@ -12,6 +12,9 @@ run: prepare check
 test: prepare check
 	go test ./internal/...
 
+testFast: prepare check
+	go test ./internal/... -short
+
 integration: prepare check
 	go test ./integration/...
 

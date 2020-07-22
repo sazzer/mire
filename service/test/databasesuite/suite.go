@@ -12,6 +12,11 @@ type Suite struct {
 }
 
 func NewSuite(t *testing.T) Suite {
+	if testing.Short() {
+		t.Skip("Skipping database tests")
+		return Suite{}
+	}
+
 	dbContainer := NewDatabase(t)
 
 	database := database.New(dbContainer.URL(t))

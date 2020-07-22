@@ -16,6 +16,11 @@ type TestDatabase struct {
 }
 
 func NewDatabase(t *testing.T) TestDatabase {
+	if testing.Short() {
+		t.Skip("Skipping database tests")
+		return TestDatabase{}
+	}
+
 	log.Info().Msg("Starting database")
 
 	ctx := context.Background()
@@ -35,6 +40,11 @@ func NewDatabase(t *testing.T) TestDatabase {
 }
 
 func (d TestDatabase) Close(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping database tests")
+		return
+	}
+
 	log.Info().Msg("Closing database")
 
 	ctx := context.Background()
