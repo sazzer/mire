@@ -13,6 +13,7 @@ var (
 	ErrMultipleRows = errors.New("mire: db: multiple errors returned")
 )
 
+// UnexpectedError represents the case where something goes wrong in a database call but we don't know what.
 type UnexpectedError struct {
 	cause error
 }
@@ -25,6 +26,7 @@ func (e UnexpectedError) Unwrap() error {
 	return e.cause
 }
 
+// ConstraintViolationError represents when a database call violates a database constraint of some kind.
 type ConstraintViolationError struct {
 	cause      error
 	Constraint string
@@ -38,6 +40,10 @@ func (e ConstraintViolationError) Unwrap() error {
 	return e.cause
 }
 
+// translateError converts an incoming error into an outgoing one.
+// If the incoming error was a pgx.PgError that represents a Constraint Violation of some form then
+// the result is a ConstraintViolationError.
+// Otherwise it's an UnexpectedError.
 func translateError(err error) error {
 	if e, ok := err.(pgx.PgError); ok {
 		log.Warn().Err(err).Str("code", e.Code).Msg("Postgres error")

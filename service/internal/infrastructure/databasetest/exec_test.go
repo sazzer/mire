@@ -14,7 +14,7 @@ func TestExecNoParamsSuccess(t *testing.T) {
 	suite := databasesuite.NewSuite(t)
 	defer suite.Close(t)
 
-	count, err := suite.Database.ExecOneOrdered(context.Background(), "CREATE TABLE testing(id SERIAL PRIMARY KEY)")
+	count, err := suite.Database.ExecOrdered(context.Background(), "CREATE TABLE testing(id SERIAL PRIMARY KEY)")
 
 	assert.NoError(t, err)
 	assert.Equal(t, int64(0), count)
@@ -33,7 +33,7 @@ func TestExecNoParamsMalformed(t *testing.T) {
 	suite := databasesuite.NewSuite(t)
 	defer suite.Close(t)
 
-	_, err := suite.Database.ExecOneOrdered(context.Background(), "CREATE TABLE testing")
+	_, err := suite.Database.ExecOrdered(context.Background(), "CREATE TABLE testing")
 
 	assert.True(t, errors.As(err, &database.UnexpectedError{}))
 }
@@ -42,14 +42,14 @@ func TestExecNoParamsConstraintViolation(t *testing.T) {
 	suite := databasesuite.NewSuite(t)
 	defer suite.Close(t)
 
-	_, err := suite.Database.ExecOneOrdered(context.Background(), "CREATE TABLE testing(id INT PRIMARY KEY)")
+	_, err := suite.Database.ExecOrdered(context.Background(), "CREATE TABLE testing(id INT PRIMARY KEY)")
 	assert.NoError(t, err)
 
-	count, err := suite.Database.ExecOneOrdered(context.Background(), "INSERT INTO testing(id) VALUES (1)")
+	count, err := suite.Database.ExecOrdered(context.Background(), "INSERT INTO testing(id) VALUES (1)")
 	assert.NoError(t, err)
 	assert.Equal(t, int64(1), count)
 
-	_, err = suite.Database.ExecOneOrdered(context.Background(), "INSERT INTO testing(id) VALUES (1)")
+	_, err = suite.Database.ExecOrdered(context.Background(), "INSERT INTO testing(id) VALUES (1)")
 	assert.True(t, errors.As(err, &database.ConstraintViolationError{}))
 
 	e, _ := err.(database.ConstraintViolationError)
