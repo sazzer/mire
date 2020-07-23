@@ -10,6 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO: Make these tests run off of a Suite
+
 func TestExecNoParamsSuccess(t *testing.T) {
 	suite := databasesuite.NewSuite(t)
 	defer suite.Close(t)

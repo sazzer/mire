@@ -7,13 +7,13 @@ import (
 
 // Config represents the configuration for the players subsystem.
 type Config struct {
-	Service service
+	Service Service
 }
 
 // New creates a new instance of the configuration.
 func New(database database.Database) Config {
 	repository := repository{database}
-	service := service{repository}
+	service := Service{repository}
 
 	return Config{service}
 }
