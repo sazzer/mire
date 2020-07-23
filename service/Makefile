@@ -1,0 +1,37 @@
+.DEFAULT_GOAL := allTests
+
+clean: clean-packr
+	rm -rf output
+
+prepare:
+	go get ./...
+	
+run: prepare check
+	go run cmd/mire/*
+
+test: prepare check
+	go test ./internal/...
+
+testFast: prepare check
+	go test ./internal/... -short
+
+integration: prepare check
+	go test ./integration/...
+
+integrationUpdate: prepare check
+	UPDATE_SNAPSHOTS=true go test ./integration/...
+
+allTests: prepare check test integration
+
+check: prepare
+	golangci-lint run
+	
+build: prepare test clean build-packr
+	go build -o output/mire cmd/mire/*
+
+clean-packr:
+	cd internal/infrastructure/database/ && packr2 clean
+
+build-packr:
+	cd internal/infrastructure/database/ && packr2 build
+	
