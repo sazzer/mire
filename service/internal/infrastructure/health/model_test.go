@@ -8,25 +8,25 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHealthyComponent(t *testing.T) {
+func TestHealthyComponentHealth(t *testing.T) {
 	component := health.ComponentHealth{nil}
 	assert.Nil(t, component.Error)
 	assert.Equal(t, health.StatusHealthy, component.Status())
 }
 
-func TestUnhealthyComponent(t *testing.T) {
+func TestUnhealthyComponentHealth(t *testing.T) {
 	component := health.ComponentHealth{errors.New("Oops")}
 	assert.Equal(t, errors.New("Oops"), component.Error)
 	assert.Equal(t, health.StatusUnhealthy, component.Status())
 }
 
-func TestEmptySystem(t *testing.T) {
+func TestEmptySystemHealth(t *testing.T) {
 	system := health.SystemHealth{map[string]health.ComponentHealth{}}
 	assert.Equal(t, health.StatusHealthy, system.Status())
 	assert.Equal(t, map[string]health.ComponentHealth{}, system.Components)
 }
 
-func TestHealthySystem(t *testing.T) {
+func TestHealthySystemHealth(t *testing.T) {
 	system := health.SystemHealth{map[string]health.ComponentHealth{
 		"healthy": {nil},
 	}}
@@ -36,7 +36,7 @@ func TestHealthySystem(t *testing.T) {
 	}, system.Components)
 }
 
-func TestUnhealthySystem(t *testing.T) {
+func TestUnhealthySystemHealth(t *testing.T) {
 	system := health.SystemHealth{map[string]health.ComponentHealth{
 		"unhealthy": {errors.New("Oops")},
 	}}
@@ -46,7 +46,7 @@ func TestUnhealthySystem(t *testing.T) {
 	}, system.Components)
 }
 
-func TestMixedSystem(t *testing.T) {
+func TestMixedSystemHealth(t *testing.T) {
 	system := health.SystemHealth{map[string]health.ComponentHealth{
 		"healthy":   {nil},
 		"unhealthy": {errors.New("Oops")},
