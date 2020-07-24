@@ -1,8 +1,7 @@
 package internal
 
 import (
-	"context"
-
+	"github.com/sazzer/mire/service/integration/database"
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 	"github.com/sazzer/mire/service/internal/infrastructure/server"
 )
@@ -14,9 +13,11 @@ type Mire struct {
 
 // New creates a new instance of the Mire service
 func New(databaseURL string) Mire {
+	db := database.New(databaseURL)
+
 	health := health.NewConfig(
 		map[string]health.Healthchecker{
-			"passing": health.HealthcheckerFunc(func(_ context.Context) error { return nil }),
+			"db": db,
 		},
 	)
 

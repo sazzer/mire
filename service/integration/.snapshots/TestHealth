@@ -1,1 +1,1 @@
-(*bytes.Buffer)({"status":"HEALTHY","components":{"passing":{"status":"HEALTHY"}}})
+(*bytes.Buffer)({"status":"HEALTHY","components":{"db":{"status":"HEALTHY"}}})
