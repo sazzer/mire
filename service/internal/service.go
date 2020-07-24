@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"errors"
 
 	"github.com/sazzer/mire/service/internal/infrastructure/health"
 	"github.com/sazzer/mire/service/internal/infrastructure/server"
@@ -18,7 +17,6 @@ func New(databaseURL string) Mire {
 	health := health.NewConfig(
 		map[string]health.Healthchecker{
 			"passing": health.HealthcheckerFunc(func(_ context.Context) error { return nil }),
-			"failing": health.HealthcheckerFunc(func(_ context.Context) error { return errors.New("Oops") }),
 		},
 	)
 
