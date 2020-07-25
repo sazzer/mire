@@ -24,21 +24,18 @@ impl HealthService {
     ///
     /// # Returns
     /// The overall system health
-    pub fn check_health(&self) -> SystemHealth {
-        let components = self
-            .components
-            .iter()
-            .map(|(name, component)| {
-                let result = component.check_health();
+    pub async fn check_health(&self) -> SystemHealth {
+        let mut components = HashMap::new();
+        for (name, component) in &self.components {
+            let result = component.check_health().await;
 
-                let component_health = match result {
-                    Ok(_) => ComponentHealth::Healthy,
-                    Err(e) => ComponentHealth::Unhalthy(e.to_string()),
-                };
+            let component_health = match result {
+                Ok(_) => ComponentHealth::Healthy,
+                Err(e) => ComponentHealth::Unhalthy(e.to_string()),
+            };
 
-                (name.clone(), component_health)
-            })
-            .collect();
+            components.insert(name.clone(), component_health);
+        }
 
         SystemHealth { components }
     }

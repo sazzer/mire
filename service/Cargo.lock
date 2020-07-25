@@ -1041,6 +1041,7 @@ dependencies = [
  "actix-rt",
  "actix-web",
  "assert2",
+ "async-trait",
  "config",
  "dotenv",
  "futures",
