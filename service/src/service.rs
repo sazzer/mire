@@ -10,7 +10,7 @@ impl Service {
     pub async fn new() -> Service {
         tracing::info!("Building service");
 
-        let server = Server::new();
+        let server = Server::new(vec![]);
 
         Service { server: server }
     }
