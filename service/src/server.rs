@@ -2,21 +2,31 @@ use actix_cors::Cors;
 use actix_web::{middleware::Logger, web::ServiceConfig, App, HttpServer};
 use std::{ops::Deref, sync::Arc};
 
-/// A function that is able to contribute configuration to the Actix server when it is being constructed
+/// A function that is able to contribute configuration to the Actix server when it is being constructed.
 pub type FnConfig = Arc<dyn Fn(&mut ServiceConfig) + Send + Sync>;
 
-/// Representation of the HTTP Server
+/// Wrapper around the HTTP Server.
 pub struct Server {
+    /// The set of configuration lambdas that can contribute to the HTTP Server.
     configs: Vec<FnConfig>,
 }
 
 impl Server {
     /// Create a new instance of the server
+    ///
+    /// # Parameters
+    /// - `configs` - The set of configuration lambdas that can contribute to the HTTP Server.
+    ///
+    /// # Returns
+    /// The wrapper around the HTTP Server.
     pub fn new(configs: Vec<FnConfig>) -> Server {
         Server { configs }
     }
 
-    /// Start the server listening on the given port
+    /// Start the server listening on the given port.
+    ///
+    /// # Parameters
+    /// - `port` - The port to listen on
     pub async fn start(self, port: u16) {
         let address = format!("0.0.0.0:{}", port);
         tracing::info!(address = ?address, "Starting web server");
