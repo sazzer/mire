@@ -1018,6 +1018,7 @@ dependencies = [
  "actix-web",
  "config",
  "dotenv",
+ "futures",
  "log",
  "serde 1.0.114",
  "tracing",

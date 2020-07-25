@@ -1,4 +1,5 @@
 use crate::server::Server;
+use futures::join;
 
 /// The actual service layer
 pub struct Service {
@@ -19,6 +20,7 @@ impl Service {
 
     /// Start the service running
     pub async fn start(self, port: u16) {
-        self.server.start(port).await;
+        let http_server = self.server.start(port);
+        join!(http_server);
     }
 }
