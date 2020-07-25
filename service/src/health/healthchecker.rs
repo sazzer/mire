@@ -1,7 +1,7 @@
 use std::{boxed::Box, error::Error};
 
 /// Trait that components able to report on their health can implement.
-pub trait Healthchecker {
+pub trait Healthchecker: Send + Sync {
     /// Check the health of the component.
     ///
     /// # Returns
