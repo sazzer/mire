@@ -39,10 +39,7 @@ impl HealthConfig {
         Arc::new(move |c| {
             c.data(service.clone());
 
-            c.route(
-                "/health",
-                actix_web::web::get().to(super::endpoints::check_health),
-            );
+            c.service(super::endpoints::get_health);
         })
     }
 }

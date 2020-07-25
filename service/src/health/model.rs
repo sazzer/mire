@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 /// Possible health states of a single component.
+#[derive(Debug)]
 pub enum ComponentHealth {
     /// The component is healthy.
     Healthy,
@@ -22,6 +23,7 @@ impl ComponentHealth {
 }
 
 /// Overall health of the system.
+#[derive(Debug)]
 pub struct SystemHealth {
     /// The health of the various components in the system.
     pub components: HashMap<String, ComponentHealth>,

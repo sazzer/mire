@@ -24,7 +24,10 @@ impl HealthService {
     ///
     /// # Returns
     /// The overall system health
+    #[tracing::instrument(skip(self))]
     pub async fn check_health(&self) -> SystemHealth {
+        tracing::debug!("Checking system health");
+
         let mut components = HashMap::new();
         for (name, component) in &self.components {
             let result = component.check_health().await;
@@ -34,6 +37,7 @@ impl HealthService {
                 Err(e) => ComponentHealth::Unhalthy(e.to_string()),
             };
 
+            tracing::debug!(name = ?name, status = ?component_health, "Component health");
             components.insert(name.clone(), component_health);
         }
 
