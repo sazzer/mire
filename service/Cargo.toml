@@ -4,8 +4,6 @@ version = "0.1.0"
 authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
 name = "mire_lib"
 
@@ -15,5 +13,11 @@ name = "mire"
 [dependencies]
 actix-rt = "1.1.1"
 dotenv = "0.15.0"
+config = "0.10.1"
+serde = { version = "1.0.114", features = ["derive"] }
+tracing = "0.1.15"
+tracing-log = "0.1.1"
+tracing-subscriber = "0.2.6"
+log = "0.4.8"
 
 [dev-dependencies]
