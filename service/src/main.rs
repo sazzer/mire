@@ -4,7 +4,10 @@ use serde::Deserialize;
 
 /// Representation of the application settings that will be loaded from the environment
 #[derive(Debug, Deserialize)]
-struct Settings {}
+struct Settings {
+    /// The port on which the HTTP server should listen on
+    pub port: Option<u16>,
+}
 
 impl Default for Settings {
     /// Construct the settings from the environment
@@ -28,8 +31,8 @@ async fn main() {
 
     let settings = Settings::default();
 
-    log::debug!("Application settings: {:?}", settings);
+    tracing::debug!(settings = ?settings, "Application settings");
 
     let service = mire_lib::Service::new().await;
-    service.start().await;
+    service.start(settings.port.unwrap_or(8000)).await;
 }
