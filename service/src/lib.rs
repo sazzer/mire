@@ -1,3 +1,3 @@
-pub async fn main() {
-  println!("Hello, world!");
-}
+mod service;
+
+pub use service::Service;

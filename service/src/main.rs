@@ -30,5 +30,6 @@ async fn main() {
 
     log::debug!("Application settings: {:?}", settings);
 
-    mire_lib::main().await
+    let service = mire_lib::Service::new().await;
+    service.start().await;
 }
