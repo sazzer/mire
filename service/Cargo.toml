@@ -13,5 +13,6 @@ name = "mire_lib"
 name = "mire"
 
 [dependencies]
+actix-rt = "1.1.1"
 
 [dev-dependencies]
