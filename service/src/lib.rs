@@ -1,3 +1,4 @@
+mod health;
 mod server;
 mod service;
 

@@ -10,7 +10,9 @@ impl Service {
     pub async fn new() -> Service {
         tracing::info!("Building service");
 
-        let server = Server::new(vec![]);
+        let health = crate::health::config::HealthConfig::new();
+
+        let server = Server::new(vec![health.server_config()]);
 
         Service { server: server }
     }
