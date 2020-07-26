@@ -1,5 +1,6 @@
 use crate::server::Server;
 use futures::join;
+use std::sync::Arc;
 
 /// The actual service layer.
 pub struct Service {
@@ -15,7 +16,8 @@ impl Service {
     pub async fn new() -> Service {
         tracing::info!("Building service");
 
-        let health = crate::health::config::HealthConfig::new();
+        let mut health = crate::health::config::HealthConfig::new();
+        health.add_component("db".to_owned(), Arc::new(MockHealthcheck {}));
 
         let server = Server::new(vec![health.server_config()]);
 
@@ -29,5 +31,14 @@ impl Service {
     pub async fn start(self, port: u16) {
         let http_server = self.server.start(port);
         join!(http_server);
+    }
+}
+
+struct MockHealthcheck {}
+
+#[async_trait::async_trait]
+impl crate::health::Healthchecker for MockHealthcheck {
+    async fn check_health(&self) -> Result<(), Box<dyn std::error::Error>> {
+        Err("Oops".to_owned().into())
     }
 }

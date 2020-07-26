@@ -34,7 +34,7 @@ impl HealthService {
 
             let component_health = match result {
                 Ok(_) => ComponentHealth::Healthy,
-                Err(e) => ComponentHealth::Unhalthy(e.to_string()),
+                Err(e) => ComponentHealth::Unhealthy(e.to_string()),
             };
 
             tracing::debug!(name = ?name, status = ?component_health, "Component health");

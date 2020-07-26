@@ -6,7 +6,7 @@ pub enum ComponentHealth {
     /// The component is healthy.
     Healthy,
     /// The component is unhealthy.
-    Unhalthy(String),
+    Unhealthy(String),
 }
 
 impl ComponentHealth {
@@ -66,7 +66,7 @@ mod tests {
         let mut components = HashMap::new();
         components.insert(
             "unhealthy".to_owned(),
-            ComponentHealth::Unhalthy("Oops".to_owned()),
+            ComponentHealth::Unhealthy("Oops".to_owned()),
         );
         let test_subject = SystemHealth { components };
 
@@ -79,7 +79,7 @@ mod tests {
         components.insert("healthy".to_owned(), ComponentHealth::Healthy);
         components.insert(
             "unhealthy".to_owned(),
-            ComponentHealth::Unhalthy("Oops".to_owned()),
+            ComponentHealth::Unhealthy("Oops".to_owned()),
         );
         let test_subject = SystemHealth { components };
 
