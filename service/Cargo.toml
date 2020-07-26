@@ -31,3 +31,5 @@ serde_json = "1.0.55"
 [dev-dependencies]
 assert2 = "0.2.1"
 insta = "0.16.0"
+testcontainers = "0.9.1"
+lazy_static = "1.4.0"
