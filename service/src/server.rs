@@ -51,4 +51,28 @@ impl Server {
         .await
         .unwrap();
     }
+
+    /// Inject an HTTP Request in to the service and return the response.
+    ///
+    /// This is strictly for integration testing of the service.
+    pub async fn inject(&self, req: actix_http::Request) -> TestResponse {
+        let configs = self.configs.clone();
+
+        let mut app = App::new();
+
+        for config in &configs {
+            app = app.configure(config.deref());
+        }
+
+        let mut test_service = actix_web::test::init_service(app).await;
+        let response = actix_web::test::call_service(&mut test_service, req).await;
+
+        TestResponse {
+            status: response.status(),
+        }
+    }
+}
+
+pub struct TestResponse {
+    pub status: actix_http::http::StatusCode,
 }

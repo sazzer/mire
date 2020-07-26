@@ -1,4 +1,4 @@
-use crate::server::Server;
+use crate::server::{Server, TestResponse};
 use futures::join;
 use std::sync::Arc;
 
@@ -32,6 +32,13 @@ impl Service {
         let http_server = self.server.start(port);
         join!(http_server);
     }
+
+    /// Inject an HTTP Request in to the service and return the response.
+    ///
+    /// This is strictly for integration testing of the service.
+    pub async fn inject(&self, req: actix_http::Request) -> TestResponse {
+        self.server.inject(req).await
+    }
 }
 
 struct MockHealthcheck {}
@@ -39,6 +46,6 @@ struct MockHealthcheck {}
 #[async_trait::async_trait]
 impl crate::health::Healthchecker for MockHealthcheck {
     async fn check_health(&self) -> Result<(), Box<dyn std::error::Error>> {
-        Err("Oops".to_owned().into())
+        Ok(())
     }
 }
