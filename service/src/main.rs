@@ -7,6 +7,8 @@ use serde::Deserialize;
 struct Settings {
     /// The port on which the HTTP server should listen on
     pub port: Option<u16>,
+    /// The URL to use to connect to the database
+    pub database_url: Option<String>,
 }
 
 impl Default for Settings {
@@ -33,6 +35,7 @@ async fn main() {
 
     tracing::debug!(settings = ?settings, "Application settings");
 
-    let service = mire_lib::Service::new().await;
+    let service =
+        mire_lib::Service::new(settings.database_url.expect("No database URL provided")).await;
     service.start(settings.port.unwrap_or(8000)).await;
 }

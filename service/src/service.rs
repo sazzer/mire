@@ -1,4 +1,8 @@
-use crate::server::{Server, TestResponse};
+use crate::database::Database;
+use crate::{
+    health::config::HealthConfig,
+    server::{Server, TestResponse},
+};
 use futures::join;
 use std::sync::Arc;
 
@@ -11,12 +15,20 @@ pub struct Service {
 impl Service {
     /// Create a new instance of the service layer
     ///
+    /// # Parameters
+    /// - `database_url` - The URL to connect to for the database
+    ///
     /// # Returns
     /// The service layer, ready to work with.
-    pub async fn new() -> Service {
+    pub async fn new<S>(database_url: S) -> Service
+    where
+        S: Into<String>,
+    {
         tracing::info!("Building service");
 
-        let mut health = crate::health::config::HealthConfig::new();
+        let database = Database::new(database_url).await;
+
+        let mut health = HealthConfig::new();
         health.add_component("db".to_owned(), Arc::new(MockHealthcheck {}));
 
         let server = Server::new(vec![health.server_config()]);

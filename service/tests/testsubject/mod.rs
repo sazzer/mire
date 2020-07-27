@@ -16,7 +16,7 @@ impl TestSubject {
 
         let database = database::TestDatabase::new();
 
-        let service = mire_lib::Service::new().await;
+        let service = mire_lib::Service::new(&database.url).await;
 
         Self { service, database }
     }
