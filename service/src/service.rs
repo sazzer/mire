@@ -1,4 +1,5 @@
 use crate::database::Database;
+use crate::health::Healthchecker;
 use crate::{
     health::config::HealthConfig,
     server::{Server, TestResponse},
@@ -27,9 +28,13 @@ impl Service {
         tracing::info!("Building service");
 
         let database = Database::new(database_url).await;
+        database
+            .check_health()
+            .await
+            .expect("Database connection is not healthy");
 
         let mut health = HealthConfig::new();
-        health.add_component("db".to_owned(), Arc::new(MockHealthcheck {}));
+        health.add_component("db".to_owned(), Arc::new(database));
 
         let server = Server::new(vec![health.server_config()]);
 
@@ -50,14 +55,5 @@ impl Service {
     /// This is strictly for integration testing of the service.
     pub async fn inject(&self, req: actix_http::Request) -> TestResponse {
         self.server.inject(req).await
-    }
-}
-
-struct MockHealthcheck {}
-
-#[async_trait::async_trait]
-impl crate::health::Healthchecker for MockHealthcheck {
-    async fn check_health(&self) -> Result<(), Box<dyn std::error::Error>> {
-        Ok(())
     }
 }

@@ -6,7 +6,7 @@ use tokio_postgres::config::Config;
 /// Wrapper around the actual database connection pool.
 pub struct Database {
     #[allow(dead_code)]
-    pool: Pool<PostgresConnectionManager<tokio_postgres::NoTls>>,
+    pub(super) pool: Pool<PostgresConnectionManager<tokio_postgres::NoTls>>,
 }
 
 impl Database {
@@ -24,7 +24,7 @@ impl Database {
         let url = url.into();
         tracing::info!(url = ?url, "Connecting to database");
 
-        let config = Config::from_str("postgresql://postgres:docker@localhost:5432").unwrap();
+        let config = Config::from_str(&url).unwrap();
         let pg_mgr = PostgresConnectionManager::new(config, tokio_postgres::NoTls);
         let pool = Pool::builder()
             .build(pg_mgr)
