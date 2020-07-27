@@ -1,5 +1,13 @@
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager;
+use std::str::FromStr;
+use tokio_postgres::config::Config;
+
 /// Wrapper around the actual database connection pool.
-pub struct Database {}
+pub struct Database {
+    #[allow(dead_code)]
+    pool: Pool<PostgresConnectionManager<tokio_postgres::NoTls>>,
+}
 
 impl Database {
     /// Create a new connection pool connecting to the provided URL
@@ -15,6 +23,14 @@ impl Database {
     {
         let url = url.into();
         tracing::info!(url = ?url, "Connecting to database");
-        Database {}
+
+        let config = Config::from_str("postgresql://postgres:docker@localhost:5432").unwrap();
+        let pg_mgr = PostgresConnectionManager::new(config, tokio_postgres::NoTls);
+        let pool = Pool::builder()
+            .build(pg_mgr)
+            .await
+            .expect("Failed to create database connection pool");
+
+        Database { pool }
     }
 }
