@@ -1,5 +1,5 @@
 use super::Database;
-use crate::health::Healthchecker;
+use mire_health::Healthchecker;
 use async_trait::async_trait;
 use std::error::Error;
 

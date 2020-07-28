@@ -2,4 +2,6 @@
 
 members = [
     "all",
+    "server",
+    "health",
 ]

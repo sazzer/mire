@@ -1276,6 +1276,7 @@ dependencies = [
  "insta",
  "lazy_static",
  "log",
+ "mire-health",
  "mire-server",
  "postgres-types",
  "rust-embed",
@@ -1287,6 +1288,22 @@ dependencies = [
  "tracing-futures",
  "tracing-log",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "mire-health"
+version = "0.1.0"
+dependencies = [
+ "actix-cors",
+ "actix-http",
+ "actix-web",
+ "assert2",
+ "async-trait",
+ "futures",
+ "mire-server",
+ "serde 1.0.114",
+ "tracing",
+ "tracing-futures",
 ]
 
 [[package]]
