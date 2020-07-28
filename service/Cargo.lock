@@ -1261,15 +1261,10 @@ dependencies = [
 name = "mire"
 version = "0.1.0"
 dependencies = [
- "actix-cors",
  "actix-http",
  "actix-rt",
  "actix-web",
  "assert2",
- "async-trait",
- "bb8",
- "bb8-postgres",
- "bytes",
  "config",
  "dotenv",
  "futures",
@@ -1279,12 +1274,8 @@ dependencies = [
  "mire-database",
  "mire-health",
  "mire-server",
- "postgres-types",
- "rust-embed",
  "serde 1.0.114",
- "serde_json",
  "testcontainers",
- "tokio-postgres",
  "tracing",
  "tracing-futures",
  "tracing-log",

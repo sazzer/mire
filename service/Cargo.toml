@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
-    "all",
+    "mire",
     "server",
     "health",
     "database"
