@@ -1267,13 +1267,12 @@ dependencies = [
  "dotenv",
  "futures",
  "insta",
- "lazy_static",
  "log",
  "mire-database",
  "mire-health",
  "mire-server",
+ "mire-testdatabase",
  "serde 1.0.114",
- "testcontainers",
  "tracing",
  "tracing-futures",
  "tracing-log",
@@ -1319,6 +1318,15 @@ dependencies = [
  "actix-web",
  "bytes",
  "serde_json",
+ "tracing",
+]
+
+[[package]]
+name = "mire-testdatabase"
+version = "0.1.0"
+dependencies = [
+ "lazy_static",
+ "testcontainers",
  "tracing",
 ]
 

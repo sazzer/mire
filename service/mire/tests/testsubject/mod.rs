@@ -1,12 +1,11 @@
-mod database;
 mod http;
-mod postgres;
+use mire_testdatabase::TestDatabase;
 
 /// The test wrapper around the service being tested
 pub struct TestSubject {
     service: mire_lib::Service,
     #[allow(dead_code)]
-    database: database::TestDatabase,
+    database: TestDatabase,
 }
 
 impl TestSubject {
@@ -14,7 +13,7 @@ impl TestSubject {
     pub async fn new() -> Self {
         let _ = tracing_subscriber::fmt::try_init();
 
-        let database = database::TestDatabase::new();
+        let database = TestDatabase::new();
 
         let service = mire_lib::Service::new(&database.url).await;
 

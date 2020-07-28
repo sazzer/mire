@@ -1,5 +1,12 @@
-use super::postgres::PostgresContainer;
+#![cfg_attr(
+    feature = "cargo-clippy",
+    allow(clippy::module_name_repetitions, clippy::wildcard_imports)
+)]
+
+mod postgres;
+
 use lazy_static::lazy_static;
+use postgres::PostgresContainer;
 use testcontainers::{clients::Cli, Container, Docker};
 
 lazy_static! {
@@ -22,6 +29,10 @@ impl Default for TestDatabase {
 }
 
 impl TestDatabase {
+    /// Create a new instance of the test database ready to work with
+    ///
+    /// # Returns
+    /// The `TestDatabase` instance.
     #[must_use]
     pub fn new() -> Self {
         tracing::info!("Starting Postgres database");
