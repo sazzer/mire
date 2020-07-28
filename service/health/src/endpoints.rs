@@ -34,7 +34,7 @@ struct ComponentHealthModel {
 }
 
 impl From<ComponentHealth> for ComponentHealthModel {
-    /// Convert the internal ComponentHealth instance into the HTTP Response.
+    /// Convert the internal `ComponentHealth` instance into the HTTP Response.
     fn from(health: ComponentHealth) -> Self {
         ComponentHealthModel {
             healthy: health.is_healthy(),
@@ -56,7 +56,7 @@ struct SystemHealthModel {
 }
 
 impl From<SystemHealth> for SystemHealthModel {
-    /// Convert the internal SystemHealth instance into the HTTP Response.
+    /// Convert the internal `SystemHealth` instance into the HTTP Response.
     fn from(health: SystemHealth) -> Self {
         SystemHealthModel {
             healthy: health.is_healthy(),

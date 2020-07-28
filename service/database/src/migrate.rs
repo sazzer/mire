@@ -32,7 +32,7 @@ pub async fn migrate(d: &Database) {
 ///
 /// # Parameters
 /// - `tx` An open database transaction in which to execute the SQL.
-async fn create_migrations_table<'a>(tx: &tokio_postgres::Transaction<'a>) {
+async fn create_migrations_table(tx: &tokio_postgres::Transaction<'_>) {
     tracing::trace!("Ensuring the migrations table exists");
     tx.execute(
         "CREATE TABLE IF NOT EXISTS __migrations(
@@ -79,7 +79,7 @@ fn list_all_migrations() -> Vec<String> {
 ///
 /// # Errors
 /// If an error occurs executing the SQL then return an error
-async fn list_applied_migrations<'a>(tx: &tokio_postgres::Transaction<'a>) -> Vec<String> {
+async fn list_applied_migrations(tx: &tokio_postgres::Transaction<'_>) -> Vec<String> {
     tracing::trace!("Listing the applied migrations");
 
     let migrations = tx
@@ -104,7 +104,7 @@ async fn list_applied_migrations<'a>(tx: &tokio_postgres::Transaction<'a>) -> Ve
 ///
 /// # Errors
 /// If an error occurs applying the migrations then return an error
-async fn apply_migrations<'a>(tx: &tokio_postgres::Transaction<'a>) {
+async fn apply_migrations(tx: &tokio_postgres::Transaction<'_>) {
     let all_migrations = list_all_migrations();
     let applied_migrations = list_applied_migrations(tx).await;
 

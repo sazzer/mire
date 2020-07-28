@@ -31,12 +31,12 @@ impl Service {
             .expect("Database connection is not healthy");
         migrate(&database).await;
 
-        let mut health = HealthConfig::new();
+        let mut health = HealthConfig::default();
         health.add_component("db".to_owned(), Arc::new(database));
 
         let server = Server::new(vec![health.server_config()]);
 
-        Service { server: server }
+        Service { server }
     }
 
     /// Start the service running.

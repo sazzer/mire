@@ -14,6 +14,7 @@ impl ComponentHealth {
     ///
     /// # Returns
     /// True for `ComponentHealth::Healthy`. False for `ComponentHealth::Unhealthy`.
+    #[must_use]
     pub fn is_healthy(&self) -> bool {
         match self {
             ComponentHealth::Healthy => true,
@@ -34,6 +35,7 @@ impl SystemHealth {
     ///
     /// # Returns
     /// True if every single component is healthy. False if any of them are unhealthy.
+    #[must_use]
     pub fn is_healthy(&self) -> bool {
         self.components.iter().all(|h| h.1.is_healthy())
     }

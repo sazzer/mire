@@ -41,10 +41,10 @@ impl Database {
     ///
     /// # Errors
     /// If the pool is unable to return a viable connection
-    pub async fn checkout<'a>(
-        &'a self,
+    pub async fn checkout(
+        &self,
     ) -> Result<
-        bb8::PooledConnection<'a, PostgresConnectionManager<tokio_postgres::NoTls>>,
+        bb8::PooledConnection<'_, PostgresConnectionManager<tokio_postgres::NoTls>>,
         bb8::RunError<tokio_postgres::Error>,
     > {
         let conn = self.pool.get().await?;

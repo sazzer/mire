@@ -2,21 +2,12 @@ use super::{HealthService, Healthchecker};
 use std::{collections::HashMap, sync::Arc};
 
 /// Configuration of the healthcheck component.
+#[derive(Default)]
 pub struct HealthConfig {
     components: HashMap<String, Arc<dyn Healthchecker>>,
 }
 
 impl HealthConfig {
-    /// Create a new healthcheck component.
-    ///
-    /// # Returns
-    /// The Healthcheck component Configuration.
-    pub fn new() -> Self {
-        Self {
-            components: HashMap::new(),
-        }
-    }
-
     /// Add a new component to the healthchecker so that we can check the health of it.
     ///
     /// # Parameters
@@ -33,6 +24,7 @@ impl HealthConfig {
     ///
     /// # Returns
     /// The lambda to register details with the HTTP Server.
+    #[must_use]
     pub fn server_config(&self) -> mire_server::FnConfig {
         let service = HealthService::new(self.components.clone());
 

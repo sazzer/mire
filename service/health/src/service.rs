@@ -16,6 +16,7 @@ impl HealthService {
     ///
     /// # Returns
     /// The health service
+    #[must_use]
     pub fn new(components: HashMap<String, Arc<dyn Healthchecker>>) -> Self {
         Self { components }
     }
