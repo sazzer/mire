@@ -318,22 +318,20 @@ checksum = "cff77d8686867eceff3105329d4698d96c2391c176d5d03adc90c7389162b5b8"
 
 [[package]]
 name = "assert2"
-version = "0.2.1"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0edd70cc8fc4958fb47621d9160d9746b53e549762322c85a31c1af5bbf7029b"
+checksum = "0c22fadcb78e2e42dfe29f58754994d3dcbb701265a62f874c071f2df59a044e"
 dependencies = [
  "assert2-macros",
- "proc-macro-hack",
  "yansi",
 ]
 
 [[package]]
 name = "assert2-macros"
-version = "0.2.1"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ced75d70bcd9db7397321bc03f55abc8cc17ff7f7cc9c2ebe29c0a462bb8eeee"
+checksum = "5ac02ceddba6778164eb02272ce87c49b8ff5ed7dea2d5b1caa0f53ec9323a60"
 dependencies = [
- "proc-macro-hack",
  "proc-macro2 1.0.19",
  "quote 1.0.7",
  "rustc_version",
@@ -1794,9 +1792,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.56"
+version = "1.0.57"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3433e879a558dde8b5e8feb2a04899cf34fdde1fafb894687e52105fc1162ac3"
+checksum = "164eacbdb13512ec2745fb09d51fd5b22b0d65ed294a1dcf7285a360c80a675c"
 dependencies = [
  "itoa",
  "ryu",
