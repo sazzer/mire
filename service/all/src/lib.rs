@@ -1,7 +1,5 @@
-mod health;
-mod server;
-mod service;
 pub(crate) mod database;
+mod health;
+mod service;
 
-pub use server::TestResponse;
 pub use service::Service;

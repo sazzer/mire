@@ -1,0 +1,13 @@
+[package]
+name = "mire-server"
+version = "0.1.0"
+authors = ["Graham Cox <graham@grahamcox.co.uk>"]
+edition = "2018"
+
+[dependencies]
+tracing = "0.1.15"
+actix-web = "2.0.0"
+actix-cors = "0.2.0"
+actix-http = "1.0.1"
+bytes = "0.5.5"
+serde_json = "1.0.55"

@@ -1276,6 +1276,7 @@ dependencies = [
  "insta",
  "lazy_static",
  "log",
+ "mire-server",
  "postgres-types",
  "rust-embed",
  "serde 1.0.114",
@@ -1286,6 +1287,18 @@ dependencies = [
  "tracing-futures",
  "tracing-log",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "mire-server"
+version = "0.1.0"
+dependencies = [
+ "actix-cors",
+ "actix-http",
+ "actix-web",
+ "bytes",
+ "serde_json",
+ "tracing",
 ]
 
 [[package]]

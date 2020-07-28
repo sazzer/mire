@@ -1,10 +1,8 @@
 use crate::database::{migrate::migrate, Database};
+use crate::health::config::HealthConfig;
 use crate::health::Healthchecker;
-use crate::{
-    health::config::HealthConfig,
-    server::{Server, TestResponse},
-};
 use futures::join;
+use mire_server::{Server, TestResponse};
 use std::sync::Arc;
 
 /// The actual service layer.

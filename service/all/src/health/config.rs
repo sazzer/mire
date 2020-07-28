@@ -33,7 +33,7 @@ impl HealthConfig {
     ///
     /// # Returns
     /// The lambda to register details with the HTTP Server.
-    pub fn server_config(&self) -> crate::server::FnConfig {
+    pub fn server_config(&self) -> mire_server::FnConfig {
         let service = HealthService::new(self.components.clone());
 
         Arc::new(move |c| {
