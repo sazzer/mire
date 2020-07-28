@@ -1,0 +1,16 @@
+[package]
+name = "mire-database"
+version = "0.1.0"
+authors = ["Graham Cox <graham@grahamcox.co.uk>"]
+edition = "2018"
+
+[dependencies]
+tracing = "0.1.15"
+async-trait = "0.1.36"
+bb8 = "0.4.2"
+bb8-postgres = "0.4.0"
+tokio-postgres = "0.5.4"
+postgres-types = "0.1.1"
+rust-embed = "5.5.1"
+
+mire-health = { path = "../health" }

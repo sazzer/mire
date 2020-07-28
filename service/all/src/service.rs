@@ -1,5 +1,5 @@
-use crate::database::{migrate::migrate, Database};
 use futures::join;
+use mire_database::{migrate::migrate, Database};
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
 use std::sync::Arc;

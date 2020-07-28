@@ -1276,6 +1276,7 @@ dependencies = [
  "insta",
  "lazy_static",
  "log",
+ "mire-database",
  "mire-health",
  "mire-server",
  "postgres-types",
@@ -1288,6 +1289,20 @@ dependencies = [
  "tracing-futures",
  "tracing-log",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "mire-database"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bb8",
+ "bb8-postgres",
+ "mire-health",
+ "postgres-types",
+ "rust-embed",
+ "tokio-postgres",
+ "tracing",
 ]
 
 [[package]]
