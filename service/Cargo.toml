@@ -31,6 +31,7 @@ bb8 = "0.4.2"
 bb8-postgres = "0.4.0"
 tokio-postgres = "0.5.4"
 postgres-types = "0.1.1"
+rust-embed = "5.5.1"
 
 [dev-dependencies]
 assert2 = "0.2.1"

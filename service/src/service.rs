@@ -1,4 +1,4 @@
-use crate::database::Database;
+use crate::database::{migrate::migrate, Database};
 use crate::health::Healthchecker;
 use crate::{
     health::config::HealthConfig,
@@ -32,6 +32,7 @@ impl Service {
             .check_health()
             .await
             .expect("Database connection is not healthy");
+        migrate(&database).await;
 
         let mut health = HealthConfig::new();
         health.add_component("db".to_owned(), Arc::new(database));
