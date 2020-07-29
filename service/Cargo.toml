@@ -5,5 +5,6 @@ members = [
     "crates/health",
     "crates/mire",
     "crates/server",
-    "crates/testdatabase"
+    "crates/testdatabase",
+    "crates/users"
 ]
