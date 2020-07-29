@@ -107,7 +107,7 @@ impl TestResponse {
     where
         S: Into<String>,
     {
-        self.headers.get(name.into()).map(|value| value)
+        self.headers.get(name.into())
     }
 
     /// Convert the response body to JSON
