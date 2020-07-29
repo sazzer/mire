@@ -14,3 +14,8 @@ tokio-postgres = "0.5.5"
 tracing = "0.1.17"
 
 mire-health = { path = "../health" }
+
+[dev-dependencies]
+actix-rt = "1.1.1"
+
+mire-testdatabase = { path = "../testdatabase" }

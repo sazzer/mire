@@ -1283,10 +1283,12 @@ dependencies = [
 name = "mire-database"
 version = "0.1.0"
 dependencies = [
+ "actix-rt",
  "async-trait",
  "bb8",
  "bb8-postgres",
  "mire-health",
+ "mire-testdatabase",
  "postgres-types",
  "rust-embed",
  "tokio-postgres",
