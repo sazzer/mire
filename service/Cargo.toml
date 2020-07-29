@@ -1,9 +1,9 @@
 [workspace]
 
 members = [
-    "database",
-    "health",
-    "mire",
-    "server",
-    "testdatabase"
+    "crates/database",
+    "crates/health",
+    "crates/mire",
+    "crates/server",
+    "crates/testdatabase"
 ]
