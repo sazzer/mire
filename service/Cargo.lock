@@ -1346,6 +1346,7 @@ name = "mire-users"
 version = "0.1.0"
 dependencies = [
  "assert2",
+ "mire-model",
  "serde 1.0.114",
  "tracing",
 ]
