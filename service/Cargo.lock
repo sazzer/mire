@@ -1273,6 +1273,7 @@ dependencies = [
  "mire-health",
  "mire-server",
  "mire-testdatabase",
+ "mire-users",
  "serde 1.0.114",
  "tracing",
  "tracing-futures",
@@ -1346,6 +1347,7 @@ name = "mire-users"
 version = "0.1.0"
 dependencies = [
  "assert2",
+ "mire-database",
  "mire-model",
  "serde 1.0.114",
  "tracing",

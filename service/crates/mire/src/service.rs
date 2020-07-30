@@ -2,6 +2,7 @@ use futures::join;
 use mire_database::{migrate::migrate, Database};
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
+use mire_users::config::UsersConfig;
 use std::sync::Arc;
 
 /// The actual service layer.
@@ -30,6 +31,8 @@ impl Service {
             .await
             .expect("Database connection is not healthy");
         migrate(&database).await;
+
+        let _users = UsersConfig::new(database.clone());
 
         let mut health = HealthConfig::default();
         health.add_component("db".to_owned(), Arc::new(database));

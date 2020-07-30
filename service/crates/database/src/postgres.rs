@@ -4,6 +4,7 @@ use std::str::FromStr;
 use tokio_postgres::config::Config;
 
 /// Wrapper around the actual database connection pool.
+#[derive(Clone)]
 pub struct Database {
     #[allow(dead_code)]
     pub(super) pool: Pool<PostgresConnectionManager<tokio_postgres::NoTls>>,

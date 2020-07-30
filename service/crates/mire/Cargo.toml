@@ -26,6 +26,7 @@ tracing-subscriber = "0.2.9"
 mire-database = { path = "../database" }
 mire-health = { path = "../health" }
 mire-server = { path = "../server" }
+mire-users = { path = "../users" }
 
 [dev-dependencies]
 actix-web = "2.0.0"
