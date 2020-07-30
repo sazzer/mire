@@ -1,8 +1,3 @@
-#![cfg_attr(
-    feature = "cargo-clippy",
-    allow(clippy::module_name_repetitions, clippy::wildcard_imports)
-)]
-
 use actix_cors::Cors;
 use actix_web::{middleware::Logger, web::ServiceConfig, App, HttpServer};
 use std::{ops::Deref, sync::Arc};
@@ -25,8 +20,8 @@ impl Server {
     /// # Returns
     /// The wrapper around the HTTP Server.
     #[must_use]
-    pub fn new(configs: Vec<FnConfig>) -> Server {
-        Server { configs }
+    pub fn new(configs: Vec<FnConfig>) -> Self {
+        Self { configs }
     }
 
     /// Start the server listening on the given port.

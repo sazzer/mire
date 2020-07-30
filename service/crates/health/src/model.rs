@@ -15,8 +15,8 @@ impl ComponentHealth {
     /// # Returns
     /// True for `ComponentHealth::Healthy`. False for `ComponentHealth::Unhealthy`.
     #[must_use]
-    pub fn is_healthy(&self) -> bool {
-        matches!(self, ComponentHealth::Healthy)
+    pub const fn is_healthy(&self) -> bool {
+        matches!(self, Self::Healthy)
     }
 }
 
@@ -41,7 +41,7 @@ impl SystemHealth {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use assert2::*;
+    use assert2::check;
 
     #[test]
     fn test_system_health_empty() {

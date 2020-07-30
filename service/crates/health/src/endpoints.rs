@@ -36,7 +36,7 @@ struct ComponentHealthModel {
 impl From<ComponentHealth> for ComponentHealthModel {
     /// Convert the internal `ComponentHealth` instance into the HTTP Response.
     fn from(health: ComponentHealth) -> Self {
-        ComponentHealthModel {
+        Self {
             healthy: health.is_healthy(),
             message: match health {
                 ComponentHealth::Healthy => None,
@@ -58,7 +58,7 @@ struct SystemHealthModel {
 impl From<SystemHealth> for SystemHealthModel {
     /// Convert the internal `SystemHealth` instance into the HTTP Response.
     fn from(health: SystemHealth) -> Self {
-        SystemHealthModel {
+        Self {
             healthy: health.is_healthy(),
             components: health
                 .components

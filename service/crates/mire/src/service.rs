@@ -18,7 +18,7 @@ impl Service {
     ///
     /// # Returns
     /// The service layer, ready to work with.
-    pub async fn new<S>(database_url: S) -> Service
+    pub async fn new<S>(database_url: S) -> Self
     where
         S: Into<String>,
     {
@@ -36,7 +36,7 @@ impl Service {
 
         let server = Server::new(vec![health.server_config()]);
 
-        Service { server }
+        Self { server }
     }
 
     /// Start the service running.

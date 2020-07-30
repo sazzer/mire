@@ -61,7 +61,7 @@
     {
       "label": "cargo clippy",
       "type": "shell",
-      "command": "cargo clippy --lib --tests --all-features -Zunstable-options -- -D clippy::pedantic",
+      "command": "cargo clippy --lib --tests --all-features -Zunstable-options -- -D clippy::all -D clippy::pedantic -D clippy::nursery -A clippy::module_name_repetitions -A clippy::future-not-send",
       "group": "test",
       "presentation": {
         "echo": true,

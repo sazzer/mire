@@ -1,8 +1,3 @@
-#![cfg_attr(
-    feature = "cargo-clippy",
-    allow(clippy::module_name_repetitions, clippy::wildcard_imports)
-)]
-
 mod postgres;
 
 use lazy_static::lazy_static;
@@ -43,7 +38,7 @@ impl TestDatabase {
         let url = format!("postgres://postgres@{}:{}", host, port);
         tracing::info!(url = ?url, "Running postgres");
 
-        TestDatabase {
+        Self {
             node,
             host,
             port,

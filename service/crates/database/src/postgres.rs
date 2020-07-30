@@ -31,7 +31,7 @@ impl Database {
             .await
             .expect("Failed to create database connection pool");
 
-        Database { pool }
+        Self { pool }
     }
 
     /// Check out a connection from the database pool in order to make queries
