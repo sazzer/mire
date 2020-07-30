@@ -4,6 +4,7 @@ members = [
     "crates/database",
     "crates/health",
     "crates/mire",
+    "crates/model",
     "crates/server",
     "crates/testdatabase",
     "crates/users"

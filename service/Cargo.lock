@@ -531,6 +531,7 @@ checksum = "c74d84029116787153e02106bf53e66828452a4b325cc8652b788b5967c0a0b6"
 dependencies = [
  "num-integer",
  "num-traits 0.2.12",
+ "serde 1.0.114",
  "time",
 ]
 
@@ -1309,6 +1310,14 @@ dependencies = [
  "serde 1.0.114",
  "tracing",
  "tracing-futures",
+]
+
+[[package]]
+name = "mire-model"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "uuid",
 ]
 
 [[package]]
@@ -2316,6 +2325,16 @@ dependencies = [
  "idna",
  "matches",
  "percent-encoding",
+]
+
+[[package]]
+name = "uuid"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9fde2f6a4bea1d6e007c4ad38c6839fa71cbb63b6dbf5b595aa38dc9b1093c11"
+dependencies = [
+ "rand",
+ "serde 1.0.114",
 ]
 
 [[package]]
