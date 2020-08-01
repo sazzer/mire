@@ -5,8 +5,10 @@ authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
 [dependencies]
+chrono = { version = "0.4.13", features = ["serde"] }
 serde = { version = "1.0.114", features = ["derive"] }
 tracing = "0.1.17"
+uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
 mire-users = { path = "../users" }
 
