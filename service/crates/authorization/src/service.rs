@@ -1,3 +1,4 @@
+mod generate;
 mod signing_key;
 
 use chrono::Duration;
