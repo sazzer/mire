@@ -36,7 +36,7 @@ mod tests {
     fn test_generate_security_context() {
         let service = AuthorizationService {
             security_context_duration: Duration::days(5),
-            signing_key: SigningKey::new("test"),
+            secret: SigningKey::new("test").into(),
         };
 
         let principal = PrincipalId::User("userId".to_owned());

@@ -16,12 +16,12 @@ async fn test_healthcheck() {
     check!(response.header("content-type").unwrap() == "application/json");
     assert_json_snapshot!(response.to_json().unwrap(), @r###"
     {
+      "healthy": true,
       "components": {
         "db": {
           "healthy": true
         }
-      },
-      "healthy": true
+      }
     }
     "###);
 }

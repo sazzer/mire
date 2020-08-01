@@ -10,10 +10,10 @@ pub struct AuthorizationConfig {
 impl AuthorizationConfig {
     /// Construct the authorization component.
     #[must_use]
-    pub const fn new(security_context_duration: Duration, signing_key: SigningKey) -> Self {
+    pub fn new(security_context_duration: Duration, signing_key: SigningKey) -> Self {
         let service = AuthorizationService {
             security_context_duration,
-            signing_key,
+            secret: signing_key.into(),
         };
         Self { service }
     }

@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 /// The unique identifier for a Security Context
 #[derive(Debug, PartialEq)]
-pub struct SecurityContextId(Uuid);
+pub struct SecurityContextId(pub(crate) Uuid);
 
 impl Default for SecurityContextId {
     /// Construct a Security Context with a UUID as the value

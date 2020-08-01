@@ -1,6 +1,8 @@
 mod generate;
+mod sign;
 mod signing_key;
 
+use biscuit::jws::Secret;
 use chrono::Duration;
 pub use signing_key::SigningKey;
 
@@ -12,5 +14,5 @@ pub struct AuthorizationService {
 
     /// The key with which to sign security contexts
     #[allow(dead_code)]
-    pub(super) signing_key: SigningKey,
+    pub(super) secret: Secret,
 }
