@@ -1282,6 +1282,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "mire-authentication"
+version = "0.1.0"
+dependencies = [
+ "assert2",
+ "mire-authorization",
+ "mire-users",
+ "serde 1.0.114",
+ "tracing",
+]
+
+[[package]]
+name = "mire-authorization"
+version = "0.1.0"
+dependencies = [
+ "assert2",
+ "mire-users",
+ "serde 1.0.114",
+ "tracing",
+]
+
+[[package]]
 name = "mire-database"
 version = "0.1.0"
 dependencies = [

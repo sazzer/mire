@@ -1,0 +1,15 @@
+[package]
+name = "mire-authentication"
+version = "0.1.0"
+authors = ["Graham Cox <graham@grahamcox.co.uk>"]
+edition = "2018"
+
+[dependencies]
+serde = { version = "1.0.114", features = ["derive"] }
+tracing = "0.1.17"
+
+mire-authorization = { path = "../authorization" }
+mire-users = { path = "../users" }
+
+[dev-dependencies]
+assert2 = "0.3.1"
