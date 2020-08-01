@@ -1,23 +1,15 @@
-/// The key with which to sign the security context
-pub struct SigningKey(String);
+mod signing_key;
+
+use chrono::Duration;
+pub use signing_key::SigningKey;
 
 /// The service layer for managing authorization of principals
 pub struct AuthorizationService {
+    /// The validity duration of generated security contexts
+    #[allow(dead_code)]
+    pub(super) security_context_duration: Duration,
+
     /// The key with which to sign security contexts
     #[allow(dead_code)]
     pub(super) signing_key: SigningKey,
-}
-
-impl AuthorizationService {
-    /// Create a new Authorization Service to authorize principals for access to services
-    ///
-    /// # Parameters
-    /// - `signing_key` - The key with which to sign security contexts
-    ///
-    /// # Returns
-    /// The Authorization Service
-    #[must_use]
-    pub const fn new(signing_key: SigningKey) -> Self {
-        Self { signing_key }
-    }
 }

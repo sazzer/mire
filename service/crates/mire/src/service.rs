@@ -1,10 +1,11 @@
+use chrono::Duration;
 use futures::join;
+use mire_authorization::{config::AuthorizationConfig, SigningKey};
 use mire_database::{migrate::migrate, Database};
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
 use mire_users::config::UsersConfig;
 use std::sync::Arc;
-
 /// The actual service layer.
 pub struct Service {
     /// The HTTP Server.
@@ -31,6 +32,9 @@ impl Service {
             .await
             .expect("Database connection is not healthy");
         migrate(&database).await;
+
+        let _authorization =
+            AuthorizationConfig::new(Duration::days(365), SigningKey::new("DummyKey"));
 
         let _users = UsersConfig::new(database.clone());
 
