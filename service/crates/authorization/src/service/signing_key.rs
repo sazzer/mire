@@ -1,8 +1,6 @@
-use biscuit::jws::Secret;
-
 /// The key with which to sign the security context
 #[derive(Clone)]
-pub struct SigningKey(String);
+pub struct SigningKey(pub(crate) String);
 
 impl SigningKey {
     /// Construct a new signing key from the provided value
@@ -14,11 +12,5 @@ impl SigningKey {
         S: Into<String>,
     {
         Self(key.into())
-    }
-}
-
-impl From<SigningKey> for Secret {
-    fn from(signing_key: SigningKey) -> Self {
-        Self::bytes_from_str(&signing_key.0)
     }
 }

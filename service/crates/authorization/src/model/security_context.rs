@@ -3,7 +3,7 @@ use super::SecurityContextId;
 use chrono::{DateTime, Utc};
 
 /// Security Context representing the authorization that a given request has
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SecurityContext {
     /// The unique ID of this security context
     pub id: SecurityContextId,

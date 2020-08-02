@@ -5,8 +5,8 @@ authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
 [dependencies]
-biscuit = "0.4.2"
 chrono = { version = "0.4.13", features = ["serde"] }
+jsonwebtoken = "7.2.0"
 serde = { version = "1.0.114", features = ["derive"] }
 tracing = "0.1.17"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }

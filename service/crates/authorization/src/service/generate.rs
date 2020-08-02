@@ -1,5 +1,5 @@
 use crate::{AuthorizationService, PrincipalId, SecurityContext, SecurityContextId};
-use chrono::Utc;
+use chrono::{Timelike, Utc};
 
 impl AuthorizationService {
     /// Generate a new security context for the provided Principal ID
@@ -11,7 +11,7 @@ impl AuthorizationService {
     /// The Security Context
     #[must_use]
     pub fn generate_security_context(&self, principal: PrincipalId) -> SecurityContext {
-        let now = Utc::now();
+        let now = Utc::now().with_nanosecond(0).unwrap();
         let valid_until = now + self.security_context_duration;
 
         let id = SecurityContextId::default();
@@ -36,7 +36,7 @@ mod tests {
     fn test_generate_security_context() {
         let service = AuthorizationService {
             security_context_duration: Duration::days(5),
-            secret: SigningKey::new("test").into(),
+            signing_key: SigningKey::new("test"),
         };
 
         let principal = PrincipalId::User("userId".to_owned());
