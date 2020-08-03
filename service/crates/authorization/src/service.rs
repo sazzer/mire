@@ -1,8 +1,12 @@
+pub mod claims;
+mod errors;
 mod generate;
 mod sign;
 mod signing_key;
+mod verify;
 
 use chrono::Duration;
+pub use errors::VerifyError;
 pub use signing_key::SigningKey;
 
 /// The service layer for managing authorization of principals
