@@ -1,9 +1,26 @@
+// TODO: Split across files
 use crate::{
     AuthorizationService, PrincipalId, SecurityContext, SecurityContextId, SignedSecurityContext,
 };
 use chrono::{DateTime, NaiveDateTime, Utc};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
+use std::convert::{TryFrom, TryInto};
+
+#[derive(thiserror::Error, Debug, PartialEq)]
+pub enum VerifyError {
+    #[error("No principal was present in the security context")]
+    MissingPrincipal,
+
+    #[error("The security context has expired")]
+    Expired,
+
+    #[error("The security context was malformed in some way")]
+    Malformed,
+
+    #[error("An unexpected error occurred")]
+    UnexpectedError,
+}
 
 /// Representation of the claims within the JWT that represents a signed security context.
 #[derive(Debug, Serialize, Deserialize)]
@@ -24,6 +41,20 @@ struct SecurityContextClaims {
     exp: i64,
 }
 
+impl Default for SecurityContextClaims {
+    fn default() -> Self {
+        Self {
+            jti: "".to_owned(),
+            aud: "tag:mire,2020:authorization".to_owned(),
+            iss: "tag:mire,2020:authorization".to_owned(),
+            sub: None,
+            iat: 0,
+            nbf: 0,
+            exp: 0,
+        }
+    }
+}
+
 impl From<&SecurityContext> for SecurityContextClaims {
     /// Convert a Security Context into a set of claims that are ready to be signed
     ///
@@ -35,20 +66,20 @@ impl From<&SecurityContext> for SecurityContextClaims {
     fn from(security_context: &SecurityContext) -> Self {
         Self {
             jti: security_context.id.0.clone(),
-            aud: "tag:mire,2020:authorization".to_owned(),
-            iss: "tag:mire,2020:authorization".to_owned(),
             sub: match &security_context.principal_id {
                 PrincipalId::User(user_id) => Some(user_id.clone()),
             },
             iat: security_context.not_valid_before.timestamp(),
             nbf: security_context.not_valid_before.timestamp(),
             exp: security_context.not_valid_after.timestamp(),
+            ..Self::default()
         }
     }
 }
 
-#[allow(clippy::fallible_impl_from)]
-impl From<SecurityContextClaims> for SecurityContext {
+impl TryFrom<SecurityContextClaims> for SecurityContext {
+    type Error = VerifyError;
+
     /// Convert a set of claims representing a security context back into the security context
     ///
     /// # Parameters
@@ -56,16 +87,16 @@ impl From<SecurityContextClaims> for SecurityContext {
     ///
     /// # Returns
     /// The security context
-    ///
-    /// # Todos
-    /// - TODO: Convert this to `TryFrom` so that it can fail.
-    fn from(claims: SecurityContextClaims) -> Self {
-        Self {
+    fn try_from(claims: SecurityContextClaims) -> Result<Self, Self::Error> {
+        Ok(Self {
             id: SecurityContextId(claims.jti),
-            principal_id: claims.sub.map(PrincipalId::User).unwrap(),
+            principal_id: claims
+                .sub
+                .map(PrincipalId::User)
+                .ok_or(VerifyError::MissingPrincipal)?,
             not_valid_before: DateTime::from_utc(NaiveDateTime::from_timestamp(claims.nbf, 0), Utc),
             not_valid_after: DateTime::from_utc(NaiveDateTime::from_timestamp(claims.exp, 0), Utc),
-        }
+        })
     }
 }
 
@@ -96,19 +127,43 @@ impl AuthorizationService {
     ///
     /// # Returns
     /// The expanded security context
+    ///
+    /// # Errors
+    /// If anything was invalid about the signed security context
     #[must_use]
-    pub fn verify(&self, security_context: &SignedSecurityContext) -> SecurityContext {
+    pub fn verify(
+        &self,
+        security_context: &SignedSecurityContext,
+    ) -> Result<SecurityContext, VerifyError> {
+        let mut valid_audiences = std::collections::HashSet::new();
+        valid_audiences.insert("tag:mire,2020:authorization".to_owned());
+
         let token = decode::<SecurityContextClaims>(
             &security_context.0,
             &DecodingKey::from_secret(self.signing_key.0.as_ref()),
             &Validation {
+                iss: Some("tag:mire,2020:authorization".to_owned()),
+                aud: Some(valid_audiences),
                 algorithms: vec![Algorithm::HS512],
                 ..Validation::default()
             },
         )
-        .unwrap();
+        .map_err(|err| {
+            tracing::warn!(err = ?err, security_context = ?security_context, "Error verifying security context");
 
-        token.claims.into()
+            match err.into_kind() {
+                jsonwebtoken::errors::ErrorKind::ExpiredSignature => VerifyError::Expired,
+                jsonwebtoken::errors::ErrorKind::InvalidSignature => VerifyError::Malformed,
+                jsonwebtoken::errors::ErrorKind::InvalidToken => VerifyError::Malformed,
+                jsonwebtoken::errors::ErrorKind::InvalidAlgorithm => VerifyError::Malformed,
+                jsonwebtoken::errors::ErrorKind::InvalidAlgorithmName => VerifyError::Malformed,
+                jsonwebtoken::errors::ErrorKind::InvalidAudience => VerifyError::Malformed,
+                jsonwebtoken::errors::ErrorKind::InvalidIssuer => VerifyError::Malformed,
+                _ => VerifyError::UnexpectedError,
+            }
+        })?;
+
+        token.claims.try_into()
     }
 }
 
@@ -133,18 +188,186 @@ mod tests {
     }
 
     #[test]
-    fn test_sign_verify() {
+    fn test_verify_valid() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS512),
+                &SecurityContextClaims {
+                    jti: "securityContextId".to_owned(),
+                    sub: Some("securityContextPrincipal".to_owned()),
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 2496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test",
+        )
+        .unwrap();
+
+        check!(verified.id == SecurityContextId("securityContextId".to_owned()));
+        check!(verified.principal_id == PrincipalId::User("securityContextPrincipal".to_owned()));
+        check!(verified.not_valid_before.timestamp() == 1496437337);
+        check!(verified.not_valid_after.timestamp() == 2496437337);
+    }
+
+    #[test]
+    fn test_verify_no_principal() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS512),
+                &SecurityContextClaims {
+                    jti: "securityContextId".to_owned(),
+                    sub: None,
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 2496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test",
+        )
+        .unwrap_err();
+
+        check!(verified == VerifyError::MissingPrincipal);
+    }
+
+    #[test]
+    fn test_verify_expired() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS512),
+                &SecurityContextClaims {
+                    jti: "securityContextId".to_owned(),
+                    sub: Some("securityContextPrincipal".to_owned()),
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 1496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test",
+        )
+        .unwrap_err();
+
+        check!(verified == VerifyError::Expired);
+    }
+
+    #[test]
+    fn test_verify_wrong_key() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS512),
+                &SecurityContextClaims {
+                    jti: "securityContextId".to_owned(),
+                    sub: Some("securityContextPrincipal".to_owned()),
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 2496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test2",
+        )
+        .unwrap_err();
+
+        check!(verified == VerifyError::Malformed);
+    }
+
+    #[test]
+    fn test_verify_wrong_algorithm() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS256),
+                &SecurityContextClaims {
+                    jti: "securityContextId".to_owned(),
+                    sub: Some("securityContextPrincipal".to_owned()),
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 2496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test",
+        )
+        .unwrap_err();
+
+        check!(verified == VerifyError::Malformed);
+    }
+
+    #[test]
+    fn test_verify_wrong_audience() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS512),
+                &SecurityContextClaims {
+                    aud: "incorrect".to_owned(),
+                    jti: "securityContextId".to_owned(),
+                    sub: Some("securityContextPrincipal".to_owned()),
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 2496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test",
+        )
+        .unwrap_err();
+
+        check!(verified == VerifyError::Malformed);
+    }
+
+    #[test]
+    fn test_verify_wrong_issuer() {
+        let verified = help_verify_token(
+            encode(
+                &Header::new(Algorithm::HS512),
+                &SecurityContextClaims {
+                    iss: "incorrect".to_owned(),
+                    jti: "securityContextId".to_owned(),
+                    sub: Some("securityContextPrincipal".to_owned()),
+                    iat: 1496437337,
+                    nbf: 1496437337,
+                    exp: 2496437337,
+                    ..SecurityContextClaims::default()
+                },
+                &EncodingKey::from_secret("test".as_bytes()),
+            )
+            .unwrap(),
+            "test",
+        )
+        .unwrap_err();
+
+        check!(verified == VerifyError::Malformed);
+    }
+
+    #[test]
+    fn test_verify_malformed_token() {
+        let verified = help_verify_token("malformed".to_owned(), "test2").unwrap_err();
+
+        check!(verified == VerifyError::Malformed);
+    }
+
+    fn help_verify_token(token: String, secret: &str) -> Result<SecurityContext, VerifyError> {
         let service = AuthorizationService {
             security_context_duration: Duration::days(5),
-            signing_key: SigningKey::new("test"),
+            signing_key: SigningKey::new(secret),
         };
-        let principal = PrincipalId::User("userId".to_owned());
 
-        let security_context = service.generate_security_context(principal);
+        let signed = SignedSecurityContext(token);
 
-        let signed = service.sign(&security_context);
-
-        let verified = service.verify(&signed);
-        check!(verified == security_context);
+        service.verify(&signed)
     }
 }
