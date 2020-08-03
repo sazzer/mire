@@ -130,7 +130,6 @@ impl AuthorizationService {
     ///
     /// # Errors
     /// If anything was invalid about the signed security context
-    #[must_use]
     pub fn verify(
         &self,
         security_context: &SignedSecurityContext,
@@ -153,11 +152,11 @@ impl AuthorizationService {
 
             match err.into_kind() {
                 jsonwebtoken::errors::ErrorKind::ExpiredSignature => VerifyError::Expired,
-                jsonwebtoken::errors::ErrorKind::InvalidSignature => VerifyError::Malformed,
-                jsonwebtoken::errors::ErrorKind::InvalidToken => VerifyError::Malformed,
-                jsonwebtoken::errors::ErrorKind::InvalidAlgorithm => VerifyError::Malformed,
-                jsonwebtoken::errors::ErrorKind::InvalidAlgorithmName => VerifyError::Malformed,
-                jsonwebtoken::errors::ErrorKind::InvalidAudience => VerifyError::Malformed,
+                jsonwebtoken::errors::ErrorKind::InvalidSignature |
+                jsonwebtoken::errors::ErrorKind::InvalidToken |
+                jsonwebtoken::errors::ErrorKind::InvalidAlgorithm |
+                jsonwebtoken::errors::ErrorKind::InvalidAlgorithmName |
+                jsonwebtoken::errors::ErrorKind::InvalidAudience | 
                 jsonwebtoken::errors::ErrorKind::InvalidIssuer => VerifyError::Malformed,
                 _ => VerifyError::UnexpectedError,
             }
@@ -173,6 +172,9 @@ mod tests {
     use crate::{PrincipalId, SigningKey};
     use assert2::check;
     use chrono::Duration;
+
+    const EARLY_TIMESTAMP: i64 = 1_496_437_337;
+    const LATE_TIMESTAMP: i64 = 2_496_437_337;
 
     #[test]
     fn test_sign_valid() {
@@ -195,12 +197,12 @@ mod tests {
                 &SecurityContextClaims {
                     jti: "securityContextId".to_owned(),
                     sub: Some("securityContextPrincipal".to_owned()),
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 2496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: LATE_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test",
@@ -209,8 +211,8 @@ mod tests {
 
         check!(verified.id == SecurityContextId("securityContextId".to_owned()));
         check!(verified.principal_id == PrincipalId::User("securityContextPrincipal".to_owned()));
-        check!(verified.not_valid_before.timestamp() == 1496437337);
-        check!(verified.not_valid_after.timestamp() == 2496437337);
+        check!(verified.not_valid_before.timestamp() == EARLY_TIMESTAMP);
+        check!(verified.not_valid_after.timestamp() == LATE_TIMESTAMP);
     }
 
     #[test]
@@ -221,12 +223,12 @@ mod tests {
                 &SecurityContextClaims {
                     jti: "securityContextId".to_owned(),
                     sub: None,
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 2496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: LATE_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test",
@@ -244,12 +246,12 @@ mod tests {
                 &SecurityContextClaims {
                     jti: "securityContextId".to_owned(),
                     sub: Some("securityContextPrincipal".to_owned()),
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 1496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: EARLY_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test",
@@ -267,12 +269,12 @@ mod tests {
                 &SecurityContextClaims {
                     jti: "securityContextId".to_owned(),
                     sub: Some("securityContextPrincipal".to_owned()),
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 2496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: LATE_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test2",
@@ -290,12 +292,12 @@ mod tests {
                 &SecurityContextClaims {
                     jti: "securityContextId".to_owned(),
                     sub: Some("securityContextPrincipal".to_owned()),
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 2496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: LATE_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test",
@@ -314,12 +316,12 @@ mod tests {
                     aud: "incorrect".to_owned(),
                     jti: "securityContextId".to_owned(),
                     sub: Some("securityContextPrincipal".to_owned()),
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 2496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: LATE_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test",
@@ -338,12 +340,12 @@ mod tests {
                     iss: "incorrect".to_owned(),
                     jti: "securityContextId".to_owned(),
                     sub: Some("securityContextPrincipal".to_owned()),
-                    iat: 1496437337,
-                    nbf: 1496437337,
-                    exp: 2496437337,
+                    iat: EARLY_TIMESTAMP,
+                    nbf: EARLY_TIMESTAMP,
+                    exp: LATE_TIMESTAMP,
                     ..SecurityContextClaims::default()
                 },
-                &EncodingKey::from_secret("test".as_bytes()),
+                &EncodingKey::from_secret(b"test"),
             )
             .unwrap(),
             "test",
