@@ -1,7 +1,7 @@
 use chrono::Duration;
 use futures::join;
 use mire_authorization::{config::AuthorizationConfig, SigningKey};
-use mire_database::{migrate::migrate, Database};
+use mire_database::Database;
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
 use mire_users::config::UsersConfig;
@@ -31,7 +31,6 @@ impl Service {
             .check_health()
             .await
             .expect("Database connection is not healthy");
-        migrate(&database).await;
 
         let _authorization =
             AuthorizationConfig::new(Duration::days(365), SigningKey::new("DummyKey"));

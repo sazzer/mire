@@ -1,5 +1,5 @@
 mod health;
-pub mod migrate;
+mod migrate;
 mod postgres;
 
 pub use postgres::Database;

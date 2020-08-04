@@ -1,3 +1,4 @@
+use super::migrate::migrate;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
 use std::str::FromStr;
@@ -32,7 +33,10 @@ impl Database {
             .await
             .expect("Failed to create database connection pool");
 
-        Self { pool }
+        let result = Self { pool };
+        migrate(&result).await;
+
+        result
     }
 
     /// Check out a connection from the database pool in order to make queries
