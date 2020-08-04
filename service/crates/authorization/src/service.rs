@@ -1,4 +1,4 @@
-pub mod claims;
+mod claims;
 mod errors;
 mod generate;
 mod sign;
