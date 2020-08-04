@@ -1,0 +1,22 @@
+use mire_database::Database;
+use mire_testdatabase::TestDatabase;
+use mire_users::{config::UsersConfig, UsersService};
+
+pub struct TestUsersService {
+    #[allow(dead_code)]
+    test_database: TestDatabase,
+    pub users_service: UsersService,
+}
+
+impl TestUsersService {
+    pub async fn new() -> Self {
+        let test_database = TestDatabase::new();
+        let database = Database::new(&test_database.url).await;
+        let users_config = UsersConfig::new(database);
+
+        Self {
+            test_database,
+            users_service: users_config.service,
+        }
+    }
+}

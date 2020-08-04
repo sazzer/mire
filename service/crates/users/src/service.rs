@@ -1,3 +1,5 @@
+mod get_by_id;
+
 use super::repository::UsersRepository;
 
 /// Service for interacting with user resources

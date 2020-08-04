@@ -1402,11 +1402,15 @@ dependencies = [
 name = "mire-users"
 version = "0.1.0"
 dependencies = [
+ "actix-rt",
  "assert2",
  "mire-database",
  "mire-model",
+ "mire-testdatabase",
  "serde 1.0.114",
+ "thiserror",
  "tracing",
+ "uuid",
 ]
 
 [[package]]
