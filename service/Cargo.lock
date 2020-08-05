@@ -1390,11 +1390,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "mire-testdata"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "postgres-types",
+ "serde_json",
+ "tokio-postgres",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "mire-testdatabase"
 version = "0.1.0"
 dependencies = [
+ "bb8",
+ "bb8-postgres",
  "lazy_static",
+ "mire-testdata",
+ "postgres-types",
  "testcontainers",
+ "tokio-postgres",
  "tracing",
 ]
 
@@ -1406,10 +1424,14 @@ dependencies = [
  "assert2",
  "mire-database",
  "mire-model",
+ "mire-testdata",
  "mire-testdatabase",
  "serde 1.0.114",
  "thiserror",
  "tracing",
+ "tracing-futures",
+ "tracing-log",
+ "tracing-subscriber",
  "uuid",
 ]
 
@@ -1626,8 +1648,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d14b0a4f433b0e0b565bb0fbc0ac9fc3d79ca338ba265ad0e7eef0f3bcc5e94"
 dependencies = [
  "bytes",
+ "chrono",
  "fallible-iterator",
  "postgres-protocol",
+ "serde 1.0.114",
+ "serde_json",
+ "uuid",
 ]
 
 [[package]]

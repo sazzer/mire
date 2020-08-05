@@ -1,4 +1,5 @@
 mod postgres;
+mod seed;
 
 use lazy_static::lazy_static;
 use postgres::PostgresContainer;
