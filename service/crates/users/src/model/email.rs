@@ -5,9 +5,12 @@ use postgres_types::{accepts, to_sql_checked, FromSql, IsNull, ToSql, Type};
 #[derive(Debug, PartialEq, FromSql)]
 pub struct Email(String);
 
-impl From<String> for Email {
-    fn from(email: String) -> Self {
-        Self(email)
+impl<S> From<S> for Email
+where
+    S: Into<String>,
+{
+    fn from(email: S) -> Self {
+        Self(email.into())
     }
 }
 

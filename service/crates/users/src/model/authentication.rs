@@ -4,12 +4,30 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct AuthenticationProvider(String);
 
+impl<S> From<S> for AuthenticationProvider
+where
+    S: Into<String>,
+{
+    fn from(value: S) -> Self {
+        Self(value.into())
+    }
+}
+
 /// The unique identifier for a user at an authentication provider
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct AuthenticationId(String);
 
+impl<S> From<S> for AuthenticationId
+where
+    S: Into<String>,
+{
+    fn from(value: S) -> Self {
+        Self(value.into())
+    }
+}
+
 /// The authentication details for a user from a single provider
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Authentication {
     /// The identity of the provider these details relate to
     pub authentication_provider: AuthenticationProvider,

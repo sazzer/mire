@@ -15,6 +15,35 @@ pub struct SeedUser {
     pub authentications: serde_json::Value,
 }
 
+impl SeedUser {
+    pub fn with_authentication<P, I, D>(
+        mut self,
+        authentication_provider: P,
+        authentication_id: I,
+        display_name: D,
+    ) -> Self
+    where
+        P: Into<String>,
+        I: Into<String>,
+        D: Into<String>,
+    {
+        let new_authentication = json!(
+            {
+                "authentication_provider": authentication_provider.into(),
+                "authentication_id": authentication_id.into(),
+                "display_name": display_name.into(),
+            }
+        );
+
+        self.authentications
+            .as_array_mut()
+            .unwrap()
+            .push(new_authentication);
+
+        self
+    }
+}
+
 impl Default for SeedUser {
     fn default() -> Self {
         Self {
