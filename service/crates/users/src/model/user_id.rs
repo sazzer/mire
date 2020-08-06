@@ -1,9 +1,17 @@
+use bytes::BytesMut;
+use postgres_types::{accepts, to_sql_checked, FromSql, IsNull, ToSql, Type};
 use std::str::FromStr;
 use uuid::Uuid;
 
 /// The unique identifier for a User record
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, FromSql)]
 pub struct UserId(Uuid);
+
+impl From<Uuid> for UserId {
+    fn from(uuid: Uuid) -> Self {
+        Self(uuid)
+    }
+}
 
 /// Errors that can occur when parsing a User ID
 #[derive(Debug, PartialEq, thiserror::Error)]
@@ -19,6 +27,20 @@ impl FromStr for UserId {
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         let id_value = Uuid::parse_str(input).map_err(|_| UserIdParseError::Malformed)?;
         Ok(Self(id_value))
+    }
+}
+
+impl ToSql for UserId {
+    accepts!(UUID);
+
+    to_sql_checked!();
+
+    fn to_sql(
+        &self,
+        t: &Type,
+        w: &mut BytesMut,
+    ) -> Result<IsNull, Box<dyn std::error::Error + Sync + Send>> {
+        self.0.to_sql(t, w)
     }
 }
 

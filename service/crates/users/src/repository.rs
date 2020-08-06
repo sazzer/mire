@@ -1,9 +1,11 @@
+mod get_by_id;
+mod parse;
+
 use mire_database::Database;
 
 /// Repository for accessing user data
 pub struct UsersRepository {
     /// The database connection to use
-    #[allow(dead_code)]
     database: Database,
 }
 

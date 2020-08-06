@@ -9,7 +9,8 @@ impl UsersService {
     /// # Returns
     /// The User that has the provided ID.
     /// If no user was found then instead returns `None`.
-    pub async fn get_by_id(&self, _user_id: &UserId) -> Option<UserModel> {
-        None
+    #[tracing::instrument(skip(self))]
+    pub async fn get_by_id(&self, user_id: &UserId) -> Option<UserModel> {
+        self.repository.get_by_id(user_id).await
     }
 }

@@ -8,7 +8,7 @@ edition = "2018"
 async-trait = "0.1.36"
 bb8 = "0.4.2"
 bb8-postgres = "0.4.0"
-postgres-types = { version = "0.1.2", features = ["with-uuid-0_8", "with-chrono-0_4", "with-serde_json-1"] }
+postgres-types = { version = "0.1.2", features = ["derive", "with-uuid-0_8", "with-chrono-0_4", "with-serde_json-1"] }
 rust-embed = "5.6.0"
 tokio-postgres = { version = "0.5.5", features = ["with-uuid-0_8", "with-chrono-0_4", "with-serde_json-1"] }
 tracing = "0.1.17"
