@@ -1,5 +1,5 @@
 use super::SeedData;
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Timelike, Utc};
 use postgres_types::ToSql;
 use serde_json::json;
 use uuid::Uuid;
@@ -20,8 +20,8 @@ impl Default for SeedUser {
         Self {
             user_id: Uuid::new_v4(),
             version: Uuid::new_v4(),
-            created: Utc::now(),
-            updated: Utc::now(),
+            created: Utc::now().with_nanosecond(0).unwrap(),
+            updated: Utc::now().with_nanosecond(0).unwrap(),
             email: format!("{}@example.com", Uuid::new_v4()),
             display_name: format!("{}", Uuid::new_v4()),
             authentications: json!([]),
