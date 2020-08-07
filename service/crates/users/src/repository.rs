@@ -1,3 +1,4 @@
+mod get_by_authentication;
 mod get_by_id;
 mod parse;
 

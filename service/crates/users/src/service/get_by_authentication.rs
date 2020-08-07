@@ -16,6 +16,8 @@ impl UsersService {
         provider: &AuthenticationProvider,
         provider_id: &AuthenticationId,
     ) -> Option<UserModel> {
-        None
+        self.repository
+            .get_by_authentication(provider, provider_id)
+            .await
     }
 }
