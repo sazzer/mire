@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
 /// The identity of some model resource
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Identity<I> {
     /// The actual ID of the resource
     pub id: I,

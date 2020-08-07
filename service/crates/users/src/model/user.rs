@@ -2,7 +2,7 @@ use super::{Authentication, Email, UserId};
 use mire_model::Identity;
 
 /// Representation of the data that makes up a user
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct UserData {
     /// The display name of the user
     pub display_name: String,
@@ -13,7 +13,7 @@ pub struct UserData {
 }
 
 /// Model type for a persisted user
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct UserModel {
     /// The identity of the resource
     pub identity: Identity<UserId>,

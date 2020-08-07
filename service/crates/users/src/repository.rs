@@ -1,7 +1,10 @@
+mod create;
+mod errors;
 mod get_by_authentication;
 mod get_by_id;
 mod parse;
 
+pub use errors::SaveUserError;
 use mire_database::Database;
 
 /// Repository for accessing user data

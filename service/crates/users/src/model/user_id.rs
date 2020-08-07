@@ -7,6 +7,12 @@ use uuid::Uuid;
 #[derive(Debug, PartialEq, FromSql)]
 pub struct UserId(Uuid);
 
+impl Default for UserId {
+    fn default() -> Self {
+        Self(Uuid::new_v4())
+    }
+}
+
 impl From<Uuid> for UserId {
     fn from(uuid: Uuid) -> Self {
         Self(uuid)

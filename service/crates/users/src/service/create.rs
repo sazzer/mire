@@ -1,4 +1,7 @@
-use crate::{AuthenticationId, AuthenticationProvider, UserData, UserModel, UsersService};
+use crate::{
+    repository::SaveUserError, AuthenticationId, AuthenticationProvider, UserData, UserModel,
+    UsersService,
+};
 
 #[derive(Debug, PartialEq, thiserror::Error)]
 pub enum CreateUserError {
@@ -13,6 +16,15 @@ pub enum CreateUserError {
     /// An unexpected error occurred
     #[error("An unexpected error occurred")]
     UnexpectedError,
+}
+
+impl From<SaveUserError> for CreateUserError {
+    fn from(e: SaveUserError) -> Self {
+        match e {
+            SaveUserError::DuplicateEmail => Self::DuplicateEmail,
+            SaveUserError::UnexpectedError => Self::UnexpectedError,
+        }
+    }
 }
 
 impl UsersService {
@@ -45,6 +57,7 @@ impl UsersService {
             }
         }
 
-        todo!()
+        let user = self.repository.create(data).await?;
+        Ok(user)
     }
 }
