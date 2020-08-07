@@ -58,7 +58,7 @@ async fn get_known_by_id_with_authentications() {
     check!(user.data.email == seeded_user.email.parse().unwrap());
     check!(user.data.display_name == seeded_user.display_name);
     check!(user.data.authentications.len() == 1);
-    check!(user.data.authentications[0].authentication_provider == "google".into());
-    check!(user.data.authentications[0].authentication_id == "123456".into());
+    check!(user.data.authentications[0].authentication_provider == "google".parse().unwrap());
+    check!(user.data.authentications[0].authentication_id == "123456".parse().unwrap());
     check!(user.data.authentications[0].display_name == "test@example.com");
 }

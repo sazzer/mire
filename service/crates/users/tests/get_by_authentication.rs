@@ -6,8 +6,8 @@ use assert2::{assert, check};
 async fn get_unknown_by_authentication() {
     let service = service::TestUsersService::new().await;
 
-    let provider = "google".into();
-    let provider_id = "123456".into();
+    let provider = "google".parse().unwrap();
+    let provider_id = "123456".parse().unwrap();
 
     let user = service
         .users_service
@@ -27,8 +27,8 @@ async fn get_known_by_authentication() {
     let service = service::TestUsersService::new().await;
     service.test_database.seed(&seeded_user).await;
 
-    let provider = "google".into();
-    let provider_id = "123456".into();
+    let provider = "google".parse().unwrap();
+    let provider_id = "123456".parse().unwrap();
 
     let user = service
         .users_service
@@ -45,8 +45,8 @@ async fn get_known_by_authentication() {
     check!(user.data.email == seeded_user.email.parse().unwrap());
     check!(user.data.display_name == seeded_user.display_name);
     check!(user.data.authentications.len() == 1);
-    check!(user.data.authentications[0].authentication_provider == "google".into());
-    check!(user.data.authentications[0].authentication_id == "123456".into());
+    check!(user.data.authentications[0].authentication_provider == "google".parse().unwrap());
+    check!(user.data.authentications[0].authentication_id == "123456".parse().unwrap());
     check!(user.data.authentications[0].display_name == "test@example.com");
 }
 
@@ -61,8 +61,8 @@ async fn get_unknown_by_authentication_wrong_provider() {
     let service = service::TestUsersService::new().await;
     service.test_database.seed(&seeded_user).await;
 
-    let provider = "other".into();
-    let provider_id = "123456".into();
+    let provider = "other".parse().unwrap();
+    let provider_id = "123456".parse().unwrap();
 
     let user = service
         .users_service
@@ -82,8 +82,8 @@ async fn get_unknown_by_authentication_wrong_provider_id() {
     let service = service::TestUsersService::new().await;
     service.test_database.seed(&seeded_user).await;
 
-    let provider = "google".into();
-    let provider_id = "other".into();
+    let provider = "google".parse().unwrap();
+    let provider_id = "other".parse().unwrap();
 
     let user = service
         .users_service
@@ -110,8 +110,8 @@ async fn get_unknown_by_authentication_overlapping() {
     service.test_database.seed(&seeded_user1).await;
     service.test_database.seed(&seeded_user2).await;
 
-    let provider = "google".into(); // From seeded_user1
-    let provider_id = "098765".into(); // From seeded_user2
+    let provider = "google".parse().unwrap(); // From seeded_user1
+    let provider_id = "098765".parse().unwrap(); // From seeded_user2
 
     let user = service
         .users_service
