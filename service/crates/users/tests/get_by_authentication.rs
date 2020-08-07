@@ -42,7 +42,7 @@ async fn get_known_by_authentication() {
     check!(user.identity.version == seeded_user.version);
     check!(user.identity.created == seeded_user.created);
     check!(user.identity.updated == seeded_user.updated);
-    check!(user.data.email == seeded_user.email.into());
+    check!(user.data.email == seeded_user.email.parse().unwrap());
     check!(user.data.display_name == seeded_user.display_name);
     check!(user.data.authentications.len() == 1);
     check!(user.data.authentications[0].authentication_provider == "google".into());
