@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 /// The unique identifier for an authentication provider
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct AuthenticationProvider(String);
 
 /// Errors that can occur when parsing an Authentication Provider
@@ -26,7 +26,7 @@ impl FromStr for AuthenticationProvider {
 }
 
 /// The unique identifier for a user at an authentication provider
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct AuthenticationId(String);
 
 /// Errors that can occur when parsing an Authentication Id
