@@ -15,3 +15,4 @@ mire-users = { path = "../users" }
 
 [dev-dependencies]
 assert2 = "0.3.1"
+mockiato = "0.9.5"

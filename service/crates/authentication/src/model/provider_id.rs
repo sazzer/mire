@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 /// The identity of an authentication provider
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub struct ProviderId(String);
 
 /// Errors that can occur when parsing a Provider ID
