@@ -24,6 +24,7 @@ tracing-futures = "0.2.4"
 tracing-log = "0.1.1"
 tracing-subscriber = "0.2.9"
 
+mire-authentication = { path = "../authentication" }
 mire-authorization = { path = "../authorization" }
 mire-database = { path = "../database" }
 mire-health = { path = "../health" }

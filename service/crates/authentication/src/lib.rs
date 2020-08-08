@@ -1,3 +1,4 @@
+pub mod config;
 mod model;
 mod service;
 

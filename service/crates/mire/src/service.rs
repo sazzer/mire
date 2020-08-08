@@ -1,10 +1,12 @@
 use chrono::Duration;
 use futures::join;
+use mire_authentication::config::AuthenticationConfig;
 use mire_authorization::{config::AuthorizationConfig, SigningKey};
 use mire_database::Database;
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
 use mire_users::config::UsersConfig;
+
 use std::sync::Arc;
 /// The actual service layer.
 pub struct Service {
@@ -37,10 +39,12 @@ impl Service {
 
         let _users = UsersConfig::new(database.clone());
 
+        let authentication = AuthenticationConfig::new();
+
         let mut health = HealthConfig::default();
         health.add_component("db".to_owned(), Arc::new(database));
 
-        let server = Server::new(vec![health.server_config()]);
+        let server = Server::new(vec![health.server_config(), authentication.server_config()]);
 
         Self { server }
     }
