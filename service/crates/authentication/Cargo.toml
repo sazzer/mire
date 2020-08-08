@@ -5,7 +5,9 @@ authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
 [dependencies]
+async-trait = "0.1.36"
 serde = { version = "1.0.114", features = ["derive"] }
+thiserror = "1.0.20"
 tracing = "0.1.17"
 
 mire-authorization = { path = "../authorization" }

@@ -1317,9 +1317,11 @@ name = "mire-authentication"
 version = "0.1.0"
 dependencies = [
  "assert2",
+ "async-trait",
  "mire-authorization",
  "mire-users",
  "serde 1.0.114",
+ "thiserror",
  "tracing",
 ]
 
