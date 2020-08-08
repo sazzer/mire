@@ -1,3 +1,4 @@
+use crate::Config;
 use chrono::Duration;
 use futures::join;
 use mire_authentication::config::AuthenticationConfig;
@@ -18,17 +19,14 @@ impl Service {
     /// Create a new instance of the service layer
     ///
     /// # Parameters
-    /// - `database_url` - The URL to connect to for the database
+    /// - `config` - The configuration of the service
     ///
     /// # Returns
     /// The service layer, ready to work with.
-    pub async fn new<S>(database_url: S) -> Self
-    where
-        S: Into<String>,
-    {
+    pub async fn new(config: Config) -> Self {
         tracing::info!("Building service");
 
-        let database = Database::new(database_url).await;
+        let database = Database::new(config.database_url).await;
         database
             .check_health()
             .await

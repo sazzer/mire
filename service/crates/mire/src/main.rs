@@ -35,7 +35,10 @@ async fn main() {
 
     tracing::debug!(settings = ?settings, "Application settings");
 
-    let service =
-        mire_lib::Service::new(settings.database_url.expect("No database URL provided")).await;
+    let config = mire_lib::Config {
+        database_url: settings.database_url.expect("No database URL provided"),
+    };
+
+    let service = mire_lib::Service::new(config).await;
     service.start(settings.port.unwrap_or(8000)).await;
 }

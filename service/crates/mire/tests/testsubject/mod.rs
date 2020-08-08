@@ -15,7 +15,11 @@ impl TestSubject {
 
         let database = TestDatabase::new();
 
-        let service = mire_lib::Service::new(&database.url).await;
+        let config = mire_lib::Config {
+            database_url: database.url.clone(),
+        };
+
+        let service = mire_lib::Service::new(config).await;
 
         Self { service, database }
     }
