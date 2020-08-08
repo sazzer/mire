@@ -17,6 +17,7 @@ impl TestSubject {
 
         let config = mire_lib::Config {
             database_url: database.url.clone(),
+            ..mire_lib::Config::default()
         };
 
         let service = mire_lib::Service::new(config).await;

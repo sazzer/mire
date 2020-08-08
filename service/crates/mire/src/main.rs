@@ -9,6 +9,18 @@ struct Settings {
     pub port: Option<u16>,
     /// The URL to use to connect to the database
     pub database_url: Option<String>,
+
+    /// The Client ID for Google Authentication
+    pub google_client_id: Option<String>,
+    /// The Client Secret for Google Authentication
+    pub google_client_secret: Option<String>,
+    /// The URI for Google to redirect to after authentication
+    pub google_redirect_uri: Option<String>,
+
+    /// The URI to redirect to in order to start authentication with Google
+    pub google_auth_uri: Option<String>,
+    /// The URI to call to get the authenticated token from Google
+    pub google_token_uri: Option<String>,
 }
 
 impl Default for Settings {
@@ -35,8 +47,25 @@ async fn main() {
 
     tracing::debug!(settings = ?settings, "Application settings");
 
+    let google_config = if let (Some(client_id), Some(client_secret), Some(redirect_uri)) = (
+        settings.google_client_id,
+        settings.google_client_secret,
+        settings.google_redirect_uri,
+    ) {
+        Some(mire_authentication::google::Config {
+            client_id,
+            client_secret,
+            redirect_uri,
+            auth_uri: settings.google_auth_uri,
+            token_uri: settings.google_token_uri,
+        })
+    } else {
+        None
+    };
+
     let config = mire_lib::Config {
         database_url: settings.database_url.expect("No database URL provided"),
+        google_config,
     };
 
     let service = mire_lib::Service::new(config).await;
