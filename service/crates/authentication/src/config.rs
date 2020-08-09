@@ -1,5 +1,4 @@
 use crate::service::Registry;
-use std::collections::HashMap;
 use std::sync::Arc;
 
 /// Configuration of the authentication component.
@@ -13,8 +12,7 @@ impl AuthenticationConfig {
     #[must_use]
     #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
-        let providers = HashMap::new();
-        let registry = Registry { providers };
+        let registry = Registry::default();
         Self { registry }
     }
 

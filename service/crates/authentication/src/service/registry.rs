@@ -4,13 +4,23 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 /// Registry of authentication providers that we can use
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Registry {
     /// The map of authentication providers that are known
-    pub(crate) providers: HashMap<ProviderId, Arc<dyn Provider>>,
+    providers: HashMap<ProviderId, Arc<dyn Provider>>,
 }
 
 impl Registry {
+    /// Insert a new provider into the registry.
+    ///
+    /// # Parameters
+    /// - `provider_id` - The ID of the provider
+    /// - `provider` - The actual provider
+    pub fn insert(&mut self, provider_id: ProviderId, provider: Arc<dyn Provider>) -> &mut Self {
+        self.providers.insert(provider_id, provider);
+        self
+    }
+
     /// Get the list of all providers that are currently registered
     ///
     /// # Returns
@@ -37,26 +47,23 @@ impl Registry {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::service::provider::{Provider, ProviderMock};
+    use crate::service::provider::ProviderMock;
     use assert2::{assert, check};
     use std::str::FromStr;
 
     #[test]
     fn list_no_providers() {
-        let providers = HashMap::new();
-        let registry = Registry { providers };
+        let registry = Registry::default();
 
         check!(registry.providers() == Vec::<&ProviderId>::new());
     }
 
     #[test]
     fn list_some_providers() {
-        let mut providers: HashMap<ProviderId, Arc<dyn Provider>> = HashMap::new();
-        providers.insert("google".parse().unwrap(), Arc::new(ProviderMock::new()));
-        providers.insert("twitter".parse().unwrap(), Arc::new(ProviderMock::new()));
-        providers.insert("facebook".parse().unwrap(), Arc::new(ProviderMock::new()));
-
-        let registry = Registry { providers };
+        let mut registry = Registry::default();
+        registry.insert("google".parse().unwrap(), Arc::new(ProviderMock::new()));
+        registry.insert("twitter".parse().unwrap(), Arc::new(ProviderMock::new()));
+        registry.insert("facebook".parse().unwrap(), Arc::new(ProviderMock::new()));
 
         check!(
             registry.providers()
@@ -70,8 +77,7 @@ mod tests {
 
     #[test]
     fn get_unknown_provider() {
-        let providers: HashMap<ProviderId, Arc<dyn Provider>> = HashMap::new();
-        let registry = Registry { providers };
+        let registry = Registry::default();
 
         let provider = registry.get_provider(&"google".parse().unwrap());
         check!(provider.is_none());
@@ -79,9 +85,8 @@ mod tests {
 
     #[test]
     fn get_known_provider() {
-        let mut providers: HashMap<ProviderId, Arc<dyn Provider>> = HashMap::new();
-        providers.insert("google".parse().unwrap(), Arc::new(ProviderMock::new()));
-        let registry = Registry { providers };
+        let mut registry = Registry::default();
+        registry.insert("google".parse().unwrap(), Arc::new(ProviderMock::new()));
 
         let provider = registry.get_provider(&"google".parse().unwrap());
         assert!(provider.is_some());
