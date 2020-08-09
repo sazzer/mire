@@ -1,5 +1,5 @@
 use super::Config;
-use crate::service::Provider;
+use crate::{service::Provider, StartAuthentication};
 
 /// Implementation of the Provider trait for authenticating with Google
 pub struct GoogleProvider {}
@@ -14,4 +14,9 @@ impl GoogleProvider {
     }
 }
 
-impl Provider for GoogleProvider {}
+impl Provider for GoogleProvider {
+    /// Generate the details needed to redirect the user to authenticate with this provider
+    fn start(&self) -> StartAuthentication {
+        todo!()
+    }
+}
