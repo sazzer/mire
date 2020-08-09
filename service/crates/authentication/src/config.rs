@@ -28,6 +28,7 @@ impl AuthenticationConfig {
             c.data(registry.clone());
 
             c.service(super::endpoints::list_providers::list_providers);
+            c.service(super::endpoints::start::start);
         })
     }
 }

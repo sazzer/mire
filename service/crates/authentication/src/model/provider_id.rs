@@ -1,9 +1,9 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 /// The identity of an authentication provider
-#[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd, Clone, Serialize)]
-pub struct ProviderId(String);
+#[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd, Clone, Serialize, Deserialize)]
+pub struct ProviderId(pub(crate) String);
 
 /// Errors that can occur when parsing a Provider ID
 #[derive(Debug, PartialEq, thiserror::Error)]
