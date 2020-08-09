@@ -17,7 +17,13 @@ impl TestSubject {
 
         let config = mire_lib::Config {
             database_url: database.url.clone(),
-            ..mire_lib::Config::default()
+            google_config: Some(mire_authentication::google::Config {
+                client_id: "GoogleClientId".to_owned(),
+                client_secret: "GoogleClientSecret".to_owned(),
+                redirect_uri: "http://localhost/authentication/google/redirect".to_owned(),
+                auth_uri: None,
+                token_uri: None,
+            }),
         };
 
         let service = mire_lib::Service::new(config).await;

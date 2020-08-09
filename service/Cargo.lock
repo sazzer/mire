@@ -1317,6 +1317,8 @@ dependencies = [
 name = "mire-authentication"
 version = "0.1.0"
 dependencies = [
+ "actix-http",
+ "actix-web",
  "assert2",
  "async-trait",
  "mire-authorization",
@@ -1325,6 +1327,7 @@ dependencies = [
  "serde 1.0.114",
  "thiserror",
  "tracing",
+ "tracing-futures",
 ]
 
 [[package]]
@@ -1361,7 +1364,6 @@ dependencies = [
 name = "mire-health"
 version = "0.1.0"
 dependencies = [
- "actix-cors",
  "actix-http",
  "actix-web",
  "assert2",

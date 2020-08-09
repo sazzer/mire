@@ -26,6 +26,8 @@ impl AuthenticationConfig {
 
         Arc::new(move |c| {
             c.data(registry.clone());
+
+            c.service(super::endpoints::list_providers::list_providers);
         })
     }
 }

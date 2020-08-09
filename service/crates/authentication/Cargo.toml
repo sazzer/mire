@@ -5,10 +5,13 @@ authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
 [dependencies]
+actix-http = "1.0.1"
+actix-web = "2.0.0"
 async-trait = "0.1.36"
 serde = { version = "1.0.114", features = ["derive"] }
 thiserror = "1.0.20"
 tracing = "0.1.17"
+tracing-futures = "0.2.4"
 
 mire-authorization = { path = "../authorization" }
 mire-server = { path = "../server" }
