@@ -37,7 +37,10 @@ impl Service {
 
         let _users = UsersConfig::new(database.clone());
 
-        let authentication = AuthenticationConfig::new();
+        let mut authentication = AuthenticationConfig::new();
+        if let Some(google) = config.google_config {
+            authentication.with_google(&google);
+        }
 
         let mut health = HealthConfig::default();
         health.add_component("db".to_owned(), Arc::new(database));
