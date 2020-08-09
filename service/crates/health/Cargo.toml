@@ -5,7 +5,6 @@ authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
 [dependencies]
-actix-cors = "0.2.0"
 actix-http = "1.0.1"
 actix-web = "2.0.0"
 async-trait = "0.1.36"
