@@ -23,7 +23,7 @@ async fn test_list_providers() {
 }
 
 #[actix_rt::test]
-async fn test_list_start_unknown() {
+async fn test_start_unknown() {
     let test_subject = TestSubject::new().await;
 
     let response = test_subject
@@ -39,7 +39,7 @@ async fn test_list_start_unknown() {
 }
 
 #[actix_rt::test]
-async fn test_list_start_google() {
+async fn test_start_google() {
     let test_subject = TestSubject::new().await;
 
     let response = test_subject
