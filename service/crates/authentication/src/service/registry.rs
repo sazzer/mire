@@ -26,9 +26,7 @@ impl Registry {
     /// # Returns
     /// The complete list of all providers that can be used
     pub fn providers(&self) -> Vec<&ProviderId> {
-        let mut providers: Vec<&ProviderId> = self.providers.keys().collect();
-        providers.sort();
-        providers
+        self.providers.keys().collect()
     }
 
     /// Get the single provider with the given ID, if there is one.
@@ -65,8 +63,11 @@ mod tests {
         registry.insert("twitter".parse().unwrap(), Arc::new(ProviderMock::new()));
         registry.insert("facebook".parse().unwrap(), Arc::new(ProviderMock::new()));
 
+        let mut providers = registry.providers();
+        providers.sort();
+
         check!(
-            registry.providers()
+            providers
                 == vec![
                     &ProviderId::from_str("facebook").unwrap(),
                     &ProviderId::from_str("google").unwrap(),

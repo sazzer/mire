@@ -22,10 +22,10 @@ impl AuthenticationConfig {
     /// The lambda to register details with the HTTP Server.
     #[must_use]
     pub fn server_config(&self) -> mire_server::FnConfig {
-        let registry = self.registry.clone();
+        let service = crate::service::AuthenticationService::new(self.registry.clone());
 
         Arc::new(move |c| {
-            c.data(registry.clone());
+            c.data(service.clone());
 
             c.service(super::endpoints::list_providers::list_providers);
             c.service(super::endpoints::start::start);
