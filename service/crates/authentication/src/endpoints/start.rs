@@ -20,26 +20,30 @@ use actix_web::{
     skip(registry)
 )]
 pub async fn start(path: Path<(ProviderId,)>, registry: Data<Registry>) -> HttpResponse {
-    let provider = registry.get_provider(&path.0);
+    if let Some(provider) = registry.get_provider(&path.0) {
+        let authentication = provider.start();
 
-    if let Some(_provider) = provider {
         let mut response = HttpResponse::Found();
         response.set(CacheControl(vec![
             CacheDirective::Public,
             CacheDirective::MaxAge(3600),
         ]));
-        response.set_header("location", "http://www.google.com");
-        response.cookie(
-            Cookie::build("mire_authentication_nonce", "someNonce")
-                .http_only(true)
-                .finish(),
-        );
+        response.set_header("location", authentication.redirect_uri);
         response.cookie(
             Cookie::build("mire_authentication_provider", path.0.0.clone())
                 .http_only(true)
                 .finish(),
         );
-        response.finish()
+
+        if let Some(nonce) = authentication.nonce {
+          response.cookie(
+            Cookie::build("mire_authentication_nonce", nonce)
+                .http_only(true)
+                .finish(),
+          );
+        }
+
+      response.finish()
     } else {
         HttpResponse::NotFound()
             .set(CacheControl(vec![

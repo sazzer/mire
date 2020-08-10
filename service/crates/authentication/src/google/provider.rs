@@ -1,22 +1,71 @@
 use super::Config;
 use crate::{service::Provider, StartAuthentication};
+use uritemplate::UriTemplate;
+use uuid::Uuid;
+
+/// The default URI to use for starting authentication
+const DEFAULT_AUTH_URI: &str = "https://accounts.google.com/o/oauth2/v2/auth{?client_id,redirect_uri,response_type,scope,state}";
+
+/// The default URI to use for fetching authenticated tokens
+const DEFAULT_TOKEN_URI: &str = "https://www.googleapis.com/oauth2/v4/token";
 
 /// Implementation of the Provider trait for authenticating with Google
-pub struct GoogleProvider {}
+pub struct GoogleProvider {
+    /// The Client ID
+    pub client_id: String,
+    /// The Client Secret
+    pub client_secret: String,
+    /// The URI for Google to redirect to after authentication
+    pub redirect_uri: String,
+
+    /// The URI to redirect to in order to start authentication
+    pub auth_uri: String,
+    /// The URI to call to get the authenticated token
+    pub token_uri: String,
+}
 
 impl GoogleProvider {
     /// Construct the Google Authentication Provider
     ///
     /// # Parameters
     /// - `config` - The configuration to use for Google
-    pub const fn new(_config: &Config) -> Self {
-        Self {}
+    pub fn new(config: &Config) -> Self {
+        Self {
+            client_id: config.client_id.clone(),
+            client_secret: config.client_secret.clone(),
+            redirect_uri: config.redirect_uri.clone(),
+            auth_uri: config
+                .auth_uri
+                .clone()
+                .unwrap_or_else(|| DEFAULT_AUTH_URI.to_owned()),
+            token_uri: config
+                .token_uri
+                .clone()
+                .unwrap_or_else(|| DEFAULT_TOKEN_URI.to_owned()),
+        }
     }
 }
 
 impl Provider for GoogleProvider {
     /// Generate the details needed to redirect the user to authenticate with this provider
     fn start(&self) -> StartAuthentication {
-        todo!()
+        tracing::debug!("Generating URI to authenticate against Google");
+
+        let state = Uuid::new_v4().to_string();
+
+        let uri = UriTemplate::new(&self.auth_uri)
+            .set("client_id", self.client_id.clone())
+            .set("redirect_uri", self.redirect_uri.clone())
+            .set("state", state.clone())
+            .set("response_type", "code")
+            .set("scope", "openid email profile")
+            .build();
+
+        tracing::debug!(uri = ?uri, state = ?state, "Generated URI to authenticate against Google");
+
+        StartAuthentication {
+            redirect_uri: uri,
+            nonce: Some(state),
+        }
     }
 }

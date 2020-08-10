@@ -12,6 +12,8 @@ serde = { version = "1.0.114", features = ["derive"] }
 thiserror = "1.0.20"
 tracing = "0.1.17"
 tracing-futures = "0.2.4"
+uritemplate = "0.1.2"
+uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
 mire-authorization = { path = "../authorization" }
 mire-server = { path = "../server" }
