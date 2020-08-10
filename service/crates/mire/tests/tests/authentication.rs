@@ -21,3 +21,35 @@ async fn test_list_providers() {
     ]
     "###);
 }
+
+#[actix_rt::test]
+async fn test_list_start_unknown() {
+    let test_subject = TestSubject::new().await;
+
+    let response = test_subject
+        .inject(
+            TestRequest::get()
+                .uri("/authentication/unknown")
+                .to_request(),
+        )
+        .await;
+
+    check!(response.status == StatusCode::NOT_FOUND);
+    check!(response.header("cache-control").unwrap() == "public, max-age=3600");
+}
+
+#[actix_rt::test]
+async fn test_list_start_google() {
+    let test_subject = TestSubject::new().await;
+
+    let response = test_subject
+        .inject(
+            TestRequest::get()
+                .uri("/authentication/google")
+                .to_request(),
+        )
+        .await;
+
+    check!(response.status == StatusCode::FOUND);
+    check!(response.header("cache-control").unwrap() == "no-cache");
+}

@@ -25,8 +25,7 @@ pub async fn start(path: Path<(ProviderId,)>, registry: Data<Registry>) -> HttpR
 
         let mut response = HttpResponse::Found();
         response.set(CacheControl(vec![
-            CacheDirective::Public,
-            CacheDirective::MaxAge(3600),
+            CacheDirective::NoCache,
         ]));
         response.set_header("location", authentication.redirect_uri);
         response.cookie(
