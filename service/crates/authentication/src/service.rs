@@ -1,9 +1,11 @@
 mod provider;
 mod providers;
 mod registry;
+mod start;
 
 pub use provider::Provider;
 pub use registry::Registry;
+pub use start::StartAuthenticationError;
 
 /// The authentication service that manages all authentication details
 #[derive(Clone)]

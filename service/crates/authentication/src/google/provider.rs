@@ -1,7 +1,6 @@
 use super::Config;
-use crate::{service::Provider, StartAuthentication};
+use crate::service::Provider;
 use uritemplate::UriTemplate;
-use uuid::Uuid;
 
 /// The default URI to use for starting authentication
 const DEFAULT_AUTH_URI: &str = "https://accounts.google.com/o/oauth2/v2/auth{?client_id,redirect_uri,response_type,scope,state}";
@@ -48,24 +47,25 @@ impl GoogleProvider {
 
 impl Provider for GoogleProvider {
     /// Generate the details needed to redirect the user to authenticate with this provider
-    fn start(&self) -> StartAuthentication {
+    ///
+    /// # Parameters
+    /// - `nonce` - A generated nonce unique to this request
+    ///
+    /// # Returns
+    /// The URL to redirect the user to in order to start authentication
+    fn start(&self, nonce: &str) -> String {
         tracing::debug!("Generating URI to authenticate against Google");
-
-        let state = Uuid::new_v4().to_string();
 
         let uri = UriTemplate::new(&self.auth_uri)
             .set("client_id", self.client_id.clone())
             .set("redirect_uri", self.redirect_uri.clone())
-            .set("state", state.clone())
+            .set("state", nonce)
             .set("response_type", "code")
             .set("scope", "openid email profile")
             .build();
 
-        tracing::debug!(uri = ?uri, state = ?state, "Generated URI to authenticate against Google");
+        tracing::debug!(uri = ?uri, state = ?nonce, "Generated URI to authenticate against Google");
 
-        StartAuthentication {
-            redirect_uri: uri,
-            nonce: Some(state),
-        }
+        uri
     }
 }
