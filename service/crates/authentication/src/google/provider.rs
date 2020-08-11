@@ -1,5 +1,6 @@
 use super::Config;
 use crate::service::Provider;
+use async_trait::async_trait;
 use uritemplate::UriTemplate;
 
 /// The default URI to use for starting authentication
@@ -45,6 +46,7 @@ impl GoogleProvider {
     }
 }
 
+#[async_trait]
 impl Provider for GoogleProvider {
     /// Generate the details needed to redirect the user to authenticate with this provider
     ///
@@ -67,5 +69,21 @@ impl Provider for GoogleProvider {
         tracing::debug!(uri = ?uri, state = ?nonce, "Generated URI to authenticate against Google");
 
         uri
+    }
+
+    /// Complete authentication against the provider and return details of the user that authenticated
+    ///
+    /// # Parameters
+    /// - `params` - The parameters received from the callback from the provider
+    ///
+    /// # Returns
+    /// The details of the user that authenticated
+    ///
+    /// # Errors
+    /// If an error occurs authenticating against the provider
+    async fn complete(&self, params: &std::collections::HashMap<String, String>) {
+        let _code = params.get("code");
+
+        todo!()
     }
 }

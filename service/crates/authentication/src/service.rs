@@ -2,6 +2,7 @@ mod provider;
 mod providers;
 mod registry;
 mod start;
+mod complete;
 
 pub use provider::Provider;
 pub use registry::Registry;

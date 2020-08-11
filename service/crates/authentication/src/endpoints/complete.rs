@@ -25,6 +25,9 @@ pub async fn complete(
     query: Query<HashMap<String, String>>,
     authentication_service: Data<AuthenticationService>,
 ) -> HttpResponse {
-    tracing::info!(query = ?query, "Query parameters");
+    authentication_service
+        .complete_authentication(&path.0, &query.0)
+        .await
+        .unwrap();
     todo!()
 }
