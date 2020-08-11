@@ -10,6 +10,7 @@ use actix_web::{
 /// HTTP Handler for starting authentication with the desired provider
 ///
 /// # Parameters
+/// - `path` - The path parameters including the provider ID
 /// - `authentication_service` - The Authentiaction Service
 ///
 /// # Returns

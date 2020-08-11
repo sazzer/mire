@@ -1,2 +1,7 @@
-pub mod list_providers;
-pub mod start;
+mod complete;
+mod list_providers;
+mod start;
+
+pub use complete::*;
+pub use list_providers::*;
+pub use start::*;
