@@ -1,9 +1,11 @@
+mod authenticated_user;
+mod complete;
 mod provider;
 mod providers;
 mod registry;
 mod start;
-mod complete;
 
+pub use authenticated_user::AuthenticatedUser;
 pub use provider::Provider;
 pub use registry::Registry;
 pub use start::StartAuthenticationError;

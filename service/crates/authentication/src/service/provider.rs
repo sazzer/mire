@@ -1,5 +1,5 @@
+use super::AuthenticatedUser;
 use async_trait::async_trait;
-
 /// Trait that represents an Authentication Provider of some kind.
 #[async_trait]
 pub trait Provider: Send + Sync {
@@ -18,11 +18,12 @@ pub trait Provider: Send + Sync {
     /// - `params` - The parameters received from the callback from the provider
     ///
     /// # Returns
-    /// The details of the user that authenticated
-    ///
-    /// # Errors
-    /// If an error occurs authenticating against the provider
-    async fn complete(&self, params: &std::collections::HashMap<String, String>);
+    /// The details of the user that authenticated. If authentication failed for some reason then instead
+    /// returns `None` to indicate this fact.
+    async fn complete(
+        &self,
+        params: &std::collections::HashMap<String, String>,
+    ) -> Option<AuthenticatedUser>;
 }
 
 #[cfg(test)]
@@ -42,7 +43,10 @@ impl Provider for ProviderMock {
         todo!()
     }
 
-    async fn complete(&self, params: &std::collections::HashMap<String, String>) {
+    async fn complete(
+        &self,
+        params: &std::collections::HashMap<String, String>,
+    ) -> Option<AuthenticatedUser> {
         todo!()
     }
 }
