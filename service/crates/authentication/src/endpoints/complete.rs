@@ -29,5 +29,6 @@ pub async fn complete(
         .complete_authentication(&path.0, &query.0)
         .await
         .unwrap();
-    todo!()
+
+    HttpResponse::NotFound().finish()
 }

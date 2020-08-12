@@ -1,4 +1,4 @@
-use super::Config;
+use super::{access_token::AccessToken, Config};
 use crate::service::{AuthenticatedUser, Provider};
 use async_trait::async_trait;
 use uritemplate::UriTemplate;
@@ -11,17 +11,20 @@ const DEFAULT_TOKEN_URI: &str = "https://www.googleapis.com/oauth2/v4/token";
 
 /// Implementation of the Provider trait for authenticating with Google
 pub struct GoogleProvider {
+    /// The HTTP Client to make use of
+    client: reqwest::Client,
+
     /// The Client ID
-    pub client_id: String,
+    client_id: String,
     /// The Client Secret
-    pub client_secret: String,
+    client_secret: String,
     /// The URI for Google to redirect to after authentication
-    pub redirect_uri: String,
+    redirect_uri: String,
 
     /// The URI to redirect to in order to start authentication
-    pub auth_uri: String,
+    auth_uri: String,
     /// The URI to call to get the authenticated token
-    pub token_uri: String,
+    token_uri: String,
 }
 
 impl GoogleProvider {
@@ -30,7 +33,10 @@ impl GoogleProvider {
     /// # Parameters
     /// - `config` - The configuration to use for Google
     pub fn new(config: &Config) -> Self {
+        let client = reqwest::Client::new();
+
         Self {
+            client,
             client_id: config.client_id.clone(),
             client_secret: config.client_secret.clone(),
             redirect_uri: config.redirect_uri.clone(),
@@ -83,8 +89,42 @@ impl Provider for GoogleProvider {
         &self,
         params: &std::collections::HashMap<String, String>,
     ) -> Option<AuthenticatedUser> {
-        let _code = params.get("code");
+        let code = params.get("code")?;
+        let params = [
+            ("code", code.as_ref()),
+            ("client_id", self.client_id.as_ref()),
+            ("client_secret", self.client_secret.as_ref()),
+            ("redirect_uri", self.redirect_uri.as_ref()),
+            ("grant_type", "authorization_code"),
+        ];
 
-        todo!()
+        let res = self
+            .client
+            .post(&self.token_uri)
+            .form(&params)
+            .send()
+            .await
+            .unwrap();
+
+        let response_status = res.status();
+
+        if !response_status.is_success() {
+            let response_body = res.text().await;
+            tracing::warn!(body = ?response_body, "Failed to authenticate with Google");
+            return None;
+        }
+
+        let access_token: AccessToken = res
+            .json()
+            .await
+            .map_err(|e| {
+                tracing::debug!(e = ?e, "Failed to parse access token from Google");
+                e
+            })
+            .ok()?;
+
+        tracing::debug!(access_token = ?access_token, "Response from authenticting with Google");
+
+        None
     }
 }
