@@ -10,10 +10,13 @@ pub use provider::Provider;
 pub use registry::Registry;
 pub use start::StartAuthenticationError;
 
+use mire_users::UsersService;
+
 /// The authentication service that manages all authentication details
 #[derive(Clone)]
 pub struct AuthenticationService {
     registry: Registry,
+    users_service: UsersService,
 }
 
 impl AuthenticationService {
@@ -21,7 +24,10 @@ impl AuthenticationService {
     ///
     /// # Parameters
     /// - `registry` - The registry of authentication providers
-    pub const fn new(registry: Registry) -> Self {
-        Self { registry }
+    pub const fn new(registry: Registry, users_service: UsersService) -> Self {
+        Self {
+            registry,
+            users_service,
+        }
     }
 }

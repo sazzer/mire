@@ -8,6 +8,7 @@ pub use errors::SaveUserError;
 use mire_database::Database;
 
 /// Repository for accessing user data
+#[derive(Clone)]
 pub struct UsersRepository {
     /// The database connection to use
     database: Database,

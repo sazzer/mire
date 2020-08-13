@@ -35,9 +35,9 @@ impl Service {
         let _authorization =
             AuthorizationConfig::new(Duration::days(365), SigningKey::new("DummyKey"));
 
-        let _users = UsersConfig::new(database.clone());
+        let users = UsersConfig::new(database.clone());
 
-        let mut authentication = AuthenticationConfig::new();
+        let mut authentication = AuthenticationConfig::new(users.service);
         if let Some(google) = config.google_config {
             authentication.with_google(&google);
         }
