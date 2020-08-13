@@ -1,6 +1,10 @@
-use super::{access_token::AccessToken, Config};
+use super::{
+    access_token::{AccessToken, IdTokenClaims},
+    Config,
+};
 use crate::service::{AuthenticatedUser, Provider};
 use async_trait::async_trait;
+use std::convert::TryInto;
 use uritemplate::UriTemplate;
 
 /// The default URI to use for starting authentication
@@ -62,7 +66,7 @@ impl Provider for GoogleProvider {
     /// # Returns
     /// The URL to redirect the user to in order to start authentication
     fn start(&self, nonce: &str) -> String {
-        tracing::debug!("Generating URI to authenticate against Google");
+        tracing::trace!("Generating URI to authenticate against Google");
 
         let uri = UriTemplate::new(&self.auth_uri)
             .set("client_id", self.client_id.clone())
@@ -118,13 +122,16 @@ impl Provider for GoogleProvider {
             .json()
             .await
             .map_err(|e| {
-                tracing::debug!(e = ?e, "Failed to parse access token from Google");
+                tracing::warn!(e = ?e, "Failed to parse access token from Google");
                 e
             })
             .ok()?;
 
-        tracing::debug!(access_token = ?access_token, "Response from authenticting with Google");
+        tracing::trace!(access_token = ?access_token, "Response from authenticting with Google");
 
-        None
+        let id_token_claims: IdTokenClaims = access_token.id_token.try_into().ok()?;
+        tracing::trace!(id_token_claims = ?id_token_claims, "ID Token from Google");
+
+        id_token_claims.try_into().ok()
     }
 }

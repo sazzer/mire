@@ -1433,6 +1433,7 @@ dependencies = [
  "actix-web",
  "assert2",
  "async-trait",
+ "jsonwebtoken",
  "mire-authorization",
  "mire-server",
  "mire-users",
