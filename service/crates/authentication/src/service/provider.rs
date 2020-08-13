@@ -43,6 +43,7 @@ impl Provider for ProviderMock {
         todo!()
     }
 
+    #[allow(unused_variables)]
     async fn complete(
         &self,
         params: &std::collections::HashMap<String, String>,
