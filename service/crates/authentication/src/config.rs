@@ -1,5 +1,4 @@
 use crate::service::Registry;
-use mire_authorization::AuthorizationService;
 use mire_users::UsersService;
 use std::sync::Arc;
 
@@ -10,20 +9,16 @@ pub struct AuthenticationConfig {
 
     /// The Users Service, to look up and register users
     users_service: UsersService,
-
-    /// The Authorization Service, to generate Security Contexts
-    authorization_service: AuthorizationService,
 }
 
 impl AuthenticationConfig {
     /// Construct the authentication component.
     #[must_use]
-    pub fn new(users_service: UsersService, authorization_service: AuthorizationService) -> Self {
+    pub fn new(users_service: UsersService) -> Self {
         let registry = Registry::default();
         Self {
             registry,
             users_service,
-            authorization_service,
         }
     }
 
@@ -36,7 +31,6 @@ impl AuthenticationConfig {
         let service = crate::service::AuthenticationService::new(
             self.registry.clone(),
             self.users_service.clone(),
-            self.authorization_service.clone(),
         );
 
         Arc::new(move |c| {

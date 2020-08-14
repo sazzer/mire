@@ -1,6 +1,6 @@
 use super::AuthenticationService;
 use crate::ProviderId;
-use mire_users::UserData;
+use mire_users::{UserData, UserModel};
 use std::collections::HashMap;
 use std::convert::TryInto;
 
@@ -29,7 +29,7 @@ impl AuthenticationService {
         &self,
         provider_id: &ProviderId,
         params: &HashMap<String, String>,
-    ) -> Result<(), CompleteAuthenticationError> {
+    ) -> Result<UserModel, CompleteAuthenticationError> {
         let provider = self.registry.get_provider(provider_id).ok_or_else(|| {
             tracing::warn!(provider_id = ?provider_id, "Unknown provider requested");
             CompleteAuthenticationError::UnknownProvider
@@ -68,11 +68,6 @@ impl AuthenticationService {
             created_user
         };
 
-        let security_context = self
-            .authorization_service
-            .generate_security_context(user.identity.id.into());
-        tracing::debug!(security_context = ?security_context, "Security Context for user");
-
-        Ok(())
+        Ok(user)
     }
 }
