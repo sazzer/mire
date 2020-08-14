@@ -7,9 +7,9 @@ edition = "2018"
 [dependencies]
 chrono = { version = "0.4.13", features = ["serde"] }
 jsonwebtoken = "7.2.0"
-serde = { version = "1.0.114", features = ["derive"] }
+serde = { version = "1.0.115", features = ["derive"] }
 thiserror = "1.0.20"
-tracing = "0.1.17"
+tracing = "0.1.19"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
 mire-server = { path = "../server" }

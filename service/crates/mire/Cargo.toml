@@ -18,11 +18,11 @@ config = "0.10.1"
 dotenv = "0.15.0"
 futures = "0.3.5"
 log = "0.4.11"
-serde = { version = "1.0.114", features = ["derive"] }
-tracing = "0.1.17"
+serde = { version = "1.0.115", features = ["derive"] }
+tracing = "0.1.19"
 tracing-futures = "0.2.4"
 tracing-log = "0.1.1"
-tracing-subscriber = "0.2.9"
+tracing-subscriber = "0.2.11"
 
 mire-authentication = { path = "../authentication" }
 mire-authorization = { path = "../authorization" }

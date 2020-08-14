@@ -10,4 +10,4 @@ actix-http = "1.0.1"
 actix-web = "2.0.0"
 bytes = "0.5.6"
 serde_json = { version = "1.0.57", features = ["preserve_order"] }
-tracing = "0.1.17"
+tracing = "0.1.19"
