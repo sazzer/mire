@@ -32,12 +32,12 @@ impl Service {
             .await
             .expect("Database connection is not healthy");
 
-        let _authorization =
+        let authorization =
             AuthorizationConfig::new(Duration::days(365), SigningKey::new("DummyKey"));
 
         let users = UsersConfig::new(database.clone());
 
-        let mut authentication = AuthenticationConfig::new(users.service);
+        let mut authentication = AuthenticationConfig::new(users.service, authorization.service);
         if let Some(google) = config.google_config {
             authentication.with_google(&google);
         }
