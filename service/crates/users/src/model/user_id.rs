@@ -1,4 +1,5 @@
 use bytes::BytesMut;
+use mire_authorization::PrincipalId;
 use postgres_types::{accepts, to_sql_checked, FromSql, IsNull, ToSql, Type};
 use std::str::FromStr;
 use uuid::Uuid;
@@ -50,6 +51,12 @@ impl ToSql for UserId {
     }
 }
 
+impl From<UserId> for PrincipalId {
+    fn from(user_id: UserId) -> Self {
+        Self::User(user_id.0.to_string())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -78,5 +85,14 @@ mod tests {
         let user_id = UserId::from_str("2ac84068-1664-4f41-8e98-a464c78c5e40").unwrap();
 
         check!(user_id.0.to_string() == "2ac84068-1664-4f41-8e98-a464c78c5e40");
+    }
+
+    #[test]
+    fn to_principal_id() {
+        let user_id = UserId::from_str("2ac84068-1664-4f41-8e98-a464c78c5e40").unwrap();
+        let principal_id = PrincipalId::from(user_id);
+        check!(
+            principal_id == PrincipalId::User("2ac84068-1664-4f41-8e98-a464c78c5e40".to_owned())
+        );
     }
 }

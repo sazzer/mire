@@ -16,6 +16,7 @@ tracing = "0.1.17"
 tracing-futures = "0.2.4"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
+mire-authorization = { path = "../authorization" }
 mire-database = { path = "../database" }
 mire-model = { path = "../model" }
 

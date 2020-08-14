@@ -12,7 +12,5 @@ thiserror = "1.0.20"
 tracing = "0.1.17"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
-mire-users = { path = "../users" }
-
 [dev-dependencies]
 assert2 = "0.3.1"

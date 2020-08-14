@@ -45,7 +45,7 @@ impl AuthenticationService {
             .get_by_authentication(&provider_id, &authenticated_user.provider_id)
             .await;
 
-        let _user = if let Some(authenticated_user) = user {
+        let _ = if let Some(authenticated_user) = user {
             tracing::debug!(user = ?authenticated_user, "Authenticated as user");
             authenticated_user
         } else {
