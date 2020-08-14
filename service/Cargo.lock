@@ -1453,6 +1453,7 @@ dependencies = [
  "assert2",
  "chrono",
  "jsonwebtoken",
+ "mire-server",
  "serde 1.0.114",
  "thiserror",
  "tracing",
