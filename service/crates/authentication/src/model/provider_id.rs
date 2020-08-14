@@ -1,4 +1,6 @@
+use mire_users::{AuthenticationProvider, AuthenticationProviderParseError};
 use serde::{Deserialize, Serialize};
+use std::convert::TryFrom;
 use std::str::FromStr;
 
 /// The identity of an authentication provider
@@ -23,6 +25,14 @@ impl FromStr for ProviderId {
         } else {
             Ok(Self(trimmed.to_owned()))
         }
+    }
+}
+
+impl TryFrom<&ProviderId> for AuthenticationProvider {
+    type Error = AuthenticationProviderParseError;
+
+    fn try_from(provider_id: &ProviderId) -> Result<Self, Self::Error> {
+        Self::from_str(&provider_id.0)
     }
 }
 
