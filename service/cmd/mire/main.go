@@ -1,11 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"os"
+	"time"
 
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	fmt.Println("Hello")
+	config := LoadConfig()
+
+	if config.Debug {
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
+	}
+
+	log.Logger = log.With().Caller().Logger()
+
+	log.Info().Msg("Starting Mire...")
 }
