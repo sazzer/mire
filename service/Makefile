@@ -3,6 +3,10 @@
 clean:
 	rm -rf output
 
+tidy:
+	go get -u ./...
+	go mod tidy
+	
 prepare:
 	go get ./...
 	

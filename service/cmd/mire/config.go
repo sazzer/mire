@@ -1,9 +1,8 @@
 package main
 
 import (
-	"github.com/rs/zerolog/log"
-
 	"github.com/kelseyhightower/envconfig"
+	"github.com/rs/zerolog/log"
 )
 
 // Config represents the configuration of the app.
