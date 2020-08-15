@@ -5,12 +5,12 @@ import (
 	"github.com/sazzer/mire/service/internal/server"
 )
 
-// Service represents the actual Mire service
+// Service represents the actual Mire service.
 type Service struct {
 	server server.Server
 }
 
-// NewService creates a new instance of the Mire service
+// NewService creates a new instance of the Mire service.
 func NewService() Service {
 	log.Debug().Msg("Building Mire...")
 
@@ -21,7 +21,7 @@ func NewService() Service {
 	}
 }
 
-// Start will start the Mire service running and ready to accept connections
+// Start will start the Mire service running and ready to accept connections.
 func (s *Service) Start(port uint16) {
 	log.Info().Msg("Starting Mire...")
 	s.server.Start(port)

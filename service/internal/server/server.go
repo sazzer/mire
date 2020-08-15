@@ -10,13 +10,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// Server represents the actual HTTP Server
+// Server represents the actual HTTP Server.
 type Server struct {
 	router *chi.Mux
 }
 
-// NewServer creates a new HTTP Server
-func NewServer() Server {
+// NewServer creates a new HTTP Server.
+func NewServer(configs ...Configurer) Server {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -32,12 +32,16 @@ func NewServer() Server {
 		MaxAge:           300,
 	}))
 
+	for _, config := range configs {
+		config.RegisterRoutes(r)
+	}
+
 	return Server{
 		router: r,
 	}
 }
 
-// Start will start the HTTP server listening for connection
+// Start will start the HTTP server listening for connection.
 func (s *Server) Start(port uint16) {
 	log.Info().Uint16("port", port).Msg("Starting HTTP Server...")
 
