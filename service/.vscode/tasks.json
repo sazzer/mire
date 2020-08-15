@@ -25,7 +25,7 @@
     {
       "label": "go check",
       "type": "shell",
-      "command": "golangci-lint run",
+      "command": "golangci-lint run --allow-parallel-runners",
       "group": "test",
       "options": {
         "env": {}

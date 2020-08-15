@@ -22,7 +22,7 @@ testFast: prepare check
 allTests: prepare check test
 
 check: prepare
-	golangci-lint run
+	golangci-lint run --allow-parallel-runners
 	
 build: prepare test clean
 	go build -o output/mire cmd/mire/*
