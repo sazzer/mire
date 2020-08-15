@@ -2,6 +2,7 @@ package internal
 
 import (
 	"github.com/rs/zerolog/log"
+	"github.com/sazzer/mire/service/internal/health"
 	"github.com/sazzer/mire/service/internal/server"
 )
 
@@ -14,7 +15,9 @@ type Service struct {
 func NewService() Service {
 	log.Debug().Msg("Building Mire...")
 
-	server := server.NewServer()
+	health := health.NewComponent()
+
+	server := server.NewServer(health)
 
 	return Service{
 		server: server,
