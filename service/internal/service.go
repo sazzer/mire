@@ -15,7 +15,7 @@ type Service struct {
 func NewService() Service {
 	log.Debug().Msg("Building Mire...")
 
-	health := health.NewComponent()
+	health := health.NewComponent(map[string]health.Healthchecker{})
 
 	server := server.NewServer(health)
 

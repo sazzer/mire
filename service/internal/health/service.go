@@ -8,15 +8,10 @@ type Service struct {
 }
 
 // Create a new instance of the healthcheck service.
-func NewService() Service {
+func NewService(components map[string]Healthchecker) Service {
 	return Service{
-		components: map[string]Healthchecker{},
+		components: components,
 	}
-}
-
-// Add a component to the healthcheck service
-func (s Service) WithComponent(name string, component Healthchecker) {
-	s.components[name] = component
 }
 
 // Representation of the health of a single component.

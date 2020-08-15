@@ -9,7 +9,7 @@ import (
 )
 
 func TestNoComponents(t *testing.T) {
-	service := health.NewService()
+	service := health.NewService(map[string]health.Healthchecker{})
 
 	health := service.CheckHealth()
 
@@ -18,8 +18,9 @@ func TestNoComponents(t *testing.T) {
 }
 
 func TestPassingComponent(t *testing.T) {
-	service := health.NewService()
-	service.WithComponent("passing", health.HealthcheckerFunc(func() error { return nil }))
+	service := health.NewService(map[string]health.Healthchecker{
+		"passing": health.HealthcheckerFunc(func() error { return nil }),
+	})
 
 	health := service.CheckHealth()
 
@@ -31,8 +32,9 @@ func TestPassingComponent(t *testing.T) {
 }
 
 func TestFailingComponent(t *testing.T) {
-	service := health.NewService()
-	service.WithComponent("failing", health.HealthcheckerFunc(func() error { return errors.New("Oops") }))
+	service := health.NewService(map[string]health.Healthchecker{
+		"failing": health.HealthcheckerFunc(func() error { return errors.New("Oops") }),
+	})
 
 	health := service.CheckHealth()
 
@@ -44,9 +46,10 @@ func TestFailingComponent(t *testing.T) {
 }
 
 func TestMixedComponent(t *testing.T) {
-	service := health.NewService()
-	service.WithComponent("passing", health.HealthcheckerFunc(func() error { return nil }))
-	service.WithComponent("failing", health.HealthcheckerFunc(func() error { return errors.New("Oops") }))
+	service := health.NewService(map[string]health.Healthchecker{
+		"passing": health.HealthcheckerFunc(func() error { return nil }),
+		"failing": health.HealthcheckerFunc(func() error { return errors.New("Oops") }),
+	})
 
 	health := service.CheckHealth()
 

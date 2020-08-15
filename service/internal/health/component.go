@@ -8,16 +8,10 @@ type Component struct {
 }
 
 // NewComponent creates a new instance of the health checking component.
-func NewComponent() Component {
+func NewComponent(components map[string]Healthchecker) Component {
 	return Component{
-		service: Service{},
+		service: NewService(components),
 	}
-}
-
-func (c Component) WithComponent(name string, component Healthchecker) Component {
-	c.service.WithComponent(name, component)
-
-	return c
 }
 
 // RegisterRoutes will ensure that the healthchecker routes are registered with the server.
