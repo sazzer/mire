@@ -9,6 +9,8 @@ import (
 // Config represents the configuration of the app.
 type Config struct {
 	Debug bool
+
+	Port uint16 `default:"8000"`
 }
 
 // LoadConfig will load the application configuration from the environment.

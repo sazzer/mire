@@ -22,5 +22,5 @@ func main() {
 	log.Debug().Msg("Running Mire...")
 
 	service := internal.NewService()
-	service.Start(8000)
+	service.Start(config.Port)
 }
