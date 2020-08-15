@@ -7,6 +7,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/sazzer/mire/service/internal"
 )
 
 func main() {
@@ -18,5 +19,8 @@ func main() {
 
 	log.Logger = log.With().Caller().Logger()
 
-	log.Info().Msg("Starting Mire...")
+	log.Debug().Msg("Running Mire...")
+
+	service := internal.NewService()
+	service.Start()
 }
