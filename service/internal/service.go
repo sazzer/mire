@@ -22,7 +22,7 @@ func NewService() Service {
 }
 
 // Start will start the Mire service running and ready to accept connections
-func (s *Service) Start() {
+func (s *Service) Start(port uint16) {
 	log.Info().Msg("Starting Mire...")
-	s.server.Start()
+	s.server.Start(port)
 }
