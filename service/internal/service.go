@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"errors"
+
 	"github.com/rs/zerolog/log"
 	"github.com/sazzer/mire/service/internal/health"
 	"github.com/sazzer/mire/service/internal/server"
@@ -15,7 +17,10 @@ type Service struct {
 func NewService() Service {
 	log.Debug().Msg("Building Mire...")
 
-	health := health.NewComponent(map[string]health.Healthchecker{})
+	health := health.NewComponent(map[string]health.Healthchecker{
+		"passing": health.HealthcheckerFunc(func() error { return nil }),
+		"failing": health.HealthcheckerFunc(func() error { return errors.New("Oops") }),
+	})
 
 	server := server.NewServer(health)
 

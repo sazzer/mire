@@ -24,13 +24,13 @@ func (c ComponentHealth) Healthy() bool {
 	return c.Error == nil
 }
 
-// Representation of the health of the entire service.
-type ServiceHealth struct {
+// Representation of the health of the entire system.
+type SystemHealth struct {
 	Components map[string]ComponentHealth
 }
 
 // Check if the entire service is healthy.
-func (s ServiceHealth) Healthy() bool {
+func (s SystemHealth) Healthy() bool {
 	for _, component := range s.Components {
 		if !component.Healthy() {
 			return false
@@ -41,7 +41,7 @@ func (s ServiceHealth) Healthy() bool {
 }
 
 // Actually check the health of the service.
-func (s Service) CheckHealth() ServiceHealth {
+func (s Service) CheckHealth() SystemHealth {
 	result := map[string]ComponentHealth{}
 
 	for name, component := range s.components {
@@ -50,5 +50,5 @@ func (s Service) CheckHealth() ServiceHealth {
 		result[name] = ComponentHealth{e}
 	}
 
-	return ServiceHealth{result}
+	return SystemHealth{result}
 }
