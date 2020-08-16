@@ -10,6 +10,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.1.1
 	github.com/go-chi/render v1.0.1
+	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/go-cmp v0.5.1 // indirect
@@ -17,6 +18,7 @@ require (
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/joho/godotenv v1.3.0
+	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/rs/zerolog v1.19.0

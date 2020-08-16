@@ -19,6 +19,7 @@ func NewService(databaseURL string) Service {
 	log.Debug().Msg("Building Mire...")
 
 	db := database.NewDatabase(databaseURL)
+	database.Migrate(db)
 
 	health := health.NewComponent(map[string]health.Healthchecker{
 		"database": db,
