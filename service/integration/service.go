@@ -4,18 +4,19 @@ import (
 	"testing"
 
 	"github.com/sazzer/mire/service/internal"
+	"github.com/sazzer/mire/service/tests"
 )
 
 // Wrapper around the actual service for integration test purposes.
 type Service struct {
 	t       *testing.T
 	service internal.Service
-	db      Database
+	db      tests.Database
 }
 
 // Create a new instance of the test service.
 func NewService(t *testing.T) Service {
-	db := NewDatabase(t)
+	db := tests.NewDatabase(t)
 	service := internal.NewService(db.URL(t))
 
 	return Service{
