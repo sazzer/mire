@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"context"
 	"errors"
 
 	"github.com/rs/zerolog/log"
@@ -18,8 +19,8 @@ func NewService() Service {
 	log.Debug().Msg("Building Mire...")
 
 	health := health.NewComponent(map[string]health.Healthchecker{
-		"passing": health.HealthcheckerFunc(func() error { return nil }),
-		"failing": health.HealthcheckerFunc(func() error { return errors.New("Oops") }),
+		"passing": health.HealthcheckerFunc(func(ctx context.Context) error { return nil }),
+		"failing": health.HealthcheckerFunc(func(ctx context.Context) error { return errors.New("Oops") }),
 	})
 
 	server := server.NewServer(health)

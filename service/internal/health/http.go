@@ -25,7 +25,7 @@ type systemHealthModel struct {
 
 // Gets the actual health of the system.
 func (h *HTTP) getHealth(w http.ResponseWriter, r *http.Request) {
-	systemHealth := h.service.CheckHealth()
+	systemHealth := h.service.CheckHealth(r.Context())
 
 	result := systemHealthModel{
 		Healthy:    systemHealth.Healthy(),

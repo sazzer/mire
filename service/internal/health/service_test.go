@@ -1,6 +1,7 @@
 package health_test
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 func TestNoComponents(t *testing.T) {
 	service := health.NewService(map[string]health.Healthchecker{})
 
-	health := service.CheckHealth()
+	health := service.CheckHealth(context.Background())
 
 	assert.True(t, health.Healthy())
 	assert.Equal(t, 0, len(health.Components))
@@ -19,10 +20,10 @@ func TestNoComponents(t *testing.T) {
 
 func TestPassingComponent(t *testing.T) {
 	service := health.NewService(map[string]health.Healthchecker{
-		"passing": health.HealthcheckerFunc(func() error { return nil }),
+		"passing": health.HealthcheckerFunc(func(ctx context.Context) error { return nil }),
 	})
 
-	health := service.CheckHealth()
+	health := service.CheckHealth(context.Background())
 
 	assert.True(t, health.Healthy())
 	assert.Equal(t, 1, len(health.Components))
@@ -33,10 +34,10 @@ func TestPassingComponent(t *testing.T) {
 
 func TestFailingComponent(t *testing.T) {
 	service := health.NewService(map[string]health.Healthchecker{
-		"failing": health.HealthcheckerFunc(func() error { return errors.New("Oops") }),
+		"failing": health.HealthcheckerFunc(func(ctx context.Context) error { return errors.New("Oops") }),
 	})
 
-	health := service.CheckHealth()
+	health := service.CheckHealth(context.Background())
 
 	assert.False(t, health.Healthy())
 	assert.Equal(t, 1, len(health.Components))
@@ -47,11 +48,11 @@ func TestFailingComponent(t *testing.T) {
 
 func TestMixedComponent(t *testing.T) {
 	service := health.NewService(map[string]health.Healthchecker{
-		"passing": health.HealthcheckerFunc(func() error { return nil }),
-		"failing": health.HealthcheckerFunc(func() error { return errors.New("Oops") }),
+		"passing": health.HealthcheckerFunc(func(ctx context.Context) error { return nil }),
+		"failing": health.HealthcheckerFunc(func(ctx context.Context) error { return errors.New("Oops") }),
 	})
 
-	health := service.CheckHealth()
+	health := service.CheckHealth(context.Background())
 
 	assert.False(t, health.Healthy())
 	assert.Equal(t, 2, len(health.Components))

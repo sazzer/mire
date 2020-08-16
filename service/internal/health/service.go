@@ -1,6 +1,10 @@
 package health
 
-import "github.com/rs/zerolog/log"
+import (
+	"context"
+
+	"github.com/rs/zerolog/log"
+)
 
 // The actual service layer for performing healthchecks.
 type Service struct {
@@ -41,11 +45,11 @@ func (s SystemHealth) Healthy() bool {
 }
 
 // Actually check the health of the service.
-func (s Service) CheckHealth() SystemHealth {
+func (s Service) CheckHealth(ctx context.Context) SystemHealth {
 	result := map[string]ComponentHealth{}
 
 	for name, component := range s.components {
-		e := component.CheckHealth()
+		e := component.CheckHealth(ctx)
 		log.Info().Str("name", name).AnErr("result", e).Msg("Component health")
 		result[name] = ComponentHealth{e}
 	}
