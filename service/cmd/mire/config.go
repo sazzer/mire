@@ -7,9 +7,9 @@ import (
 
 // Config represents the configuration of the app.
 type Config struct {
-	Debug bool
-
-	Port uint16 `default:"8000"`
+	Debug       bool
+	Port        uint16 `default:"8000"`
+	DatabaseURL string `required:"true" envconfig:"DATABASE_URL"`
 }
 
 // LoadConfig will load the application configuration from the environment.

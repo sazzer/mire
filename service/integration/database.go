@@ -2,6 +2,7 @@ package integration
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/rs/zerolog/log"
@@ -50,4 +51,16 @@ func (d *Database) Close(t *testing.T) {
 	ctx := context.Background()
 	err := d.container.Terminate(ctx)
 	assert.NoError(t, err)
+}
+
+// Get the connection string for connecting to the test database.
+func (d *Database) URL(t *testing.T) string {
+	ctx := context.Background()
+	ip, err := d.container.Host(ctx)
+	assert.NoError(t, err)
+
+	port, err := d.container.MappedPort(ctx, "5432")
+	assert.NoError(t, err)
+
+	return fmt.Sprintf("postgres://postgres@%s:%s", ip, port.Port())
 }

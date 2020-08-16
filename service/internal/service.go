@@ -1,10 +1,10 @@
 package internal
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/rs/zerolog/log"
+	"github.com/sazzer/mire/service/internal/database"
 	"github.com/sazzer/mire/service/internal/health"
 	"github.com/sazzer/mire/service/internal/server"
 )
@@ -15,11 +15,13 @@ type Service struct {
 }
 
 // NewService creates a new instance of the Mire service.
-func NewService() Service {
+func NewService(databaseURL string) Service {
 	log.Debug().Msg("Building Mire...")
 
+	db := database.NewDatabase(databaseURL)
+
 	health := health.NewComponent(map[string]health.Healthchecker{
-		"database": health.HealthcheckerFunc(func(ctx context.Context) error { return nil }),
+		"database": db,
 	})
 
 	server := server.NewServer(health)

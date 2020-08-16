@@ -16,7 +16,7 @@ type Service struct {
 // Create a new instance of the test service.
 func NewService(t *testing.T) Service {
 	db := NewDatabase(t)
-	service := internal.NewService()
+	service := internal.NewService(db.URL(t))
 
 	return Service{
 		t:       t,

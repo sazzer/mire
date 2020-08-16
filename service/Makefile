@@ -16,10 +16,13 @@ run: prepare check
 test: prepare check
 	go test ./internal/...
 
+testIntegration: prepare check
+	go test ./internal/...
+
 testFast: prepare check
 	go test ./internal/... -short
 
-allTests: prepare check test
+allTests: prepare check test testIntegration
 
 check: prepare
 	golangci-lint run --allow-parallel-runners
