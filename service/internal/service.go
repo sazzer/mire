@@ -2,7 +2,7 @@ package internal
 
 import (
 	"context"
-	"errors"
+	"net/http"
 
 	"github.com/rs/zerolog/log"
 	"github.com/sazzer/mire/service/internal/health"
@@ -19,8 +19,7 @@ func NewService() Service {
 	log.Debug().Msg("Building Mire...")
 
 	health := health.NewComponent(map[string]health.Healthchecker{
-		"passing": health.HealthcheckerFunc(func(ctx context.Context) error { return nil }),
-		"failing": health.HealthcheckerFunc(func(ctx context.Context) error { return errors.New("Oops") }),
+		"database": health.HealthcheckerFunc(func(ctx context.Context) error { return nil }),
 	})
 
 	server := server.NewServer(health)
@@ -34,4 +33,9 @@ func NewService() Service {
 func (s *Service) Start(port uint16) {
 	log.Info().Msg("Starting Mire...")
 	s.server.Start(port)
+}
+
+// Inject a request into the HTTP Server and handle the response.
+func (s *Service) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.server.ServeHTTP(w, r)
 }
