@@ -4,3 +4,4 @@ linters:
     - goerr113
     - gomnd
     - gofumpt
+    - gci
