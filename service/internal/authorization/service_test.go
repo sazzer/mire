@@ -13,7 +13,7 @@ import (
 
 func TestGenerateSecurityContext(t *testing.T) {
 	clock := clock.NewMock()
-	service := authorization.NewService(clock, 24*time.Hour)
+	service := authorization.NewService(clock, 24*time.Hour, "Key")
 	principal := authorization.PrincipalID("testId")
 
 	securityContext := service.Generate(principal)
@@ -21,4 +21,13 @@ func TestGenerateSecurityContext(t *testing.T) {
 	assert.Equal(t, principal, securityContext.Principal)
 	assert.Equal(t, clock.Now().UTC(), securityContext.Issued)
 	assert.Equal(t, clock.Now().UTC().Add(24*time.Hour), securityContext.Expires)
+}
+
+func TestSignSecurityContext(t *testing.T) {
+	clock := clock.NewMock()
+	service := authorization.NewService(clock, 24*time.Hour, "Key")
+	principal := authorization.PrincipalID("testId")
+
+	securityContext := service.Generate(principal)
+	service.Sign(securityContext)
 }

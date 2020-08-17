@@ -22,6 +22,7 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/lestrrat-go/jwx v1.0.4
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/rs/zerolog v1.19.0
 	github.com/shopspring/decimal v1.2.0 // indirect
