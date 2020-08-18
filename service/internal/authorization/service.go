@@ -7,15 +7,15 @@ import (
 )
 
 // Service layer for working with security contexts.
-type Service struct {
+type service struct {
 	clock      clock.Clock
 	duration   time.Duration
 	signingKey []byte
 }
 
 // Create a new instance of the service layer.
-func NewService(clock clock.Clock, duration time.Duration, signingKey string) Service {
-	return Service{
+func newService(clock clock.Clock, duration time.Duration, signingKey string) service {
+	return service{
 		clock:      clock,
 		duration:   duration,
 		signingKey: []byte(signingKey),

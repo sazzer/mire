@@ -13,7 +13,7 @@ import (
 
 func TestGenerateSecurityContext(t *testing.T) {
 	clock := clock.NewMock()
-	service := authorization.NewService(clock, 24*time.Hour, "Key")
+	service := authorization.NewComponent(clock, 24*time.Hour, "Key").Service
 	principal := authorization.PrincipalID("testId")
 
 	securityContext := service.Generate(principal)

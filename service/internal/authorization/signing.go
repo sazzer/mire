@@ -16,7 +16,7 @@ type SecurityContextSigningUseCase interface {
 }
 
 // Sign the provided Security Context.
-func (s *Service) Sign(sc SecurityContext) SignedSecurityContext {
+func (s service) Sign(sc SecurityContext) SignedSecurityContext {
 	token := jwt.New()
 	_ = token.Set(jwt.IssuerKey, "tag:mire,2020:authorization")
 	_ = token.Set(jwt.AudienceKey, "tag:mire,2020:authorization")
@@ -38,6 +38,6 @@ func (s *Service) Sign(sc SecurityContext) SignedSecurityContext {
 }
 
 // Verify the provided Signed Security Context.
-func (s *Service) Verify(sc SignedSecurityContext) (SecurityContext, error) {
+func (s service) Verify(sc SignedSecurityContext) (SecurityContext, error) {
 	return SecurityContext{}, nil
 }

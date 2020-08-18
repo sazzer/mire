@@ -9,7 +9,7 @@ type SecurityContextGenerationUseCase interface {
 }
 
 // Generate a Security Context for the given Principal.
-func (s *Service) Generate(principal PrincipalID) SecurityContext {
+func (s service) Generate(principal PrincipalID) SecurityContext {
 	id := SecurityContextID(uuid.New().String())
 	issued := s.clock.Now().UTC()
 	expires := issued.Add(s.duration)
