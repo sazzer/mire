@@ -12,5 +12,5 @@ type SecurityContextSigningUseCase interface {
 	Sign(sc SecurityContext) SignedSecurityContext
 
 	// Verify the provided Signed Security Context.
-	Verify(sc SignedSecurityContext) SecurityContext
+	Verify(sc SignedSecurityContext) (SecurityContext, error)
 }

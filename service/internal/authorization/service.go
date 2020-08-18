@@ -63,3 +63,8 @@ func (s *Service) Sign(sc SecurityContext) SignedSecurityContext {
 
 	return result
 }
+
+// Verify the provided Signed Security Context.
+func (s *Service) Verify(sc SignedSecurityContext) (SecurityContext, error) {
+	return SecurityContext{}, nil
+}
