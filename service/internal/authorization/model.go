@@ -28,3 +28,7 @@ type SecurityContext struct {
 
 // A signed security context.
 type SignedSecurityContext string
+
+func (s SignedSecurityContext) string() string {
+	return string(s)
+}

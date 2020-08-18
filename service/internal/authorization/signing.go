@@ -1,6 +1,8 @@
 package authorization
 
 import (
+	"bytes"
+
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwt"
 	"github.com/rs/zerolog/log"
@@ -39,5 +41,26 @@ func (s service) Sign(sc SecurityContext) SignedSecurityContext {
 
 // Verify the provided Signed Security Context.
 func (s service) Verify(sc SignedSecurityContext) (SecurityContext, error) {
-	return SecurityContext{}, nil
+	token, err := jwt.Parse(bytes.NewReader([]byte(sc.string())), jwt.WithVerify(jwa.HS512, s.signingKey))
+	if err != nil {
+		log.Debug().Err(err).Interface("signed", sc).Msg("Failed to verify security context")
+
+		return SecurityContext{}, err
+	}
+
+	id := token.JwtID()
+	principal := token.Subject()
+	expires := token.Expiration()
+	issued := token.IssuedAt()
+
+	result := SecurityContext{
+		ID:        SecurityContextID(id),
+		Principal: PrincipalID(principal),
+		Expires:   expires.UTC(),
+		Issued:    issued.UTC(),
+	}
+
+	log.Debug().Interface("securityContext", result).Interface("signed", sc).Msg("Verified security context")
+
+	return result, nil
 }
