@@ -9,10 +9,10 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// Parsing a security context failed because it was malformed.
+// ErrSecurityContextMalformed is an error for when parsing a security context failed because it was malformed.
 var ErrSecurityContextMalformed = errors.New("malformed security context")
 
-// Parsing a security context failed because it was expired.
+// ErrSecurityContextExpired is an error for when parsing a security context failed because it was expired.
 var ErrSecurityContextExpired = errors.New("expired security context")
 
 // Use Case for working with Signed Security Contexts.
