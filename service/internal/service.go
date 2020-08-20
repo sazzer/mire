@@ -2,11 +2,16 @@ package internal
 
 import (
 	"net/http"
+	"time"
+
+	"github.com/benbjohnson/clock"
 
 	"github.com/rs/zerolog/log"
+	"github.com/sazzer/mire/service/internal/authorization"
 	"github.com/sazzer/mire/service/internal/database"
 	"github.com/sazzer/mire/service/internal/health"
 	"github.com/sazzer/mire/service/internal/server"
+	"github.com/sazzer/mire/service/internal/users"
 )
 
 // Service represents the actual Mire service.
@@ -18,8 +23,14 @@ type Service struct {
 func NewService(databaseURL string) Service {
 	log.Debug().Msg("Building Mire...")
 
+	clock := clock.New()
+
 	db := database.NewDatabase(databaseURL)
 	database.Migrate(db)
+
+	_ = authorization.NewComponent(clock, 365*24*time.Hour, "SomeSecretKey")
+
+	_ = users.NewComponent(db)
 
 	health := health.NewComponent(map[string]health.Healthchecker{
 		"database": db,
