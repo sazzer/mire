@@ -39,5 +39,19 @@ func TestVerifyMalformedSecurityContext(t *testing.T) {
 	signed := authorization.SignedSecurityContext("malformed")
 
 	_, err := service.Verify(signed)
-	assert.Error(t, err)
+	assert.Equal(t, authorization.ErrSecurityContextMalformed, err)
+}
+
+func TestExpiredMalformedSecurityContext(t *testing.T) {
+	clock := clock.NewMock()
+	service := authorization.NewComponent(clock, 24*time.Hour, "Key").Service
+	principal := authorization.PrincipalID("testId")
+
+	securityContext := service.Generate(principal)
+	signed := service.Sign(securityContext)
+
+	clock.Add(25 * time.Hour)
+
+	_, err := service.Verify(signed)
+	assert.Equal(t, authorization.ErrSecurityContextExpired, err)
 }

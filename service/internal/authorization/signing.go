@@ -2,11 +2,18 @@ package authorization
 
 import (
 	"bytes"
+	"errors"
 
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwt"
 	"github.com/rs/zerolog/log"
 )
+
+// Parsing a security context failed because it was malformed
+var ErrSecurityContextMalformed = errors.New("malformed security context")
+
+// Parsing a security context failed because it was expired
+var ErrSecurityContextExpired = errors.New("expired security context")
 
 // Use Case for working with Signed Security Contexts.
 type SecurityContextSigningUseCase interface {
@@ -43,21 +50,22 @@ func (s service) Sign(sc SecurityContext) SignedSecurityContext {
 func (s service) Verify(sc SignedSecurityContext) (SecurityContext, error) {
 	token, err := jwt.Parse(bytes.NewReader([]byte(sc.string())), jwt.WithVerify(jwa.HS512, s.signingKey))
 	if err != nil {
-		log.Debug().Err(err).Interface("signed", sc).Msg("Failed to verify security context")
+		log.Warn().Err(err).Interface("signed", sc).Msg("Failed to verify security context")
 
-		return SecurityContext{}, err
+		return SecurityContext{}, ErrSecurityContextMalformed
 	}
 
-	id := token.JwtID()
-	principal := token.Subject()
-	expires := token.Expiration()
-	issued := token.IssuedAt()
+	if token.Expiration().Before(s.clock.Now()) {
+		log.Warn().Err(err).Time("expiration", token.Expiration()).Interface("signed", sc).Msg("Security Context has expired")
+
+		return SecurityContext{}, ErrSecurityContextExpired
+	}
 
 	result := SecurityContext{
-		ID:        SecurityContextID(id),
-		Principal: PrincipalID(principal),
-		Expires:   expires.UTC(),
-		Issued:    issued.UTC(),
+		ID:        SecurityContextID(token.JwtID()),
+		Principal: PrincipalID(token.Subject()),
+		Expires:   token.Expiration().UTC(),
+		Issued:    token.IssuedAt().UTC(),
 	}
 
 	log.Debug().Interface("securityContext", result).Interface("signed", sc).Msg("Verified security context")
