@@ -29,7 +29,7 @@ RUN cargo build --release
 # Next build a container with the build artifact but no code
 FROM debian:buster-slim
 
-RUN apt update -y && apt install -y openssl
+RUN apt update -y && apt install -y openssl ca-certificates
 
 WORKDIR /mire
 
