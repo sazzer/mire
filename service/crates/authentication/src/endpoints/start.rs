@@ -25,11 +25,14 @@ pub async fn start(
     authentication_service: Data<AuthenticationService>,
 ) -> HttpResponse {
     match authentication_service.start_authentication(&path.0) {
-        Ok(StartAuthentication { redirect_uri, nonce }) => HttpResponse::Found()
+        Ok(StartAuthentication {
+            redirect_uri,
+            nonce,
+        }) => HttpResponse::Found()
             .set_header("location", redirect_uri)
             .set(CacheControl(vec![CacheDirective::NoCache]))
             .cookie(
-                Cookie::build("mire_authentication_provider", path.0.0.clone())
+                Cookie::build("mire_authentication_provider", (path.0).0.clone())
                     .http_only(true)
                     .finish(),
             )
