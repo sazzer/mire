@@ -5,17 +5,19 @@ on: [push]
 jobs:
   build-service:
     runs-on: ubuntu-latest
+    env:
+      RUST_TOOLCHAIN: stable
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install latest nightly
+      - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
           override: true
-          components: rustfmt, clippy
+          components: clippy
 
       - name: Cache cargo registry
         uses: actions/cache@v1
@@ -43,8 +45,8 @@ jobs:
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          toolchain: nightly
-          args: --manifest-path service/Cargo.toml --lib --tests --all-features -Zunstable-options -- -D clippy::all -D clippy::pedantic -D clippy::nursery -A clippy::module_name_repetitions -A clippy::future-not-send
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+          args: --manifest-path service/Cargo.toml --lib --tests --all-features -- -D clippy::all -D clippy::pedantic -D clippy::nursery -A clippy::module_name_repetitions -A clippy::future-not-send
 
       - name: Run cargo test
         uses: actions-rs/cargo@v1
