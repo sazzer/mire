@@ -2,7 +2,6 @@ use crate::TestSubject;
 use actix_http::http::StatusCode;
 use actix_web::test::TestRequest;
 use assert2::check;
-use mockito;
 
 #[actix_rt::test]
 async fn test_start_google() {

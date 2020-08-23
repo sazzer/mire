@@ -1,6 +1,5 @@
 mod http;
 use mire_testdatabase::TestDatabase;
-use mockito;
 
 /// The test wrapper around the service being tested
 pub struct TestSubject {
