@@ -113,3 +113,39 @@ async fn test_complete_google_invalid_id_token() {
 
     m.assert();
 }
+
+#[actix_rt::test]
+async fn test_complete_google_valid_id_token_unknown_user() {
+    let test_subject = TestSubject::new().await;
+
+    let m = mockito::mock("POST", "/authentication/google/oauth2/v4/token")
+        .match_header("content-type", "application/x-www-form-urlencoded")
+        .match_body("code=valid&client_id=GoogleClientId&client_secret=GoogleClientSecret&redirect_uri=http%3A%2F%2Flocalhost%2Fauthentication%2Fgoogle%2Fredirect&grant_type=authorization_code")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(r#"{
+          "access_token":"2YotnFZFEjr1zCsicMWpAA",
+          "token_type":"Bearer",
+          "expires_in":3600,
+          "id_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnb29nbGVVc2VySWQiLCJlbWFpbCI6InRlc3R1c2VyQGV4YW1wbGUuY29tIiwibmFtZSI6IlRlc3QgVXNlciJ9.j1oy1X7lHXoZFFHPwJBNIfPNdYQ-MO7LxdNcIh51LAE"
+        }"#)
+        .create();
+
+    // The above ID Token represents:
+    // * User ID: googleUserId
+    // * Email Address: testuser@example.com
+    // * Name: Test User
+
+    let response = test_subject
+        .inject(
+            TestRequest::get()
+                .uri("/authentication/google/complete?code=valid")
+                .to_request(),
+        )
+        .await;
+    check!(response.status == StatusCode::OK);
+
+    m.assert();
+
+    // TODO: Assert the database record
+}
