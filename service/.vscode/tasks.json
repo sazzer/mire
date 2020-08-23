@@ -81,7 +81,7 @@
     {
       "label": "cargo clippy",
       "type": "shell",
-      "command": "cargo clippy --lib --tests --all-features -- -D clippy::all -D clippy::pedantic -D clippy::nursery -A clippy::module_name_repetitions -A clippy::future-not-send",
+      "command": "find . -name '*.rs' -exec touch {} \\; && cargo clippy --lib --tests --all-features -- -D clippy::all -D clippy::pedantic -D clippy::nursery -A clippy::module_name_repetitions -A clippy::future-not-send",
       "group": "test",
       "presentation": {
         "echo": true,
