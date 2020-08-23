@@ -27,12 +27,18 @@ pub async fn complete(
     authentication_service: Data<AuthenticationService>,
     authorization_service: Data<AuthorizationService>,
 ) -> HttpResponse {
-    let user = authentication_service
+    let user_result = authentication_service
         .complete_authentication(&path.0, &query.0)
-        .await
-        .unwrap();
-    let security_context = authorization_service.generate_security_context(user.identity.id.into());
-    let signed_security_context = authorization_service.sign(&security_context);
+        .await;
 
-    HttpResponse::Ok().json(signed_security_context)
+    match user_result {
+        Ok(user) => {
+            let security_context =
+                authorization_service.generate_security_context(user.identity.id.into());
+            let signed_security_context = authorization_service.sign(&security_context);
+
+            HttpResponse::Ok().json(signed_security_context)
+        }
+        _ => HttpResponse::BadRequest().finish(),
+    }
 }

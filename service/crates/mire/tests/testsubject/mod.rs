@@ -1,5 +1,6 @@
 mod http;
 use mire_testdatabase::TestDatabase;
+use mockito;
 
 /// The test wrapper around the service being tested
 pub struct TestSubject {
@@ -22,7 +23,10 @@ impl TestSubject {
                 client_secret: "GoogleClientSecret".to_owned(),
                 redirect_uri: "http://localhost/authentication/google/redirect".to_owned(),
                 auth_uri: None,
-                token_uri: None,
+                token_uri: Some(format!(
+                    "{}/authentication/google/oauth2/v4/token",
+                    mockito::server_url()
+                )),
             }),
         };
 

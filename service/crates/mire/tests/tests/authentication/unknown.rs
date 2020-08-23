@@ -18,3 +18,17 @@ async fn test_start_unknown() {
     check!(response.status == StatusCode::NOT_FOUND);
     check!(response.header("cache-control").unwrap() == "public, max-age=3600");
 }
+
+#[actix_rt::test]
+async fn test_complete_unknown() {
+    let test_subject = TestSubject::new().await;
+
+    let response = test_subject
+        .inject(
+            TestRequest::get()
+                .uri("/authentication/unknown/complete")
+                .to_request(),
+        )
+        .await;
+    check!(response.status == StatusCode::BAD_REQUEST);
+}
