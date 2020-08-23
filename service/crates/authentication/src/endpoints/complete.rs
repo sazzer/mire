@@ -39,6 +39,6 @@ pub async fn complete(
 
             HttpResponse::Ok().json(signed_security_context)
         }
-        _ => HttpResponse::BadRequest().finish(),
+        Err(_) => HttpResponse::BadRequest().finish(),
     }
 }
