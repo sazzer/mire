@@ -37,4 +37,5 @@ assert2 = "0.3.1"
 insta = "0.16.1"
 mockito = "0.27.0"
 
+mire-testdata = { path = "../testdata" }
 mire-testdatabase = { path = "../testdatabase" }
