@@ -1,4 +1,5 @@
 mod postgres;
+mod query;
 mod seed;
 
 use lazy_static::lazy_static;

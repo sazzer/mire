@@ -1,7 +1,8 @@
 use crate::TestSubject;
 use actix_http::http::StatusCode;
 use actix_web::test::TestRequest;
-use assert2::check;
+use assert2::{assert, check};
+use uuid::Uuid;
 
 #[actix_rt::test]
 async fn test_start_google() {
@@ -147,19 +148,33 @@ async fn test_complete_google_valid_id_token_unknown_user() {
 
     m.assert();
 
-    // TODO: Assert the database record
+    test_subject
+        .query("SELECT * FROM users", vec![], |rows| {
+            assert!(rows.len() == 1);
+
+            let row = &rows[0];
+            check!(row.get::<&str, String>("email") == "testuser@example.com");
+            check!(row.get::<&str, String>("display_name") == "Test User");
+        })
+        .await;
 }
 
 #[actix_rt::test]
 async fn test_complete_google_valid_id_token_known_user() {
     let test_subject = TestSubject::new().await;
 
+    let user_id = Uuid::new_v4();
+
     test_subject
-        .seed(&mire_testdata::SeedUser::default().with_authentication(
-            "google",
-            "googleUserId",
-            "testuser@example.com",
-        ))
+        .seed(
+            &mire_testdata::SeedUser {
+                user_id,
+                email: "testing@example.com".to_owned(),
+                display_name: "Testing".to_owned(),
+                ..mire_testdata::SeedUser::default()
+            }
+            .with_authentication("google", "googleUserId", "testuser@example.com"),
+        )
         .await;
 
     let m = mockito::mock("POST", "/authentication/google/oauth2/v4/token")
@@ -191,5 +206,14 @@ async fn test_complete_google_valid_id_token_known_user() {
 
     m.assert();
 
-    // TODO: Assert the database record
+    test_subject
+        .query("SELECT * FROM users", vec![], |rows| {
+            assert!(rows.len() == 1);
+
+            let row = &rows[0];
+            check!(row.get::<&str, Uuid>("user_id") == user_id);
+            check!(row.get::<&str, String>("email") == "testing@example.com");
+            check!(row.get::<&str, String>("display_name") == "Testing");
+        })
+        .await;
 }

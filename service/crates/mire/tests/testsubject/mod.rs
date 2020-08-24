@@ -1,5 +1,5 @@
 mod http;
-mod seed;
+mod database;
 use mire_testdatabase::TestDatabase;
 
 /// The test wrapper around the service being tested
