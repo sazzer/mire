@@ -1,4 +1,6 @@
-import App from "./App";
+import "./i18n";
+
+import { App } from "./App";
 import React from "react";
 import ReactDOM from "react-dom";
 
