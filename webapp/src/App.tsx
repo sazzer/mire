@@ -1,23 +1,20 @@
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import { HeaderBar } from "./header";
+import { LandingPage } from "./landing";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 /**
  * Component representing the entire UI.
  */
-export const App = () => {
-  const { t } = useTranslation();
-
+export const App: React.FC = () => {
   return (
     <>
       <HeaderBar />
       <main className="container-fluid">
-        <Link to="/hello">Learn React</Link>
         <Switch>
-          <Route path="/hello">
-            <p>{t("hello")}</p>
+          <Route path="/">
+            <LandingPage />
           </Route>
         </Switch>
       </main>

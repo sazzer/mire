@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 /**
  * Component representing the header of the entire UI.
  */
-export const HeaderBar = () => {
+export const HeaderBar: React.FC = () => {
   const { t } = useTranslation();
 
   return (
     <header>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <span className="navbar-brand">{t("header.title")}</span>
         <button
           className="navbar-toggler"

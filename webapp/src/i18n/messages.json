@@ -3,5 +3,11 @@
   "header": {
     "title": "Mire",
     "toggleNavigation": "Toggle Navigation"
+  },
+  "authentication": {
+    "header": "Login / Register",
+    "google": "Sign In with Google",
+    "twitter": "Sign In with Twitter",
+    "facebook": "Sign In with Facebook"
   }
 }

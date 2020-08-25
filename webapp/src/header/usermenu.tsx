@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 /**
  * The User Menu dropdown appearing in the header bar.
  */
-export const UserMenu = () => {
+export const UserMenu: React.FC = () => {
   return (
     <li className="nav-item dropdown">
       <a
