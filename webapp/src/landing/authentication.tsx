@@ -18,9 +18,9 @@ const AuthenticationButton: React.FC<AuthenticationButtonProps> = ({
   const { t } = useTranslation();
 
   return (
-    <a className={`btn btn-block btn-social btn-${name}`}>
+    <button className={`btn btn-block btn-social btn-${name}`}>
       <span className={`fa fa-${name}`}></span> {t(`authentication.${name}`)}
-    </a>
+    </button>
   );
 };
 

@@ -1,15 +1,14 @@
+import { Link } from "react-router-dom";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 /**
  * The User Menu dropdown appearing in the header bar.
  */
 export const UserMenu: React.FC = () => {
   return (
-    <li className="nav-item dropdown">
-      <a
+    <li className="nav-item dropdown" role="menu">
+      <span
         className="nav-link dropdown-toggle"
-        href="#"
         id="userMenuDropdown"
         role="button"
         data-toggle="dropdown"
@@ -17,18 +16,18 @@ export const UserMenu: React.FC = () => {
         aria-expanded="false"
       >
         Graham
-      </a>
+      </span>
       <div
         className="dropdown-menu dropdown-menu-right"
         aria-labelledby="userMenuDropdown"
       >
-        <a className="dropdown-item" href="#">
+        <Link to="/profile" className="dropdown-item" role="menuitem">
           User Profile
-        </a>
+        </Link>
         <div className="dropdown-divider"></div>
-        <a className="dropdown-item" href="#">
+        <button className="dropdown-item" role="menuitem">
           Log Out
-        </a>
+        </button>
       </div>
     </li>
   );
