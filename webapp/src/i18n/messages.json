@@ -1,3 +1,7 @@
 {
-  "hello": "World"
+  "hello": "World",
+  "header": {
+    "title": "Mire",
+    "toggleNavigation": "Toggle Navigation"
+  }
 }
