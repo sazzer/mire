@@ -142,3 +142,42 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release -a mire-cd web
+
+  deploy-webapp:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs:
+      - build-webapp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        working-directory: webapp
+        run: yarn add react-env netlify-cli
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: webapp
+          path: webapp/build
+
+      - name: Set up runtime environment
+        working-directory: webapp
+        env:
+          REACT_APP_URL_BASE: "https://mire-cd.herokuapp.com"
+          NODE_ENV: production
+        run: |
+          npx react-env --dest build
+          find build
+
+      - name: Deploy to Netlify
+        working-directory: webapp
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          npx netlify deploy --dir=build --prod --message="Prod deploy: ${{ github.ref }}"
