@@ -1,4 +1,6 @@
-import React from "react";
+import { Providers, listAuthenticationProviders } from "../api/authentication";
+import React, { useEffect, useState } from "react";
+
 import { useTranslation } from "react-i18next";
 
 /**
@@ -29,14 +31,17 @@ const AuthenticationButton: React.FC<AuthenticationButtonProps> = ({
  */
 export const Authentication: React.FC = () => {
   const { t } = useTranslation();
+  const [providers, setProviders] = useState<Providers>([]);
 
-  const providers = ["facebook", "google", "twitter"];
+  useEffect(() => {
+    listAuthenticationProviders().then(setProviders);
+  }, []);
 
   return (
     <div>
       <h2>{t("authentication.header")}</h2>
       {providers.map((provider) => (
-        <AuthenticationButton name={provider} />
+        <AuthenticationButton name={provider} key={provider} />
       ))}
     </div>
   );
