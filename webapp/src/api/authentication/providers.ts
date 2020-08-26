@@ -2,7 +2,7 @@ import debug from "debug";
 import { request } from "../http";
 
 /** The logger to use */
-const LOGGER = debug("mire:api:authentication");
+const LOGGER = debug("mire:api:authentication:providers");
 
 /** The type representing the list of providers */
 export type Providers = Array<string>;

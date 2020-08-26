@@ -1,4 +1,8 @@
-import { Providers, listAuthenticationProviders } from "../api/authentication";
+import {
+  Providers,
+  authenticate,
+  listAuthenticationProviders,
+} from "../api/authentication";
 import React, { useEffect, useState } from "react";
 
 import { useTranslation } from "react-i18next";
@@ -20,7 +24,10 @@ const AuthenticationButton: React.FC<AuthenticationButtonProps> = ({
   const { t } = useTranslation();
 
   return (
-    <button className={`btn btn-block btn-social btn-${name}`}>
+    <button
+      className={`btn btn-block btn-social btn-${name}`}
+      onClick={() => authenticate(name)}
+    >
       <span className={`fa fa-${name}`}></span> {t(`authentication.${name}`)}
     </button>
   );
