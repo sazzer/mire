@@ -74,6 +74,10 @@ jobs:
         working-directory: webapp
         run: yarn install
 
+      - name: Remove .env
+        working-directory: webapp
+        run: rm -f .env
+
       - name: Run tests
         working-directory: webapp
         run: |
