@@ -2,6 +2,7 @@ import { render, waitFor } from "@testing-library/react";
 
 import { Authentication } from "./authentication";
 import React from "react";
+import { axe } from "jest-axe";
 import { listAuthenticationProviders } from "../api/authentication";
 
 jest.mock("../api/authentication");
@@ -13,7 +14,7 @@ describe("<Authentication>", () => {
     listAuthenticationProvidersMock.mockClear();
   });
 
-  test("Before authentication providers are loaded", () => {
+  test("Before authentication providers are loaded", async () => {
     listAuthenticationProvidersMock.mockReturnValueOnce(new Promise(() => {}));
 
     const { container } = render(<Authentication />);
@@ -26,6 +27,7 @@ describe("<Authentication>", () => {
         </div>
       </div>
     `);
+    expect(await axe(container)).toHaveNoViolations();
   });
 
   test("After some authentication providers are loaded", async () => {
@@ -65,6 +67,7 @@ describe("<Authentication>", () => {
         </div>
       </div>
     `);
+    expect(await axe(container)).toHaveNoViolations();
   });
 
   test("After no authentication providers are loaded", async () => {
@@ -84,5 +87,6 @@ describe("<Authentication>", () => {
         </div>
       </div>
     `);
+    expect(await axe(container)).toHaveNoViolations();
   });
 });
