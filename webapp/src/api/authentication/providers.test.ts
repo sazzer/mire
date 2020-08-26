@@ -3,7 +3,7 @@ import * as api from "./providers";
 import nock from "nock";
 
 test("Successfully list providers", async () => {
-  nock("https://mire-cd.herokuapp.com")
+  nock("http://mire-cd.example.com")
     .defaultReplyHeaders({
       "access-control-allow-origin": "*",
       "Access-Control-Expose-Headers": "Content-Type",
