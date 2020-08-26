@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "lint": "./node_modules/react-scripts/node_modules/.bin/eslint src/**/*.ts*",
     "eject": "react-scripts eject"
   },
@@ -49,6 +49,9 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "@types/url-template": "^2.0.28",
-    "history": "^5.0.0"
+    "history": "^5.0.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "nock": "^13.0.4",
+    "prettier": "^2.1.1"
   }
 }
