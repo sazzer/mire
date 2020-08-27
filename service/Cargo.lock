@@ -1488,6 +1488,7 @@ dependencies = [
  "mire-users",
  "reqwest",
  "serde 1.0.115",
+ "string_template",
  "thiserror",
  "tracing",
  "tracing-futures",
@@ -2476,6 +2477,15 @@ name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+
+[[package]]
+name = "string_template"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc6f2c6b2c3fa950895c9aeb0c3cb9271d7eb580662af9af2b711b593f446320"
+dependencies = [
+ "regex 1.3.9",
+]
 
 [[package]]
 name = "stringprep"

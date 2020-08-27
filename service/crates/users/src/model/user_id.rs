@@ -5,7 +5,7 @@ use std::str::FromStr;
 use uuid::Uuid;
 
 /// The unique identifier for a User record
-#[derive(Debug, PartialEq, FromSql)]
+#[derive(Debug, PartialEq, FromSql, Clone)]
 pub struct UserId(Uuid);
 
 impl Default for UserId {
@@ -17,6 +17,12 @@ impl Default for UserId {
 impl From<Uuid> for UserId {
     fn from(uuid: Uuid) -> Self {
         Self(uuid)
+    }
+}
+
+impl ToString for UserId {
+    fn to_string(&self) -> String {
+        format!("{}", self.0)
     }
 }
 

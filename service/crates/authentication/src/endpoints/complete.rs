@@ -6,6 +6,46 @@ use actix_web::{
 };
 use mire_authorization::AuthorizationService;
 use std::collections::HashMap;
+use string_template::Template;
+
+const SUCCESS_TEMPLATE: &str = r#"
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Mire</title>
+</head>
+<body>
+    <div>Successfully authenticated as {{displayName}}</div>
+    <div>Access Token: {{accessToken}}</div>
+    <div>Expires: {{expires}}</div>
+    <div>User ID: {{userId}}</div>
+
+    <script>
+        const message = {
+            type: 'mireAuthenticated',
+            accessToken: '{{accessToken}}',
+            expires: new Date('{{expires}}'),
+            user: '{{userId}}',
+            name: '{{displayName}}',
+        };
+        console.log(message);
+        window.opener.postMessage(message, '*');
+        window.close();
+    </script>
+</body>
+</html>
+"#;
+const FAILURE_TEMPLATE: &str = r#"
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Mire</title>
+</head>
+<body>
+    <div>Authentication failed</div>
+</body>
+</html>
+"#;
 
 /// HTTP Handler for completing authentication with the desired provider
 ///
@@ -31,14 +71,30 @@ pub async fn complete(
         .complete_authentication(&path.0, &query.0)
         .await;
 
-    match user_result {
-        Ok(user) => {
-            let security_context =
-                authorization_service.generate_security_context(user.identity.id.into());
-            let signed_security_context = authorization_service.sign(&security_context);
+    if let Ok(user) = user_result {
+        let security_context =
+            authorization_service.generate_security_context(user.identity.id.clone().into());
+        let signed_security_context = authorization_service.sign(&security_context);
 
-            HttpResponse::Ok().json(signed_security_context)
-        }
-        Err(_) => HttpResponse::BadRequest().finish(),
+        let user_id_str = user.identity.id.to_string();
+        let expires_str = security_context.not_valid_after.to_rfc3339();
+
+        let template = Template::new(SUCCESS_TEMPLATE);
+        let mut vals = HashMap::new();
+        vals.insert("displayName", user.data.display_name.as_ref());
+        vals.insert("accessToken", signed_security_context.as_ref());
+        vals.insert("expires", expires_str.as_ref());
+        vals.insert("userId", user_id_str.as_ref());
+
+        HttpResponse::Ok()
+            .content_type("text/html;charset=utf-8")
+            .body(template.render(&vals))
+    } else {
+        let template = Template::new(FAILURE_TEMPLATE);
+        let vals = HashMap::new();
+
+        HttpResponse::BadRequest()
+            .content_type("text/html;charset=utf-8")
+            .body(template.render(&vals))
     }
 }
