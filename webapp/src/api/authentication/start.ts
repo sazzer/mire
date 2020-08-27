@@ -17,5 +17,14 @@ export function authenticate(provider: string) {
 
   LOGGER("Redirecting to %s", url);
 
+  const eventListener = (event: MessageEvent) => {
+    if (event && event.data && event.data.type === "mireAuthenticated") {
+      window.removeEventListener("message", eventListener);
+      console.log(event.data);
+      console.log(event.origin);
+    }
+  };
+  window.addEventListener("message", eventListener);
+
   window.open(url, "mireAuthentication");
 }
