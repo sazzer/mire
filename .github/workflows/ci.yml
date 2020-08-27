@@ -6,7 +6,7 @@ jobs:
   build-service:
     runs-on: ubuntu-latest
     env:
-      RUST_TOOLCHAIN: stable
+      RUST_TOOLCHAIN: 1.45.2
 
     steps:
       - name: Checkout

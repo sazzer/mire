@@ -6,7 +6,7 @@ COPY ./crates /mire/crates/
 RUN ./package.sh
 
 # Build the code first
-FROM rust:slim-buster AS builder
+FROM rust:1.45.2-slim-buster AS builder
 
 RUN rustc --version --verbose
 RUN apt update -y && apt install -y pkg-config libssl-dev
