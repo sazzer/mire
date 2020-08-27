@@ -15,7 +15,7 @@ impl ComponentHealth {
     /// # Returns
     /// True for `ComponentHealth::Healthy`. False for `ComponentHealth::Unhealthy`.
     #[must_use]
-    pub fn is_healthy(&self) -> bool {
+    pub const fn is_healthy(&self) -> bool {
         matches!(self, Self::Healthy)
     }
 }
