@@ -2,6 +2,7 @@ import { Problem } from "./problem";
 import UrlTemplate from "url-template";
 import debug from "debug";
 import env from "@beam-australia/react-env";
+import { getToken } from "./token";
 
 /** The logger to use */
 const LOGGER = debug("mire:api:http:request");
@@ -48,6 +49,11 @@ export async function request<B>(
   const headers = new Headers();
   if (request.ignoreCache) {
     headers.set("cache-control", "no-cache");
+  }
+
+  const token = getToken();
+  if (token) {
+    headers.set("authorization", `Bearer ${token}`);
   }
 
   try {

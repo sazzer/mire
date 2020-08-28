@@ -64,7 +64,7 @@ export function getToken(): string | undefined {
       };
 
       LOGGER(
-        "Storing access token %s, valid until %o",
+        "Loading remembered access token %s, valid until %o",
         currentToken.token,
         currentToken.validUntil
       );
