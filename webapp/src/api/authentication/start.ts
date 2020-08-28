@@ -1,6 +1,7 @@
 import UrlTemplate from "url-template";
 import debug from "debug";
 import env from "@beam-australia/react-env";
+import { storeToken } from "../http/token";
 
 /** The logger to use */
 const LOGGER = debug("mire:api:authentication:start");
@@ -24,6 +25,9 @@ export function authenticate(
   const eventListener = (event: MessageEvent) => {
     if (event && event.data && event.data.type === "mireAuthenticated") {
       window.removeEventListener("message", eventListener);
+      if (event.data.accessToken && event.data.expires) {
+        storeToken(event.data.accessToken, event.data.expires);
+      }
       if (event.data.user) {
         setUserId(event.data.user);
       }
