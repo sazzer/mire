@@ -7,6 +7,7 @@ members = [
     "crates/health",
     "crates/mire",
     "crates/model",
+    "crates/problem",
     "crates/server",
     "crates/testdata",
     "crates/testdatabase",
