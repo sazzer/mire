@@ -5,6 +5,7 @@ import {
 } from "../api/authentication";
 import React, { useEffect, useState } from "react";
 
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
 
@@ -24,11 +25,17 @@ const AuthenticationButton: React.FC<AuthenticationButtonProps> = ({
 }) => {
   const { t } = useTranslation();
   const { setUserId } = useUser();
+  const history = useHistory();
+
+  const completeAuthentication = (userId: string) => {
+    setUserId(userId);
+    history.push("/characters");
+  };
 
   return (
     <button
       className={`btn btn-block btn-social btn-${name}`}
-      onClick={() => authenticate(name, setUserId)}
+      onClick={() => authenticate(name, completeAuthentication)}
     >
       <span className={`fa fa-${name}`}></span> {t(`authentication.${name}`)}
     </button>

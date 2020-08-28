@@ -2,7 +2,15 @@
   "hello": "World",
   "header": {
     "title": "Mire",
-    "toggleNavigation": "Toggle Navigation"
+    "toggleNavigation": "Toggle Navigation",
+    "userMenu": {
+      "label": {
+        "simple": "{{name}}",
+        "full": "User menu for {{name}}"
+      },
+      "profile": "User Profile",
+      "logout": "Log out"
+    }
   },
   "authentication": {
     "header": "Login / Register",
