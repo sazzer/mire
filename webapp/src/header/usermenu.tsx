@@ -10,12 +10,8 @@ import { useUser } from "../currentUser";
  */
 export const UserMenu: React.FC = () => {
   const { t } = useTranslation();
-  const { clearUserId } = useUser();
+  const { clearUserId, user } = useUser();
   const history = useHistory();
-
-  const user = {
-    name: "Graham",
-  };
 
   const onLogOut = () => {
     clearUserId();
@@ -34,9 +30,11 @@ export const UserMenu: React.FC = () => {
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
-        aria-label={t("header.userMenu.label.full", user)}
+        aria-label={t("header.userMenu.label.full", {
+          name: user?.displayName,
+        })}
       >
-        {t("header.userMenu.label.simple", user)}
+        {t("header.userMenu.label.simple", { name: user?.displayName })}
       </a>
       <div
         className="dropdown-menu dropdown-menu-right"

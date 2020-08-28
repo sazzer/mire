@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { User, loadUser } from "./api/users";
 
 import debug from "debug";
 
@@ -7,8 +8,6 @@ const LOGGER = debug("mire:currentUser");
 
 /** The key into Session Storage where the current user ID is stored */
 const USER_KEY = "mire_current_user";
-
-type User = string;
 
 /**
  * The shape of the actual context store
@@ -31,15 +30,26 @@ const userContext = React.createContext<UserContext>({
 
 export const UserProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const loadUser = (userId: string | null) => {
-    setUser(userId);
+  const loadUserDetails = async (userId: string | null) => {
+    if (userId) {
+      try {
+        const loadedUser = await loadUser(userId);
+        LOGGER("Loaded user: %o", loadedUser);
+        setUser(loadedUser);
+      } catch (e) {
+        LOGGER("Failed to load user %s: %o", userId, e);
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
   };
 
   useEffect(() => {
     const storedUserId = sessionStorage.getItem(USER_KEY);
     if (storedUserId) {
       LOGGER("Loading remembered user: %s", storedUserId);
-      loadUser(storedUserId);
+      loadUserDetails(storedUserId);
     }
   }, []);
 
@@ -48,11 +58,11 @@ export const UserProvider: React.FC = ({ children }) => {
     setUserId: (userId: string) => {
       LOGGER("Loading user: %s", userId);
       sessionStorage.setItem(USER_KEY, userId);
-      loadUser(userId);
+      loadUserDetails(userId);
     },
     clearUserId: () => {
       sessionStorage.removeItem(USER_KEY);
-      loadUser(null);
+      loadUserDetails(null);
     },
   };
 
