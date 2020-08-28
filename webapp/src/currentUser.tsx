@@ -1,9 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import debug from "debug";
 
 /** The logger to use */
 const LOGGER = debug("mire:currentUser");
+
+/** The key into Session Storage where the current user ID is stored */
+const USER_KEY = "mire_current_user";
 
 type User = string;
 
@@ -28,15 +31,28 @@ const userContext = React.createContext<UserContext>({
 
 export const UserProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const loadUser = (userId: string | null) => {
+    setUser(userId);
+  };
+
+  useEffect(() => {
+    const storedUserId = sessionStorage.getItem(USER_KEY);
+    if (storedUserId) {
+      LOGGER("Loading remembered user: %s", storedUserId);
+      loadUser(storedUserId);
+    }
+  }, []);
 
   const contextValue = {
     user,
     setUserId: (userId: string) => {
       LOGGER("Loading user: %s", userId);
-      setUser(userId);
+      sessionStorage.setItem(USER_KEY, userId);
+      loadUser(userId);
     },
     clearUserId: () => {
-      setUser(null);
+      sessionStorage.removeItem(USER_KEY);
+      loadUser(null);
     },
   };
 
