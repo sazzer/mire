@@ -1,12 +1,14 @@
 import React from "react";
 import { UserMenu } from "./usermenu";
 import { useTranslation } from "react-i18next";
+import { useUser } from "../currentUser";
 
 /**
  * Component representing the header of the entire UI.
  */
 export const HeaderBar: React.FC = () => {
   const { t } = useTranslation();
+  const { hasUser } = useUser();
 
   return (
     <header>
@@ -25,9 +27,7 @@ export const HeaderBar: React.FC = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">
-            <UserMenu />
-          </ul>
+          <ul className="navbar-nav ml-auto">{hasUser && <UserMenu />}</ul>
         </div>
       </nav>
     </header>

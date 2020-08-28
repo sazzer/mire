@@ -8,8 +8,12 @@ const LOGGER = debug("mire:api:authentication:start");
 /**
  * Start authentication with the named provider
  * @param provider The name of the provider to start authentication with
+ * @param setUserId Callback to provide the User ID of the newly authenticated user
  */
-export function authenticate(provider: string) {
+export function authenticate(
+  provider: string,
+  setUserId: (userId: string) => void
+) {
   const template = UrlTemplate.parse(
     env("URL_BASE") + "/authentication/{provider}"
   );
@@ -20,8 +24,9 @@ export function authenticate(provider: string) {
   const eventListener = (event: MessageEvent) => {
     if (event && event.data && event.data.type === "mireAuthenticated") {
       window.removeEventListener("message", eventListener);
-      console.log(event.data);
-      console.log(event.origin);
+      if (event.data.user) {
+        setUserId(event.data.user);
+      }
     }
   };
   window.addEventListener("message", eventListener);
