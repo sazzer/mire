@@ -1,11 +1,12 @@
 use bytes::BytesMut;
 use mire_authorization::PrincipalId;
 use postgres_types::{accepts, to_sql_checked, FromSql, IsNull, ToSql, Type};
+use serde::Deserialize;
 use std::str::FromStr;
 use uuid::Uuid;
 
 /// The unique identifier for a User record
-#[derive(Debug, PartialEq, FromSql, Clone)]
+#[derive(Debug, PartialEq, FromSql, Clone, Deserialize)]
 pub struct UserId(Uuid);
 
 impl Default for UserId {

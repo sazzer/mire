@@ -1592,13 +1592,16 @@ dependencies = [
 name = "mire-users"
 version = "0.1.0"
 dependencies = [
+ "actix-http",
  "actix-rt",
+ "actix-web",
  "assert2",
  "bytes",
  "chrono",
  "mire-authorization",
  "mire-database",
  "mire-model",
+ "mire-server",
  "mire-testdata",
  "mire-testdatabase",
  "postgres-types",

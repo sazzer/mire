@@ -37,7 +37,7 @@ impl Service {
 
         let users = UsersConfig::new(database.clone());
 
-        let mut authentication = AuthenticationConfig::new(users.service);
+        let mut authentication = AuthenticationConfig::new(users.service.clone());
         if let Some(google) = config.google_config {
             authentication.with_google(&google);
         }
@@ -49,6 +49,7 @@ impl Service {
             health.server_config(),
             authorization.server_config(),
             authentication.server_config(),
+            users.server_config(),
         ]);
 
         Self { server }
