@@ -1552,6 +1552,11 @@ dependencies = [
 [[package]]
 name = "mire-problem"
 version = "0.1.0"
+dependencies = [
+ "actix-http",
+ "serde 1.0.115",
+ "serde_json",
+]
 
 [[package]]
 name = "mire-server"
