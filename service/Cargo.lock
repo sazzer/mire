@@ -1554,6 +1554,8 @@ name = "mire-problem"
 version = "0.1.0"
 dependencies = [
  "actix-http",
+ "actix-web",
+ "futures",
  "serde 1.0.115",
  "serde_json",
 ]
@@ -1610,6 +1612,7 @@ dependencies = [
  "mire-authorization",
  "mire-database",
  "mire-model",
+ "mire-problem",
  "mire-server",
  "mire-testdata",
  "mire-testdatabase",

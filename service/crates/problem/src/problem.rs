@@ -5,22 +5,22 @@ use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 
 /// Trait to represent the type of problem.
-pub trait ProblemType<'a>: Debug {
+pub trait ProblemType: Debug + Display {
     /// A URI Reference that identifies the problem type.
-    fn problem_type(&self) -> &'a str;
+    fn problem_type(&self) -> &'static str;
 }
 
-impl<'a> Display for dyn ProblemType<'a> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.problem_type())
-    }
+/// Trait that problem type instances can implement that mean they define their own status codes.
+pub trait ProblemTypeStatus {
+    /// The status code to use for this problem type
+    fn status_code(&self) -> StatusCode;
 }
 
 /// Representation of an RFC-7807 Problem.
 #[derive(Debug)]
-pub struct Problem<'a> {
+pub struct Problem {
     /// The actual error that occurred
-    pub error: Box<dyn ProblemType<'a>>,
+    pub error: Box<dyn ProblemType>,
     /// The HTTP Status code to use
     pub status: StatusCode,
     /// An additional detail message
@@ -31,7 +31,7 @@ pub struct Problem<'a> {
     pub extra: HashMap<String, Value>,
 }
 
-impl<'a> Problem<'a> {
+impl Problem {
     /// Create a new Problem instance
     ///
     /// # Parameters
@@ -40,9 +40,9 @@ impl<'a> Problem<'a> {
     ///
     /// # Returns
     /// The problem
-    pub fn new<T>(error: T, status: StatusCode) -> Self
+    pub fn new_with_status<T>(error: T, status: StatusCode) -> Self
     where
-        T: ProblemType<'a> + 'static,
+        T: ProblemType + 'static,
     {
         Self {
             error: Box::new(error),
@@ -51,6 +51,21 @@ impl<'a> Problem<'a> {
             instance: None,
             extra: HashMap::new(),
         }
+    }
+
+    /// Create a new Problem instance
+    ///
+    /// # Parameters
+    /// - `error` - The error code
+    ///
+    /// # Returns
+    /// The problem
+    pub fn new<T>(error: T) -> Self
+    where
+        T: ProblemType + ProblemTypeStatus + 'static,
+    {
+        let status = error.status_code();
+        Self::new_with_status(error, status)
     }
 
     /// Set the Detail of the Problem instance
@@ -102,15 +117,28 @@ mod tests {
         SomeProblem,
     }
 
-    impl<'a> ProblemType<'a> for ProblemDetails {
-        fn problem_type(&self) -> &'a str {
+    impl ProblemType for ProblemDetails {
+        fn problem_type(&self) -> &'static str {
             "tag:mire,2020:some/problem"
         }
     }
 
+    impl Display for ProblemDetails {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "Some Problem")
+        }
+    }
+
+    impl ProblemTypeStatus for ProblemDetails {
+        fn status_code(&self) -> StatusCode {
+            StatusCode::NO_CONTENT
+        }
+    }
+
     #[test]
-    fn test_basic_problem() {
-        let problem = Problem::new(ProblemDetails::SomeProblem, StatusCode::BAD_REQUEST);
+    fn test_basic_problem_with_status() {
+        let problem =
+            Problem::new_with_status(ProblemDetails::SomeProblem, StatusCode::BAD_REQUEST);
 
         assert_eq!(StatusCode::BAD_REQUEST, problem.status);
         assert_eq!("tag:mire,2020:some/problem", problem.error.problem_type());
@@ -120,12 +148,24 @@ mod tests {
     }
 
     #[test]
+    fn test_basic_problem() {
+        let problem = Problem::new(ProblemDetails::SomeProblem);
+
+        assert_eq!(StatusCode::NO_CONTENT, problem.status);
+        assert_eq!("tag:mire,2020:some/problem", problem.error.problem_type());
+        assert_eq!(None, problem.detail);
+        assert_eq!(None, problem.instance);
+        assert_eq!(0, problem.extra.len());
+    }
+
+    #[test]
     fn test_full_problem() {
-        let problem = Problem::new(ProblemDetails::SomeProblem, StatusCode::BAD_REQUEST)
-            .with_detail("Some Detail")
-            .with_instance("Some Instance")
-            .with_extra("some_key", "Some Value")
-            .with_extra("other_key", 42);
+        let problem =
+            Problem::new_with_status(ProblemDetails::SomeProblem, StatusCode::BAD_REQUEST)
+                .with_detail("Some Detail")
+                .with_instance("Some Instance")
+                .with_extra("some_key", "Some Value")
+                .with_extra("other_key", 42);
 
         assert_eq!(StatusCode::BAD_REQUEST, problem.status);
         assert_eq!("tag:mire,2020:some/problem", problem.error.problem_type());

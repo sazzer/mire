@@ -3,8 +3,8 @@ use crate::UserId;
 use actix_web::{
     get,
     web::{Data, Path},
-    HttpResponse,
 };
+use mire_problem::{Problem, NOT_FOUND};
 
 /// HTTP Handler for getting the details of a User by ID.
 ///
@@ -18,8 +18,9 @@ use actix_web::{
     fields(http_method = "GET", http_path = "/users/:id"),
     skip(users_service)
 )]
-pub async fn get_user(path: Path<(UserId,)>, users_service: Data<UsersService>) -> HttpResponse {
+pub async fn get_user(path: Path<(UserId,)>, users_service: Data<UsersService>) -> Problem {
     let user = users_service.get_by_id(&path.0).await;
     tracing::debug!("Found user: {:?}", user);
-    todo!()
+
+    Problem::new(NOT_FOUND)
 }
