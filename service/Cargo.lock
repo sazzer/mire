@@ -1500,8 +1500,11 @@ dependencies = [
 name = "mire-authorization"
 version = "0.1.0"
 dependencies = [
+ "actix-http",
+ "actix-web",
  "assert2",
  "chrono",
+ "futures",
  "jsonwebtoken",
  "mire-server",
  "serde 1.0.115",
