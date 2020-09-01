@@ -1,4 +1,5 @@
 use crate::service::Registry;
+use actix_web::web;
 use mire_users::UsersService;
 use std::sync::Arc;
 
@@ -36,9 +37,15 @@ impl AuthenticationConfig {
         Arc::new(move |c| {
             c.data(service.clone());
 
-            c.service(super::endpoints::list_providers);
-            c.service(super::endpoints::start);
-            c.service(super::endpoints::complete);
+            c.service(
+                web::scope("/authentication")
+                    .route("", web::get().to(super::endpoints::list_providers))
+                    .route("/{provider}", web::get().to(super::endpoints::start))
+                    .route(
+                        "/{provider}/complete",
+                        web::get().to(super::endpoints::complete),
+                    ),
+            );
         })
     }
 }

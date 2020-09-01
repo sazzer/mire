@@ -1,6 +1,6 @@
 use super::{ComponentHealth, HealthService, SystemHealth};
 use actix_http::{http::StatusCode, Error, Response};
-use actix_web::{get, web::Data, HttpRequest, HttpResponse, Responder};
+use actix_web::{web::Data, HttpRequest, HttpResponse, Responder};
 use futures::future::{ok, Ready};
 use serde::Serialize;
 use std::collections::HashMap;
@@ -12,7 +12,6 @@ use std::collections::HashMap;
 ///
 /// # Returns
 /// The HTTP Model for the response
-#[get("/health")]
 #[tracing::instrument(
     fields(http_method = "GET", http_path = "/health"),
     skip(health_service)

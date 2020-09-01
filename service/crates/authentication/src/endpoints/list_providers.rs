@@ -1,6 +1,6 @@
 use crate::service::AuthenticationService;
 use actix_http::http::header::{CacheControl, CacheDirective};
-use actix_web::{get, web::Data, HttpResponse};
+use actix_web::{web::Data, HttpResponse};
 
 /// HTTP Handler for getting the list of authentication providers.
 ///
@@ -9,7 +9,6 @@ use actix_web::{get, web::Data, HttpResponse};
 ///
 /// # Returns
 /// The HTTP Model for the response
-#[get("/authentication")]
 #[tracing::instrument(
     fields(http_method = "GET", http_path = "/authentication"),
     skip(authentication_service)

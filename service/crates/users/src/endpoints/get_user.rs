@@ -1,9 +1,6 @@
 use crate::service::UsersService;
 use crate::UserId;
-use actix_web::{
-    get,
-    web::{Data, Path},
-};
+use actix_web::web::{Data, Path};
 use mire_problem::{Problem, NOT_FOUND};
 
 /// HTTP Handler for getting the details of a User by ID.
@@ -13,7 +10,6 @@ use mire_problem::{Problem, NOT_FOUND};
 ///
 /// # Returns
 /// The HTTP Model for the response
-#[get("/users/{id}")]
 #[tracing::instrument(
     fields(http_method = "GET", http_path = "/users/:id"),
     skip(users_service)

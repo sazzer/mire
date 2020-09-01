@@ -1,6 +1,5 @@
 use crate::{service::AuthenticationService, ProviderId};
 use actix_web::{
-    get,
     web::{Data, Path, Query},
     HttpResponse,
 };
@@ -56,7 +55,6 @@ const FAILURE_TEMPLATE: &str = r#"
 ///
 /// # Returns
 /// The HTTP Model for the response
-#[get("/authentication/{provider}/complete")]
 #[tracing::instrument(
     fields(http_method = "GET", http_path = "/authentication/:provider/complete"),
     skip(authentication_service, authorization_service)

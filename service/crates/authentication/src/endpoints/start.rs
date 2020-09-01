@@ -2,7 +2,6 @@ use crate::{service::AuthenticationService, ProviderId, StartAuthentication};
 use actix_http::http::header::{CacheControl, CacheDirective};
 use actix_web::{
     cookie::Cookie,
-    get,
     web::{Data, Path},
     HttpResponse,
 };
@@ -15,7 +14,6 @@ use actix_web::{
 ///
 /// # Returns
 /// The HTTP Model for the response
-#[get("/authentication/{provider}")]
 #[tracing::instrument(
     fields(http_method = "GET", http_path = "/authentication/:provider"),
     skip(authentication_service)

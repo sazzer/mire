@@ -1,4 +1,5 @@
 use super::{HealthService, Healthchecker};
+use actix_web::web;
 use std::{collections::HashMap, sync::Arc};
 
 /// Configuration of the healthcheck component.
@@ -31,7 +32,7 @@ impl HealthConfig {
         Arc::new(move |c| {
             c.data(service.clone());
 
-            c.service(super::endpoints::get_health);
+            c.service(web::resource("/health").route(web::get().to(super::endpoints::get_health)));
         })
     }
 }

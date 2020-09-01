@@ -1,5 +1,6 @@
 use super::repository::UsersRepository;
 use super::UsersService;
+use actix_web::web;
 use std::sync::Arc;
 
 /// Configuration of the users component.
@@ -27,7 +28,9 @@ impl UsersConfig {
         Arc::new(move |c| {
             c.data(service.clone());
 
-            c.service(super::endpoints::get_user);
+            c.service(
+                web::scope("/users").route("/{id}", web::get().to(super::endpoints::get_user)),
+            );
         })
     }
 }
