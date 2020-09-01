@@ -1,9 +1,10 @@
 use bytes::BytesMut;
 use postgres_types::{accepts, to_sql_checked, FromSql, IsNull, ToSql, Type};
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 /// The email address for a User record
-#[derive(Debug, PartialEq, FromSql)]
+#[derive(Debug, PartialEq, FromSql, Serialize, Deserialize)]
 pub struct Email(String);
 
 /// Errors that can occur when parsing an Email Address

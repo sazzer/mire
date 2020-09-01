@@ -1,3 +1,4 @@
+use super::model::UserModel;
 use crate::service::UsersService;
 use crate::UserId;
 use actix_web::web::{Data, Path};
@@ -14,9 +15,13 @@ use mire_problem::{Problem, NOT_FOUND};
     fields(http_method = "GET", http_path = "/users/:id"),
     skip(users_service)
 )]
-pub async fn get_user(path: Path<(UserId,)>, users_service: Data<UsersService>) -> Problem {
+pub async fn get_user(
+    path: Path<(UserId,)>,
+    users_service: Data<UsersService>,
+) -> Result<UserModel, Problem> {
     let user = users_service.get_by_id(&path.0).await;
     tracing::debug!("Found user: {:?}", user);
 
-    Problem::new(NOT_FOUND)
+    user.map(UserModel::from)
+        .ok_or_else(|| Problem::new(NOT_FOUND))
 }

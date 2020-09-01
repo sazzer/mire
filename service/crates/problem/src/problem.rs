@@ -2,7 +2,7 @@ use actix_http::http::StatusCode;
 use serde::Serialize;
 use serde_json::Value;
 use std::collections::HashMap;
-use std::fmt::{Debug, Display};
+use std::fmt::{Debug, Display, Formatter};
 
 /// Trait to represent the type of problem.
 pub trait ProblemType: Debug + Display {
@@ -29,6 +29,12 @@ pub struct Problem {
     pub instance: Option<String>,
     /// Any extra details
     pub extra: HashMap<String, Value>,
+}
+
+impl Display for Problem {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.error)
+    }
 }
 
 impl Problem {

@@ -1609,6 +1609,7 @@ dependencies = [
  "assert2",
  "bytes",
  "chrono",
+ "futures",
  "mire-authorization",
  "mire-database",
  "mire-model",

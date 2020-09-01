@@ -1,5 +1,9 @@
 use crate::Problem;
-use actix_web::{Error, HttpRequest, HttpResponse, Responder};
+use actix_web::{
+    error::ResponseError,
+    http::{header, StatusCode},
+    Error, HttpRequest, HttpResponse, Responder,
+};
 use futures::future::{ready, Ready};
 use serde::Serialize;
 use serde_json::Value;
@@ -24,23 +28,44 @@ struct ProblemModel {
     pub extra: HashMap<String, Value>,
 }
 
+impl From<&Problem> for HttpResponse {
+    fn from(problem: &Problem) -> Self {
+        let body = ProblemModel {
+            r#type: problem.error.problem_type().to_owned(),
+            title: problem.error.to_string(),
+            status: problem.status.as_u16(),
+            detail: problem.detail.clone(),
+            instance: problem.instance.clone(),
+            extra: problem.extra.clone(),
+        };
+
+        Self::build(problem.status)
+            .header(header::CONTENT_TYPE, "application/problem+json")
+            .json(body)
+    }
+}
+
+impl From<Problem> for HttpResponse {
+    fn from(problem: Problem) -> Self {
+        Self::from(&problem)
+    }
+}
+
 impl Responder for Problem {
     type Error = Error;
     type Future = Ready<Result<HttpResponse, Error>>;
 
     fn respond_to(self, _req: &HttpRequest) -> Self::Future {
-        let body = ProblemModel {
-            r#type: self.error.problem_type().to_owned(),
-            title: self.error.to_string(),
-            status: self.status.as_u16(),
-            detail: self.detail,
-            instance: self.instance,
-            extra: self.extra,
-        };
+        ready(Ok(self.into()))
+    }
+}
 
-        // Create response and set content type
-        ready(Ok(HttpResponse::build(self.status)
-            .content_type("application/problem+json")
-            .body(serde_json::to_string_pretty(&body).unwrap())))
+impl ResponseError for Problem {
+    fn status_code(&self) -> StatusCode {
+        self.status
+    }
+
+    fn error_response(&self) -> HttpResponse {
+        self.into()
     }
 }
