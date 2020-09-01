@@ -1506,6 +1506,7 @@ dependencies = [
  "chrono",
  "futures",
  "jsonwebtoken",
+ "mire-problem",
  "mire-server",
  "serde 1.0.115",
  "thiserror",
