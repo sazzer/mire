@@ -83,6 +83,7 @@ impl Service {
     ///
     /// # Returns
     /// The security context
+    #[must_use]
     pub fn generate_access_token(
         &self,
         principal: mire_authorization::PrincipalId,

@@ -10,6 +10,7 @@ impl TestSubject {
     ///
     /// # Returns
     /// The access token.
+    #[must_use]
     pub fn generate_access_token<S>(&self, user_id: S) -> SignedSecurityContext
     where
         S: Into<String>,
