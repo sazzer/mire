@@ -21,7 +21,13 @@ pub async fn get_user(
     authenticator: Authenticator,
     users_service: Data<UsersService>,
 ) -> Result<UserModel, Problem> {
-    let user = users_service.get_by_id(&path.0).await;
+    let user_id = &path.0;
+    authenticator
+        .check()
+        .same_principal(&user_id.clone().into())
+        .result()?;
+
+    let user = users_service.get_by_id(user_id).await;
     tracing::debug!("Found user: {:?}", user);
 
     user.map(UserModel::from)

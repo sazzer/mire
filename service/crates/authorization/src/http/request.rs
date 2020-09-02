@@ -5,6 +5,7 @@ use actix_web::{dev, http::header, web::Data, Error, FromRequest, HttpRequest};
 use futures::future::{err, ok, Ready};
 use mire_problem::{Problem, SimpleProblemType};
 
+/// Problem type to indicate that the request has invalid authentication details.
 pub const UNAUTHENTICATED: SimpleProblemType = SimpleProblemType {
     problem_type: "tag:mire/2020:problems/unauthenticated",
     problem_title: "The request was not correctly authenticated",
@@ -12,6 +13,16 @@ pub const UNAUTHENTICATED: SimpleProblemType = SimpleProblemType {
 };
 
 impl Authenticator {
+    /// Helper to parse the header value into a signed security context.
+    ///
+    /// # Parameters
+    /// - `header` - The header to parse
+    ///
+    /// # Returns
+    /// The Signed Security Context.
+    /// If the header was somehow invalid then returns `Err(())`.
+    /// If the header was absent then returns `Ok(None)`.
+    /// Otherwise returns `Ok(Some(SignedSecurityContext))`
     fn parse_header(
         header: Option<&header::HeaderValue>,
     ) -> Result<Option<SignedSecurityContext>, ()> {
