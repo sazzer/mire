@@ -1,5 +1,6 @@
 mod http;
 mod database;
+mod token;
 use mire_testdatabase::TestDatabase;
 
 /// The test wrapper around the service being tested

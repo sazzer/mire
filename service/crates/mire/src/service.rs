@@ -2,7 +2,7 @@ use crate::Config;
 use chrono::Duration;
 use futures::join;
 use mire_authentication::config::AuthenticationConfig;
-use mire_authorization::{config::AuthorizationConfig, SigningKey};
+use mire_authorization::{config::AuthorizationConfig, AuthorizationService, SigningKey};
 use mire_database::Database;
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
@@ -13,6 +13,8 @@ use std::sync::Arc;
 pub struct Service {
     /// The HTTP Server.
     server: Server,
+    /// The Authorization Service, needed for testing.
+    authorization_service: AuthorizationService,
 }
 
 impl Service {
@@ -52,7 +54,10 @@ impl Service {
             users.server_config(),
         ]);
 
-        Self { server }
+        Self {
+            server,
+            authorization_service: authorization.service,
+        }
     }
 
     /// Start the service running.
@@ -69,5 +74,22 @@ impl Service {
     /// This is strictly for integration testing of the service.
     pub async fn inject(&self, req: actix_http::Request) -> TestResponse {
         self.server.inject(req).await
+    }
+
+    /// Generate a signed security context that can be used to access the service.
+    ///
+    /// # Parameters
+    /// - `principal` - The Principal whom the security context represents
+    ///
+    /// # Returns
+    /// The security context
+    pub fn generate_access_token(
+        &self,
+        principal: mire_authorization::PrincipalId,
+    ) -> mire_authorization::SignedSecurityContext {
+        let security_context = self
+            .authorization_service
+            .generate_security_context(principal);
+        self.authorization_service.sign(&security_context)
     }
 }
