@@ -63,13 +63,7 @@ async fn test_get_unknown_user() {
         .inject(
             TestRequest::get()
                 .uri("/users/b077bffd-7d03-4c85-ad33-d0b1e8a7daa5")
-                .header(
-                    "Authorization",
-                    format!(
-                        "Bearer {}",
-                        test_subject.generate_access_token("b077bffd-7d03-4c85-ad33-d0b1e8a7daa5")
-                    ),
-                )
+                .set(test_subject.generate_access_token("b077bffd-7d03-4c85-ad33-d0b1e8a7daa5"))
                 .to_request(),
         )
         .await;
@@ -108,13 +102,7 @@ async fn test_get_known_user() {
         .inject(
             TestRequest::get()
                 .uri("/users/b077bffd-7d03-4c85-ad33-d0b1e8a7daa5")
-                .header(
-                    "Authorization",
-                    format!(
-                        "Bearer {}",
-                        test_subject.generate_access_token("b077bffd-7d03-4c85-ad33-d0b1e8a7daa5")
-                    ),
-                )
+                .set(test_subject.generate_access_token("b077bffd-7d03-4c85-ad33-d0b1e8a7daa5"))
                 .to_request(),
         )
         .await;
