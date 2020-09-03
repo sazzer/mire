@@ -1,5 +1,5 @@
 use actix_cors::Cors;
-use actix_web::{http::header, middleware::Logger, web::ServiceConfig, App, HttpServer};
+use actix_web::{middleware::Logger, web::ServiceConfig, App, HttpServer};
 use std::{ops::Deref, sync::Arc};
 
 /// A function that is able to contribute configuration to the Actix server when it is being constructed.
@@ -38,7 +38,7 @@ impl Server {
 
             let mut app = App::new()
                 .wrap(Logger::default())
-                .wrap(Cors::new().allowed_header(header::ETAG).finish());
+                .wrap(Cors::new().finish());
 
             for config in &configs {
                 app = app.configure(config.deref());
