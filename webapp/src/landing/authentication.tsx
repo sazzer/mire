@@ -3,8 +3,9 @@ import {
   authenticate,
   listAuthenticationProviders,
 } from "../api/authentication";
-import React, { useEffect, useState } from "react";
+import React, { Suspense } from "react";
 
+import { useAsyncResource } from "use-async-resource";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
@@ -42,23 +43,38 @@ const AuthenticationButton: React.FC<AuthenticationButtonProps> = ({
   );
 };
 
+interface AuthenticationButtonsProps {
+  providers: () => Providers;
+}
+
+/**
+ * Render the list of authentication buttons to display
+ */
+const AuthenticationButtons: React.FC<AuthenticationButtonsProps> = ({
+  providers,
+}) => {
+  return (
+    <>
+      {providers().map((provider) => (
+        <AuthenticationButton name={provider} key={provider} />
+      ))}
+    </>
+  );
+};
+
 /**
  * The sidebar on the landing page for logging in.
  */
 export const Authentication: React.FC = () => {
   const { t } = useTranslation();
-  const [providers, setProviders] = useState<Providers>([]);
-
-  useEffect(() => {
-    listAuthenticationProviders().then(setProviders);
-  }, []);
+  const [providers] = useAsyncResource(() => listAuthenticationProviders(), []);
 
   return (
     <div>
       <h2>{t("authentication.header")}</h2>
-      {providers.map((provider) => (
-        <AuthenticationButton name={provider} key={provider} />
-      ))}
+      <Suspense fallback="Loading...">
+        <AuthenticationButtons providers={providers} />
+      </Suspense>
     </div>
   );
 };

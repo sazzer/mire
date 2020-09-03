@@ -24,6 +24,7 @@ describe("<Authentication>", () => {
           <h2>
             Login / Register
           </h2>
+          Loading...
         </div>
       </div>
     `);
@@ -31,13 +32,17 @@ describe("<Authentication>", () => {
   });
 
   test("After some authentication providers are loaded", async () => {
-    listAuthenticationProvidersMock.mockReturnValueOnce(
-      Promise.resolve(["facebook", "twitter"])
-    );
+    listAuthenticationProvidersMock.mockResolvedValueOnce([
+      "facebook",
+      "twitter",
+    ]);
 
     const { container } = render(<Authentication />);
-    await waitFor(() =>
-      expect(listAuthenticationProvidersMock).toHaveBeenCalledTimes(1)
+    await waitFor(
+      () => expect(listAuthenticationProvidersMock).toHaveBeenCalledTimes(1),
+      {
+        container,
+      }
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -71,7 +76,7 @@ describe("<Authentication>", () => {
   });
 
   test("After no authentication providers are loaded", async () => {
-    listAuthenticationProvidersMock.mockReturnValueOnce(Promise.resolve([]));
+    listAuthenticationProvidersMock.mockResolvedValueOnce([]);
 
     const { container } = render(<Authentication />);
     await waitFor(() =>
