@@ -24,7 +24,21 @@ describe("<Authentication>", () => {
           <h2>
             Login / Register
           </h2>
-          Loading...
+          <div
+            class="text-center"
+          >
+            <div
+              class="spinner-border"
+              role="status"
+              style="width: 3rem; height: 3rem;"
+            >
+              <span
+                class="sr-only"
+              >
+                Loading...
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     `);

@@ -5,6 +5,7 @@ import {
 } from "../api/authentication";
 import React, { Suspense } from "react";
 
+import { Spinner } from "../components/spinner";
 import { useAsyncResource } from "use-async-resource";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -72,7 +73,7 @@ export const Authentication: React.FC = () => {
   return (
     <div>
       <h2>{t("authentication.header")}</h2>
-      <Suspense fallback="Loading...">
+      <Suspense fallback={<Spinner />}>
         <AuthenticationButtons providers={providers} />
       </Suspense>
     </div>

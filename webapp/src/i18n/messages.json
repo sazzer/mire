@@ -1,5 +1,7 @@
 {
-  "hello": "World",
+  "components": {
+    "loading": "Loading..."
+  },
   "header": {
     "title": "Mire",
     "toggleNavigation": "Toggle Navigation",
