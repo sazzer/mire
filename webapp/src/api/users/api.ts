@@ -1,10 +1,7 @@
-/** The type representing the ID of a user */
-export type UserId = string;
-
 /**
- * Representation of a single authentication with a provider
+ * Representation of a single authentication with a provider on the API
  */
-export interface Authentication {
+export interface AuthenticationModel {
   /** The provider that this authentication is with */
   authenticationProvider: string;
   /** The ID of the user with the provider */
@@ -14,13 +11,11 @@ export interface Authentication {
 }
 
 /**
- * Representation of a single user
+ * Representation of a single user on the API
  */
-export interface User {
+export interface UserModel {
   /** The ID of the user */
-  id: UserId;
-  /** The version of the user record */
-  version: string;
+  id: string;
   /** When the user was created */
   created: Date;
   /** When the user was last updated */
@@ -30,5 +25,5 @@ export interface User {
   /** The email address of the user */
   email: string;
   /** The set of authentication details for the user */
-  authentications: Authentication[];
+  authentications: AuthenticationModel[];
 }
