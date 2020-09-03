@@ -36,12 +36,9 @@ impl Server {
         HttpServer::new(move || {
             let configs = configs.clone();
 
-            let mut app = App::new().wrap(Logger::default()).wrap(
-                Cors::new()
-                    .allowed_header(header::ETAG)
-                    .allowed_header(header::AUTHORIZATION)
-                    .finish(),
-            );
+            let mut app = App::new()
+                .wrap(Logger::default())
+                .wrap(Cors::new().expose_headers(vec![header::ETAG]).finish());
 
             for config in &configs {
                 app = app.configure(config.deref());
