@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:11.6-alpine
+    environment:
+      POSTGRES_DB: mire
+      POSTGRES_USER: mire
+      POSTGRES_PASSWORD: mire
+    ports:
+      - "127.0.0.1:35432:5432"
+    networks:
+      - mire-e2e
+
+  fakeauth:
+    image: sazzer/fakeauth:latest
+    ports:
+      - "127.0.0.1:33000:3000"
+    networks:
+      - mire-e2e
+
+  service:
+    image: mire-service
+    environment:
+      - RUST_LOG=mire_lib=debug,info
+      - DATABASE_URL=postgres://mire:mire@postgres/mire
+      - GOOGLE_CLIENT_ID=e2eGoogleClientId
+      - GOOGLE_CLIENT_SECRET=e2eGoogleClientSecret
+      - GOOGLE_REDIRECT_URI=http://localhost:38000/authentication/google/complete
+      - GOOGLE_AUTH_URI=http://localhost:33000/google/o/oauth2/v2/auth{?client_id,redirect_uri,response_type,scope,state}
+      - GOOGLE_TOKEN_URI=http://fakeauth:3000/google/oauth2/v4/token
+    ports:
+      - "127.0.0.1:38000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - mire-e2e
+
+  webapp:
+    image: mire-webapp
+    environment:
+      - REACT_APP_URL_BASE=http://localhost:38000
+    ports:
+      - "127.0.0.1:30080:80"
+    depends_on:
+      - service
+    networks:
+      - mire-e2e
+
+networks:
+  mire-e2e:
