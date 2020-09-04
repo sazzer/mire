@@ -2,6 +2,7 @@ import { Route, Switch } from "react-router-dom";
 
 import { HeaderBar } from "./header";
 import { LandingPage } from "./landing";
+import { ProfilePage } from "./profile";
 import React from "react";
 
 /**
@@ -13,6 +14,9 @@ export const App: React.FC = () => {
       <HeaderBar />
       <main className="container-fluid">
         <Switch>
+          <Route path="/profile">
+            <ProfilePage />
+          </Route>
           <Route path="/">
             <LandingPage />
           </Route>

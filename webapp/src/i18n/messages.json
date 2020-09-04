@@ -1,6 +1,7 @@
 {
   "components": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "unauthenticated": "You must log in to access this page."
   },
   "header": {
     "title": "Mire",
