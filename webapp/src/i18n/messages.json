@@ -3,6 +3,9 @@
     "loading": "Loading...",
     "unauthenticated": "You must log in to access this page."
   },
+  "common": {
+    "home": "Home"
+  },
   "header": {
     "title": "Mire",
     "toggleNavigation": "Toggle Navigation",
@@ -20,5 +23,8 @@
     "google": "Sign In with Google",
     "twitter": "Sign In with Twitter",
     "facebook": "Sign In with Facebook"
+  },
+  "profile": {
+    "breadcrumb": "User Profile: {{displayName}}"
   }
 }
