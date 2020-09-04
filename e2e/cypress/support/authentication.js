@@ -1,4 +1,4 @@
-function getButton(provider, callback) {
+function getButton(provider) {
   const button = cy.findByText(`Sign In with ${provider}`);
   return button;
 }
