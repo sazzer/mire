@@ -135,6 +135,9 @@ jobs:
       - build-service-container
       - build-webapp
       - build-webapp-container
+    strategy:
+      matrix:
+        browser: [chrome, firefox]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -162,9 +165,15 @@ jobs:
       - name: Run Tests
         uses: cypress-io/github-action@v1
         with:
-          browser: chrome
+          browser: ${{ matrix.browser }}
           working-directory: e2e
           wait-on: "http://localhost:38000/health"
+
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-ubuntu-${{ matrix.browser }}
+          path: e2e/output
 
   deploy-service-container:
     runs-on: ubuntu-latest

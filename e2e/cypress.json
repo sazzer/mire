@@ -1,5 +1,8 @@
 {
   "baseUrl": "http://localhost:30080",
+  "screenshotsFolder": "output/screenshots",
+  "videosFolder": "output/videos",
+  "fixturesFolder": false,
   "testFiles": "**/*.{feature,features}",
   "env": {
     "POSTGRES_URL": "postgres://mire:mire@localhost:35432/mire"
