@@ -1,12 +1,12 @@
 import { Then, When } from "cypress-cucumber-preprocessor/steps";
 
+import { toList } from "./table";
+
 Then("the available authentication providers are:", (dataTable) => {
   cy.getAuthentication(({ getButton }) => {
-    dataTable.rawTable
-      .map((row) => row[0])
-      .forEach((provider) => {
-        getButton(provider).should("be.visible");
-      });
+    toList(dataTable).forEach((provider) => {
+      getButton(provider).should("be.visible");
+    });
   });
 });
 
