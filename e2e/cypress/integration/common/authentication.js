@@ -16,10 +16,24 @@ When("I authenticate using {string}", (provider) => {
   });
 });
 
+When("I log out", () => {
+  cy.getPageHeader(({ getUserMenu }) => {
+    getUserMenu(({ logout }) => {
+      logout();
+    });
+  });
+});
+
 Then("I am logged in as {string}", (displayName) => {
   cy.getPageHeader(({ getUserMenu }) => {
     getUserMenu(({ getDropdownButton }) => {
       getDropdownButton().should("be.visible").should("have.text", displayName);
     });
+  });
+});
+
+Then("I am not logged in", () => {
+  cy.getPageHeader(({ getUserMenuElement }) => {
+    getUserMenuElement().should("not.exist");
   });
 });

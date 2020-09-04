@@ -11,3 +11,9 @@ Feature: Authentication
     Examples:
       | Provider | Name      |
       | Google   | Test User |
+
+  Scenario: Logging out
+    Given I authenticate using "Google"
+    And I am logged in as "Test User"
+    When I log out
+    Then I am not logged in
