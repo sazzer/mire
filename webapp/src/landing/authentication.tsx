@@ -71,8 +71,8 @@ export const Authentication: React.FC = () => {
   const [providers] = useAsyncResource(() => listAuthenticationProviders(), []);
 
   return (
-    <div>
-      <h2>{t("authentication.header")}</h2>
+    <div aria-labelledby="authenticationLabel">
+      <h2 id="authenticationLabel">{t("authentication.header")}</h2>
       <Suspense fallback={<Spinner />}>
         <AuthenticationButtons providers={providers} />
       </Suspense>

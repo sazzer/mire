@@ -3,10 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "open": "cypress open"
+    "open": "cypress open",
+    "run": "cypress run"
   },
   "dependencies": {
-    "cypress": "^5.1.0"
+    "@testing-library/cypress": "^7.0.0",
+    "cypress": "^5.1.0",
+    "cypress-commands": "^1.1.0",
+    "cypress-cucumber-preprocessor": "^2.5.5"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  }
 }

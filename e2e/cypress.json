@@ -1,1 +1,4 @@
-{}
+{
+  "baseUrl": "http://localhost:30080",
+  "testFiles": "**/*.{feature,features}"
+}

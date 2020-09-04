@@ -20,8 +20,12 @@ describe("<Authentication>", () => {
     const { container } = render(<Authentication />);
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <div>
-          <h2>
+        <div
+          aria-labelledby="authenticationLabel"
+        >
+          <h2
+            id="authenticationLabel"
+          >
             Login / Register
           </h2>
           <div
@@ -61,8 +65,12 @@ describe("<Authentication>", () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <div>
-          <h2>
+        <div
+          aria-labelledby="authenticationLabel"
+        >
+          <h2
+            id="authenticationLabel"
+          >
             Login / Register
           </h2>
           <button
@@ -99,8 +107,12 @@ describe("<Authentication>", () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <div>
-          <h2>
+        <div
+          aria-labelledby="authenticationLabel"
+        >
+          <h2
+            id="authenticationLabel"
+          >
             Login / Register
           </h2>
         </div>
