@@ -10,7 +10,8 @@
     "@testing-library/cypress": "^7.0.0",
     "cypress": "^5.1.0",
     "cypress-commands": "^1.1.0",
-    "cypress-cucumber-preprocessor": "^2.5.5"
+    "cypress-cucumber-preprocessor": "^2.5.5",
+    "pg": "^8.3.3"
   },
   "devDependencies": {},
   "cypress-cucumber-preprocessor": {

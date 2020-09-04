@@ -1,4 +1,7 @@
 {
   "baseUrl": "http://localhost:30080",
-  "testFiles": "**/*.{feature,features}"
+  "testFiles": "**/*.{feature,features}",
+  "env": {
+    "POSTGRES_URL": "postgres://mire:mire@localhost:35432/mire"
+  }
 }
