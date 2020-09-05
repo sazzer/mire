@@ -1,3 +1,4 @@
+import { Accordion } from "../components/accordion";
 import { Authenticated } from "../components/authenticated";
 import { Breadcrumb } from "../components/breadcrumb";
 import React from "react";
@@ -19,7 +20,19 @@ export const ProfilePage: React.FC = () => {
       />
 
       <Authenticated>
-        <div>Hello</div>
+        <Accordion
+          id="userProfile"
+          panes={[
+            {
+              title: "Profile",
+              content: <div>Profile</div>,
+            },
+            {
+              title: "Login details",
+              content: <div>Login details</div>,
+            },
+          ]}
+        />
       </Authenticated>
     </>
   );
