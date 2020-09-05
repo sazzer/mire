@@ -1,20 +1,27 @@
 import { Link, useHistory } from "react-router-dom";
 
 import React from "react";
+import { User } from "../api/users";
 import { clearToken } from "../api/http/token";
 import { useTranslation } from "react-i18next";
-import { useUser } from "../currentUser";
+
+/**
+ * Props needed for the User Menu
+ */
+export interface UserMenuProps {
+  user: User;
+  onLogout: () => void;
+}
 
 /**
  * The User Menu dropdown appearing in the header bar.
  */
-export const UserMenu: React.FC = () => {
+export const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout }) => {
   const { t } = useTranslation();
-  const { clearUserId, user } = useUser();
   const history = useHistory();
 
-  const onLogOut = () => {
-    clearUserId();
+  const doLogout = () => {
+    onLogout();
     clearToken();
     history.push("/");
   };
@@ -44,7 +51,7 @@ export const UserMenu: React.FC = () => {
           {t("header.userMenu.profile")}
         </Link>
         <div className="dropdown-divider"></div>
-        <button className="dropdown-item" role="menuitem" onClick={onLogOut}>
+        <button className="dropdown-item" role="menuitem" onClick={doLogout}>
           {t("header.userMenu.logout")}
         </button>
       </div>

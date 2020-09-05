@@ -75,12 +75,12 @@ const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({ userId }) => {
  * Page for viewing and editing the user profile
  */
 export const ProfilePage: React.FC = () => {
-  const { userId } = useUser();
+  const user = useUser();
   resourceCache(loadUser).clear();
 
   return (
     <Suspense fallback={<Spinner />}>
-      {userId && <ProfilePageLoader userId={userId} />}
+      {user.hasUser && <ProfilePageLoader userId={user.userId} />}
     </Suspense>
   );
 };

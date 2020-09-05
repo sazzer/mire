@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { User, loadUser } from "./api/users";
+import { User, UserId, loadUser } from "./api/users";
 
 import debug from "debug";
 
@@ -71,17 +71,41 @@ export const UserProvider: React.FC = ({ children }) => {
   );
 };
 
+export interface UserHookBase {
+  setUserId: (userId: UserId) => void;
+  clearUserId: () => void;
+}
+export interface UserHookWithUser extends UserHookBase {
+  hasUser: true;
+  user: User;
+  userId: UserId;
+}
+
+export interface UserHookWithoutUser extends UserHookBase {
+  hasUser: false;
+}
+
+export type UserHook = UserHookWithUser | UserHookWithoutUser;
 /**
  * Hook to access the user details
  */
-export function useUser() {
+export function useUser(): UserHook {
   const context = useContext(userContext);
 
-  return {
-    user: context.user,
-    userId: context.user?.id,
-    hasUser: context.user !== null,
-    setUserId: context.setUserId,
-    clearUserId: context.clearUserId,
-  };
+  const user = context.user;
+  if (user) {
+    return {
+      hasUser: true,
+      user,
+      userId: user.id,
+      setUserId: context.setUserId,
+      clearUserId: context.clearUserId,
+    };
+  } else {
+    return {
+      hasUser: false,
+      setUserId: context.setUserId,
+      clearUserId: context.clearUserId,
+    };
+  }
 }

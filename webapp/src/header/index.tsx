@@ -8,7 +8,7 @@ import { useUser } from "../currentUser";
  */
 export const HeaderBar: React.FC = () => {
   const { t } = useTranslation();
-  const { hasUser } = useUser();
+  const user = useUser();
 
   return (
     <header>
@@ -27,7 +27,11 @@ export const HeaderBar: React.FC = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">{hasUser && <UserMenu />}</ul>
+          <ul className="navbar-nav ml-auto">
+            {user.hasUser && (
+              <UserMenu user={user.user} onLogout={user.clearUserId} />
+            )}
+          </ul>
         </div>
       </nav>
     </header>
