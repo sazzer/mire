@@ -4,6 +4,7 @@ import { Authentication } from "./authentication";
 import React from "react";
 import { axe } from "jest-axe";
 import { listAuthenticationProviders } from "../api/authentication";
+import { resourceCache } from "use-async-resource";
 
 jest.mock("../api/authentication");
 
@@ -11,6 +12,7 @@ describe("<Authentication>", () => {
   const listAuthenticationProvidersMock = listAuthenticationProviders as jest.Mock;
 
   beforeEach(() => {
+    resourceCache(listAuthenticationProviders).clear();
     listAuthenticationProvidersMock.mockClear();
   });
 
