@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { User, loadUser } from "../api/users";
+import { resourceCache, useAsyncResource } from "use-async-resource";
 
 import { Accordion } from "../components/accordion";
 import { Authenticated } from "../components/authenticated";
@@ -7,7 +8,6 @@ import { Authentications } from "./authentications";
 import { Breadcrumb } from "../components/breadcrumb";
 import { ProfileForm } from "./profileForm";
 import { Spinner } from "../components/spinner";
-import { useAsyncResource } from "use-async-resource";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
 
@@ -67,8 +67,7 @@ interface ProfilePageLoaderProps {
  * Component to load the user from the server and display the profile page when it's loaded.
  */
 const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({ userId }) => {
-  const [user] = useAsyncResource(() => loadUser(userId, true), []);
-
+  const [user] = useAsyncResource(loadUser, userId, true);
   return <ProfilePageContents user={user} />;
 };
 
@@ -77,6 +76,7 @@ const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({ userId }) => {
  */
 export const ProfilePage: React.FC = () => {
   const { userId } = useUser();
+  resourceCache(loadUser).clear();
 
   return (
     <Suspense fallback={<Spinner />}>

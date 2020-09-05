@@ -68,7 +68,7 @@ const AuthenticationButtons: React.FC<AuthenticationButtonsProps> = ({
  */
 export const Authentication: React.FC = () => {
   const { t } = useTranslation();
-  const [providers] = useAsyncResource(() => listAuthenticationProviders(), []);
+  const [providers] = useAsyncResource(listAuthenticationProviders, []);
 
   return (
     <div aria-labelledby="authenticationLabel">

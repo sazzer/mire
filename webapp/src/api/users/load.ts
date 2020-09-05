@@ -15,7 +15,10 @@ const LOGGER = debug("mire:api:users:load");
 export async function loadUser(id: UserId, force?: boolean): Promise<User> {
   LOGGER("Loading user: %s", id);
 
-  const userResponse = await request<UserModel>(`/users/${id}`, {
+  const userResponse = await request<UserModel>(`/users/{id}`, {
+    urlParams: {
+      id,
+    },
     ignoreCache: force || false,
   });
   const userModel = userResponse.body!!;
