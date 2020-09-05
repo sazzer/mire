@@ -25,6 +25,12 @@
     "facebook": "Sign In with Facebook"
   },
   "profile": {
-    "breadcrumb": "User Profile: {{displayName}}"
+    "breadcrumb": "User Profile: {{displayName}}",
+    "profile": {
+      "header": "User Profile"
+    },
+    "authentications": {
+      "header": "Login Details"
+    }
   }
 }

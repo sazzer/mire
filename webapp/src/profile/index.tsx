@@ -1,6 +1,8 @@
 import { Accordion } from "../components/accordion";
 import { Authenticated } from "../components/authenticated";
+import { Authentications } from "./authentications";
 import { Breadcrumb } from "../components/breadcrumb";
+import { ProfileForm } from "./profileForm";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
@@ -24,12 +26,12 @@ export const ProfilePage: React.FC = () => {
           id="userProfile"
           panes={[
             {
-              title: "Profile",
-              content: <div>Profile</div>,
+              title: t("profile.profile.header"),
+              content: <ProfileForm />,
             },
             {
-              title: "Login details",
-              content: <div>Login details</div>,
+              title: t("profile.authentications.header"),
+              content: <Authentications />,
             },
           ]}
         />
