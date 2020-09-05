@@ -11,10 +11,18 @@ import { useAsyncResource } from "use-async-resource";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
 
+/**
+ * Props for the Profile Page
+ */
 interface ProfilePageProps {
+  /** Reader to read the user to work with */
   user: () => User;
 }
 
+/**
+ * Component to display the contents of the profile page
+ * @param user The user to work with
+ */
 const ProfilePageContents: React.FC<ProfilePageProps> = ({ user }) => {
   const { t } = useTranslation();
   const userDetails = user();
@@ -47,10 +55,17 @@ const ProfilePageContents: React.FC<ProfilePageProps> = ({ user }) => {
   );
 };
 
+/**
+ * Props for the profile page loader
+ */
 interface ProfilePageLoaderProps {
+  /** The ID of the user */
   userId: string;
 }
 
+/**
+ * Component to load the user from the server and display the profile page when it's loaded.
+ */
 const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({ userId }) => {
   const [user] = useAsyncResource(() => loadUser(userId, true), []);
 

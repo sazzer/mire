@@ -23,8 +23,8 @@ export async function loadUser(id: UserId, force?: boolean): Promise<User> {
   return {
     id: userModel.id,
     version: userResponse.headers.get("Etag")!!,
-    created: userModel.created,
-    updated: userModel.updated,
+    created: new Date(userModel.created),
+    updated: new Date(userModel.updated),
     displayName: userModel.displayName,
     email: userModel.email,
     authentications: userModel.authentications,

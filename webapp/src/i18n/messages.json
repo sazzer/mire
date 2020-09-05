@@ -46,6 +46,10 @@
       },
       "actions": {
         "submit": "Save"
+      },
+      "alert": {
+        "saving": "Saving changes...",
+        "saved": "Successfully saved changes"
       }
     },
     "authentications": {
