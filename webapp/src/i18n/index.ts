@@ -19,6 +19,26 @@ i18n
 
     interpolation: {
       escapeValue: false,
+      format: (value, format, lng) => {
+        if (format === "intlDate") {
+          return new Intl.DateTimeFormat(lng, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }).format(value);
+        } else if (format === "intlDateTime") {
+          return new Intl.DateTimeFormat(lng, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+          }).format(value);
+        }
+
+        return value;
+      },
     },
 
     parseMissingKeyHandler: (key) => {

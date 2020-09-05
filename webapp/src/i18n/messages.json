@@ -4,7 +4,9 @@
     "unauthenticated": "You must log in to access this page."
   },
   "common": {
-    "home": "Home"
+    "home": "Home",
+    "formattedDate": "{{date, intlDate}}",
+    "formattedDateTime": "{{date, intlDateTime}}"
   },
   "header": {
     "title": "Mire",
@@ -27,7 +29,24 @@
   "profile": {
     "breadcrumb": "User Profile: {{displayName}}",
     "profile": {
-      "header": "User Profile"
+      "header": "User Profile",
+      "created": {
+        "label": "Registered"
+      },
+      "updated": {
+        "label": "Last Updated"
+      },
+      "email": {
+        "label": "Email Address",
+        "help": "We'll never share your email with anyone else."
+      },
+      "displayName": {
+        "label": "Display Name",
+        "help": "Nobody else will ever see this."
+      },
+      "actions": {
+        "submit": "Save"
+      }
     },
     "authentications": {
       "header": "Login Details"

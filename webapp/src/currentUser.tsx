@@ -79,6 +79,7 @@ export function useUser() {
 
   return {
     user: context.user,
+    userId: context.user?.id,
     hasUser: context.user !== null,
     setUserId: context.setUserId,
     clearUserId: context.clearUserId,

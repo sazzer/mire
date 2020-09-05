@@ -10,11 +10,14 @@ const LOGGER = debug("mire:api:users:load");
 /**
  * Load the user details from the server with the given ID
  * @param id The ID of the user to load
+ * @param force Whether to force loading the user
  */
-export async function loadUser(id: UserId): Promise<User> {
+export async function loadUser(id: UserId, force?: boolean): Promise<User> {
   LOGGER("Loading user: %s", id);
 
-  const userResponse = await request<UserModel>(`/users/${id}`);
+  const userResponse = await request<UserModel>(`/users/${id}`, {
+    ignoreCache: force || false,
+  });
   const userModel = userResponse.body!!;
 
   return {
