@@ -49,7 +49,8 @@
       },
       "alert": {
         "saving": "Saving changes...",
-        "saved": "Successfully saved changes"
+        "saved": "Successfully saved changes",
+        "error": "An error occurred saving changes"
       }
     },
     "authentications": {

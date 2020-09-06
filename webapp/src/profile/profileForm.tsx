@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { User, saveUser } from "../api/users";
 
-import { User } from "../api/users";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -32,12 +32,25 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       updated: t("common.formattedDateTime", { date: user.updated }),
     },
   });
-  const [state, setState] = useState<"INITIAL" | "SAVING" | "SAVED">("INITIAL");
+  const [state, setState] = useState<"INITIAL" | "SAVING" | "SAVED" | "ERROR">(
+    "INITIAL"
+  );
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = (data: ProfileFormFields) => {
     setState("SAVING");
-    setTimeout(() => setState("SAVED"), 2000);
+    const newUser = {
+      ...user,
+      email: data.email,
+      displayName: data.displayName,
+    };
+
+    saveUser(newUser)
+      .then(() => {
+        setState("SAVED");
+      })
+      .catch(() => {
+        setState("ERROR");
+      });
   };
 
   return (
@@ -133,6 +146,11 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       {state === "SAVED" && (
         <div className="alert alert-success" role="alert">
           {t("profile.profile.alert.saved")}
+        </div>
+      )}
+      {state === "ERROR" && (
+        <div className="alert alert-danger" role="alert">
+          {t("profile.profile.alert.error")}
         </div>
       )}
     </form>

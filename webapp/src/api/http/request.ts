@@ -56,6 +56,10 @@ export async function request<B>(
     headers.set("authorization", `Bearer ${token}`);
   }
 
+  if (request.body) {
+    headers.set("content-type", "application/json");
+  }
+
   try {
     const response = await fetch(finalUrl, {
       method: request.method || "GET",
