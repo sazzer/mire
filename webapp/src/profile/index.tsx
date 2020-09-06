@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import { User, loadUser } from "../api/users";
 import { resourceCache, useAsyncResource } from "use-async-resource";
 
 import { Accordion } from "../components/accordion";
@@ -8,6 +7,7 @@ import { Authentications } from "./authentications";
 import { Breadcrumb } from "../components/breadcrumb";
 import { ProfileForm } from "./profileForm";
 import { Spinner } from "../components/spinner";
+import { User } from "../api/users";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
 
@@ -59,16 +59,23 @@ const ProfilePageContents: React.FC<ProfilePageProps> = ({ user }) => {
  * Props for the profile page loader
  */
 interface ProfilePageLoaderProps {
-  /** The ID of the user */
-  userId: string;
+  /** Reader to read the user to work with */
+  userReader: () => Promise<User>;
 }
 
 /**
  * Component to load the user from the server and display the profile page when it's loaded.
  */
-const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({ userId }) => {
-  const [user] = useAsyncResource(loadUser, userId, true);
-  return <ProfilePageContents user={user} />;
+const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({
+  userReader,
+}) => {
+  const [user] = useAsyncResource(userReader, []);
+
+  return (
+    <Suspense fallback={<Spinner />}>
+      <ProfilePageContents user={user} />
+    </Suspense>
+  );
 };
 
 /**
@@ -76,11 +83,11 @@ const ProfilePageLoader: React.FC<ProfilePageLoaderProps> = ({ userId }) => {
  */
 export const ProfilePage: React.FC = () => {
   const user = useUser();
-  resourceCache(loadUser).clear();
+  if (user.hasUser) {
+    resourceCache(user.reload).clear();
 
-  return (
-    <Suspense fallback={<Spinner />}>
-      {user.hasUser && <ProfilePageLoader userId={user.userId} />}
-    </Suspense>
-  );
+    return <ProfilePageLoader userReader={user.reload} />;
+  } else {
+    return <></>;
+  }
 };

@@ -10,16 +10,34 @@ const LOGGER = debug("mire:currentUser");
 const USER_KEY = "mire_current_user";
 
 /**
- * The shape of the actual context store
+ * Base type for the structure of the context store
  */
-export interface UserContext {
-  /** The user details */
-  user: User | null;
+export interface UserContextBase {
   /** Callback to store the ID of the User */
   setUserId: (userId: string) => void;
   /** Callback to clear the User */
   clearUserId: () => void;
 }
+
+/**
+ * Shape of the context store when a user is present
+ */
+export interface UserContextWithUser extends UserContextBase {
+  user: User;
+  reload: () => Promise<User>;
+}
+
+/**
+ * Shape of the context store when a user is not present
+ */
+export interface UserContextWithoutUser extends UserContextBase {
+  user: null;
+}
+
+/**
+ * The shape of the actual context store
+ */
+export type UserContext = UserContextWithUser | UserContextWithoutUser;
 
 /** The actual context type */
 const userContext = React.createContext<UserContext>({
@@ -28,78 +46,106 @@ const userContext = React.createContext<UserContext>({
   clearUserId: () => {},
 });
 
+/**
+ * React component to act as a context provider for the current user.
+ */
 export const UserProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const loadUserDetails = async (userId: string | null) => {
-    if (userId) {
-      try {
-        const loadedUser = await loadUser(userId);
-        LOGGER("Loaded user: %o", loadedUser);
-        setUser(loadedUser);
-      } catch (e) {
-        LOGGER("Failed to load user %s: %o", userId, e);
-        setUser(null);
+
+  const loadUserDetails = async (userId: string, force: boolean) => {
+    const loadedUser = await loadUser(userId, force);
+    sessionStorage.setItem(USER_KEY, userId);
+
+    if (loadedUser.version !== user?.version) {
+      LOGGER("Loaded user: %o", loadedUser);
+      setUser(loadedUser);
+      return loadedUser;
+    }
+    return user;
+  };
+
+  const clearUserDetails = () => {
+    LOGGER("Cleared user");
+    sessionStorage.removeItem(USER_KEY);
+    setUser(null);
+  };
+
+  useEffect(
+    () => {
+      const storedUserId = sessionStorage.getItem(USER_KEY);
+      if (storedUserId) {
+        LOGGER("Loading remembered user: %s", storedUserId);
+        loadUserDetails(storedUserId, false);
       }
-    } else {
-      setUser(null);
-    }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  let contextValue: UserContext = {
+    user: null,
+    setUserId: (userId) => loadUserDetails(userId, false),
+    clearUserId: clearUserDetails,
   };
 
-  useEffect(() => {
-    const storedUserId = sessionStorage.getItem(USER_KEY);
-    if (storedUserId) {
-      LOGGER("Loading remembered user: %s", storedUserId);
-      loadUserDetails(storedUserId);
-    }
-  }, []);
-
-  const contextValue = {
-    user,
-    setUserId: (userId: string) => {
-      LOGGER("Loading user: %s", userId);
-      sessionStorage.setItem(USER_KEY, userId);
-      loadUserDetails(userId);
-    },
-    clearUserId: () => {
-      sessionStorage.removeItem(USER_KEY);
-      loadUserDetails(null);
-    },
-  };
+  if (user) {
+    contextValue = {
+      user,
+      setUserId: (userId) => loadUserDetails(userId, false),
+      clearUserId: clearUserDetails,
+      reload: () => loadUserDetails(user.id, true),
+    };
+  }
 
   return (
     <userContext.Provider value={contextValue}>{children}</userContext.Provider>
   );
 };
 
+/**
+ * Base type for the shape of the return value from the useUser hook.
+ */
 export interface UserHookBase {
   setUserId: (userId: UserId) => void;
   clearUserId: () => void;
 }
+
+/**
+ * Shape of the return value from the useUser hook when a user is present
+ */
 export interface UserHookWithUser extends UserHookBase {
   hasUser: true;
   user: User;
   userId: UserId;
+  reload: () => Promise<User>;
 }
 
+/**
+ * Shape of the return value from the useUser hook when a user is not present
+ */
 export interface UserHookWithoutUser extends UserHookBase {
   hasUser: false;
 }
 
+/**
+ * Shape of the return value from the useUser hook
+ */
 export type UserHook = UserHookWithUser | UserHookWithoutUser;
+
 /**
  * Hook to access the user details
  */
 export function useUser(): UserHook {
   const context = useContext(userContext);
 
-  const user = context.user;
-  if (user) {
+  if (context.user) {
     return {
       hasUser: true,
-      user,
-      userId: user.id,
+      user: context.user,
+      userId: context.user.id,
       setUserId: context.setUserId,
       clearUserId: context.clearUserId,
+      reload: context.reload,
     };
   } else {
     return {
