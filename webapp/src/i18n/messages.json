@@ -53,7 +53,8 @@
       }
     },
     "authentications": {
-      "header": "Login Details"
+      "header": "Login Details",
+      "google": "Google"
     }
   }
 }

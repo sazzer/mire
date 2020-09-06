@@ -46,7 +46,7 @@ const ProfilePageContents: React.FC<ProfilePageProps> = ({ user }) => {
             },
             {
               title: t("profile.authentications.header"),
-              content: <Authentications />,
+              content: <Authentications user={userDetails} />,
             },
           ]}
         />
