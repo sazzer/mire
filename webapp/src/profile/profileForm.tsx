@@ -3,6 +3,7 @@ import { User, saveUser } from "../api/users";
 
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useUser } from "../currentUser";
 
 /**
  * Props for the actual form
@@ -23,8 +24,10 @@ interface ProfileFormFields {
  * @param user The user to work with
  */
 export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
+  const currentUser = useUser();
+
   const { t } = useTranslation();
-  const { register, handleSubmit } = useForm<ProfileFormFields>({
+  const { register, handleSubmit, setValue } = useForm<ProfileFormFields>({
     defaultValues: {
       email: user.email,
       displayName: user.displayName,
@@ -45,8 +48,21 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     };
 
     saveUser(newUser)
-      .then(() => {
+      .then((savedUser) => {
         setState("SAVED");
+        if (currentUser.hasUser) {
+          return currentUser.reload();
+        } else {
+          return savedUser;
+        }
+      })
+      .then((savedUser) => {
+        setValue("email", savedUser.email);
+        setValue("displayName", savedUser.displayName);
+        setValue(
+          "updated",
+          t("common.formattedDateTime", { date: savedUser.updated })
+        );
       })
       .catch(() => {
         setState("ERROR");

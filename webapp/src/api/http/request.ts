@@ -15,6 +15,8 @@ export interface Request {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
   /** Any parameters to use for URL expansion */
   urlParams?: { [key: string]: any };
+  /** Any additional headers to provide for the request */
+  headers?: { [key: string]: any };
   /** Any body to submit */
   body?: any;
   /** Whether to ignore the cache when making the request */
@@ -47,6 +49,12 @@ export async function request<B>(
   LOGGER("Making request to %s: %o", finalUrl, request);
 
   const headers = new Headers();
+  if (request.headers) {
+    Object.entries(request.headers).forEach(([key, value]) =>
+      headers.set(key, value)
+    );
+  }
+
   if (request.ignoreCache) {
     headers.set("cache-control", "no-cache");
   }

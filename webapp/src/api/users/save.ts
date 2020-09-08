@@ -22,6 +22,9 @@ export async function saveUser(user: User): Promise<User> {
       email: user.email,
       displayName: user.displayName,
     },
+    headers: {
+      "if-match": user.version,
+    },
   });
 
   const userModel = userResponse.body!!;
