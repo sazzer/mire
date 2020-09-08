@@ -20,7 +20,7 @@ export async function saveUser(user: User): Promise<User> {
     method: "PATCH",
     body: {
       email: user.email,
-      display_name: user.displayName,
+      displayName: user.displayName,
     },
   });
 

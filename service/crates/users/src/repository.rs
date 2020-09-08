@@ -3,6 +3,7 @@ mod errors;
 mod get_by_authentication;
 mod get_by_id;
 mod parse;
+mod update;
 
 pub use errors::SaveUserError;
 use mire_database::Database;

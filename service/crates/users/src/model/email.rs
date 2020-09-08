@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 /// The email address for a User record
-#[derive(Debug, PartialEq, FromSql, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, FromSql, Serialize, Deserialize, Clone)]
 pub struct Email(String);
 
 /// Errors that can occur when parsing an Email Address

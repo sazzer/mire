@@ -22,7 +22,7 @@ impl From<SaveUserError> for CreateUserError {
     fn from(e: SaveUserError) -> Self {
         match e {
             SaveUserError::DuplicateEmail => Self::DuplicateEmail,
-            SaveUserError::UnexpectedError => Self::UnexpectedError,
+            _ => Self::UnexpectedError,
         }
     }
 }

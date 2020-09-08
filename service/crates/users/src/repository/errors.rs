@@ -7,6 +7,14 @@ pub enum SaveUserError {
     #[error("The email address is already registered")]
     DuplicateEmail,
 
+    /// The user could not be found
+    #[error("The user could not be found")]
+    UnknownUser,
+
+    /// The version was not correct for the user record
+    #[error("The version was not correct for the user record")]
+    IncorrectVersion,
+
     /// An unexpected error occurred
     #[error("An unexpected error occurred")]
     UnexpectedError,

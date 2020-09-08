@@ -33,3 +33,21 @@ pub const NOT_FOUND: SimpleProblemType = SimpleProblemType {
     problem_title: "The requested resource was not found",
     status_code: StatusCode::NOT_FOUND,
 };
+
+pub const MISSING_ETAG: SimpleProblemType = SimpleProblemType {
+    problem_type: "tag:mire/2020:problems/no_if-match_header",
+    problem_title: "The required 'If-Match' header was missing",
+    status_code: StatusCode::PRECONDITION_REQUIRED,
+};
+
+pub const INCORRECT_VERSION: SimpleProblemType = SimpleProblemType {
+    problem_type: "tag:mire/2020:problems/incorrect_if-match_header",
+    problem_title: "The required 'If-Match' header was not the correct value",
+    status_code: StatusCode::CONFLICT,
+};
+
+pub const UNEXPECTED_ERROR: SimpleProblemType = SimpleProblemType {
+    problem_type: "tag:mire/2020:problems/internal_server_error",
+    problem_title: "An unexpected error occurred",
+    status_code: StatusCode::INTERNAL_SERVER_ERROR,
+};

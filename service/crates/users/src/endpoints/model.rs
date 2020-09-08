@@ -70,8 +70,7 @@ impl From<crate::UserModel> for UserModel {
 impl From<&UserModel> for HttpResponse {
     fn from(user: &UserModel) -> Self {
         Self::Ok()
-            .set(header::ETag(header::EntityTag::new(
-                false,
+            .set(header::ETag(header::EntityTag::strong(
                 user.version.to_string(),
             )))
             .set(header::CacheControl(vec![

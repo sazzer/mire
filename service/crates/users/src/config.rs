@@ -29,7 +29,9 @@ impl UsersConfig {
             c.data(service.clone());
 
             c.service(
-                web::scope("/users").route("/{id}", web::get().to(super::endpoints::get_user)),
+                web::scope("/users")
+                    .route("/{id}", web::patch().to(super::endpoints::patch_user))
+                    .route("/{id}", web::get().to(super::endpoints::get_user)),
             );
         })
     }
