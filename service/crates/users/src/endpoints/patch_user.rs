@@ -6,7 +6,8 @@ use actix_web::{
 };
 use mire_authorization::Authenticator;
 use mire_problem::{
-    Problem, SimpleProblemType, INCORRECT_VERSION, MISSING_ETAG, NOT_FOUND, UNEXPECTED_ERROR,
+    Problem, SimpleProblemType, ValidationErrorBuilder, INCORRECT_VERSION, MISSING_ETAG, NOT_FOUND,
+    REQUIRED_FIELD_VALIDATION, UNEXPECTED_ERROR,
 };
 use serde::Deserialize;
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 #[serde(rename_all = "camelCase")]
 pub struct PatchBody {
     display_name: Option<String>,
-    email: Option<Email>,
+    email: Option<String>,
 }
 
 pub const DUPLICATE_EMAIL: SimpleProblemType = SimpleProblemType {
@@ -60,23 +61,35 @@ pub async fn patch_user(
     let version =
         uuid::Uuid::from_str(version.tag()).map_err(|_| Problem::new(INCORRECT_VERSION))?;
 
-    let user = users_service
-        .update(user_id, |user| {
-            user.identity.version = version;
-            if let Some(email) = &body.email {
-                user.data.email = email.clone();
-            }
-            if let Some(display_name) = &body.display_name {
-                user.data.display_name = display_name.clone();
-            }
-        })
-        .await;
-    tracing::debug!("Updated user: {:?}", user);
+    let email = body.email.clone().map(|e| Email::from_str(&e)).transpose();
 
-    user.map(UserModel::from).map_err(|e| match e {
-        UpdateUserError::IncorrectVersion => Problem::new(INCORRECT_VERSION),
-        UpdateUserError::UnknownUser => Problem::new(NOT_FOUND),
-        UpdateUserError::DuplicateEmail => Problem::new(DUPLICATE_EMAIL),
-        UpdateUserError::UnexpectedError => Problem::new(UNEXPECTED_ERROR),
-    })
+    if let Ok(email) = email {
+        let user = users_service
+            .update(user_id, |user| {
+                user.identity.version = version;
+                if let Some(email) = &email {
+                    user.data.email = email.clone();
+                }
+                if let Some(display_name) = &body.display_name {
+                    user.data.display_name = display_name.clone();
+                }
+            })
+            .await;
+        tracing::debug!("Updated user: {:?}", user);
+
+        user.map(UserModel::from).map_err(|e| match e {
+            UpdateUserError::IncorrectVersion => Problem::new(INCORRECT_VERSION),
+            UpdateUserError::UnknownUser => Problem::new(NOT_FOUND),
+            UpdateUserError::DuplicateEmail => Problem::new(DUPLICATE_EMAIL),
+            UpdateUserError::UnexpectedError => Problem::new(UNEXPECTED_ERROR),
+        })
+    } else {
+        let mut builder = ValidationErrorBuilder::default();
+
+        if email.is_err() {
+            builder.with_field("email", &REQUIRED_FIELD_VALIDATION);
+        }
+
+        Err(builder.build())
+    }
 }

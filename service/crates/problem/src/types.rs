@@ -1,4 +1,4 @@
-use crate::{ProblemType, ProblemTypeStatus};
+use crate::{FieldValidationType, ProblemType, ProblemTypeStatus};
 use actix_http::http::StatusCode;
 use std::fmt::{Display, Formatter};
 
@@ -50,4 +50,28 @@ pub const UNEXPECTED_ERROR: SimpleProblemType = SimpleProblemType {
     problem_type: "tag:mire/2020:problems/internal_server_error",
     problem_title: "An unexpected error occurred",
     status_code: StatusCode::INTERNAL_SERVER_ERROR,
+};
+
+#[derive(Debug)]
+pub struct SimpleValidationType {
+    pub problem_type: &'static str,
+    pub problem_title: &'static str,
+}
+
+impl FieldValidationType for SimpleValidationType {
+    /// A URI Reference that identifies the field validation type.
+    fn problem_type(&self) -> &'static str {
+        self.problem_type
+    }
+}
+
+impl Display for SimpleValidationType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.problem_title)
+    }
+}
+
+pub const REQUIRED_FIELD_VALIDATION: SimpleValidationType = SimpleValidationType {
+    problem_type: "tag:mire/2020:validation/required_field",
+    problem_title: "The field is required but was not present",
 };
