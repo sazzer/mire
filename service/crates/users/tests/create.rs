@@ -10,7 +10,7 @@ async fn create_success() {
         .users_service
         .create(mire_users::UserData {
             email: "testuser@example.com".parse().unwrap(),
-            display_name: "Test User".to_owned(),
+            display_name: "Test User".parse().unwrap(),
             authentications: vec![mire_users::Authentication {
                 authentication_provider: "google".parse().unwrap(),
                 authentication_id: "123456".parse().unwrap(),
@@ -22,7 +22,7 @@ async fn create_success() {
     assert!(result.is_ok());
     let user = result.unwrap();
     check!(user.data.email == "testuser@example.com".parse().unwrap());
-    check!(user.data.display_name == "Test User");
+    check!(user.data.display_name == "Test User".parse().unwrap());
     check!(user.data.authentications.len() == 1);
     check!(user.data.authentications[0].authentication_provider == "google".parse().unwrap());
     check!(user.data.authentications[0].authentication_id == "123456".parse().unwrap());
@@ -37,7 +37,7 @@ async fn create_refetch() {
         .users_service
         .create(mire_users::UserData {
             email: "testuser@example.com".parse().unwrap(),
-            display_name: "Test User".to_owned(),
+            display_name: "Test User".parse().unwrap(),
             authentications: vec![mire_users::Authentication {
                 authentication_provider: "google".parse().unwrap(),
                 authentication_id: "123456".parse().unwrap(),
@@ -74,7 +74,7 @@ async fn create_duplicate_authentication() {
         .users_service
         .create(mire_users::UserData {
             email: "testuser@example.com".parse().unwrap(),
-            display_name: "Test User".to_owned(),
+            display_name: "Test User".parse().unwrap(),
             authentications: vec![mire_users::Authentication {
                 authentication_provider: "google".parse().unwrap(),
                 authentication_id: "123456".parse().unwrap(),
@@ -107,11 +107,11 @@ async fn create_duplicate_email() {
         .users_service
         .create(mire_users::UserData {
             email: "testuser@example.com".parse().unwrap(),
-            display_name: "Test User".to_owned(),
+            display_name: "Test User".parse().unwrap(),
             authentications: vec![mire_users::Authentication {
                 authentication_provider: "google".parse().unwrap(),
                 authentication_id: "123456".parse().unwrap(),
-                display_name: "test@example.com".to_owned(),
+                display_name: "test@example.com".parse().unwrap(),
             }],
         })
         .await;

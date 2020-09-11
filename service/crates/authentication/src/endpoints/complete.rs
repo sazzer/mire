@@ -79,7 +79,6 @@ pub async fn complete(
 
         let template = Template::new(SUCCESS_TEMPLATE);
         let mut vals = HashMap::new();
-        vals.insert("displayName", user.data.display_name.as_ref());
         vals.insert("accessToken", signed_security_context.as_ref());
         vals.insert("expires", expires_str.as_ref());
         vals.insert("userId", user_id_str.as_ref());

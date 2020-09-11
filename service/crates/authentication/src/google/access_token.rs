@@ -1,6 +1,6 @@
 use crate::service::AuthenticatedUser;
 use jsonwebtoken::dangerous_insecure_decode;
-use mire_users::{AuthenticationId, Email};
+use mire_users::{AuthenticationId, DisplayName, Email};
 use serde::Deserialize;
 use std::convert::TryFrom;
 use std::str::FromStr;
@@ -56,10 +56,14 @@ impl TryFrom<IdTokenClaims> for AuthenticatedUser {
             tracing::warn!(e = ?e, email = ?claims.email, "Failed to parse email address");
         })?;
 
+        let user_display_name = DisplayName::from_str(&claims.name).map_err(|e| {
+            tracing::warn!(e = ?e, display_name = ?claims.name, "Failed to parse display name");
+        })?;
+
         Ok(Self {
             provider_id: claims.sub,
             provider_display_name: claims.email,
-            user_display_name: claims.name,
+            user_display_name,
             email,
         })
     }

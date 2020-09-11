@@ -1,4 +1,4 @@
-use crate::{AuthenticationId, AuthenticationProvider, Email, UserId};
+use crate::{AuthenticationId, AuthenticationProvider, DisplayName, Email, UserId};
 use actix_web::{http::header, Error, HttpRequest, HttpResponse, Responder};
 use chrono::{DateTime, Utc};
 use futures::future::{ready, Ready};
@@ -31,7 +31,7 @@ pub struct UserModel {
     /// When the resource was last updated
     pub updated: DateTime<Utc>,
     /// The display name of the user
-    pub display_name: String,
+    pub display_name: DisplayName,
     /// The email address of the user
     pub email: Email,
     /// The set of authentication details of this user

@@ -1,4 +1,6 @@
-use crate::{endpoints::model::UserModel, Email, UpdateUserError, UserId, UsersService};
+use crate::{
+    endpoints::model::UserModel, DisplayName, Email, UpdateUserError, UserId, UsersService,
+};
 use actix_http::http::StatusCode;
 use actix_web::{
     http::header,
@@ -62,15 +64,20 @@ pub async fn patch_user(
         uuid::Uuid::from_str(version.tag()).map_err(|_| Problem::new(INCORRECT_VERSION))?;
 
     let email = body.email.clone().map(|e| Email::from_str(&e)).transpose();
+    let display_name = body
+        .display_name
+        .clone()
+        .map(|e| DisplayName::from_str(&e))
+        .transpose();
 
-    if let Ok(email) = email {
+    if let (Ok(email), Ok(display_name)) = (&email, &display_name) {
         let user = users_service
             .update(user_id, |user| {
                 user.identity.version = version;
-                if let Some(email) = &email {
+                if let Some(email) = email {
                     user.data.email = email.clone();
                 }
-                if let Some(display_name) = &body.display_name {
+                if let Some(display_name) = display_name {
                     user.data.display_name = display_name.clone();
                 }
             })
@@ -88,6 +95,10 @@ pub async fn patch_user(
 
         if email.is_err() {
             builder.with_field("email", &REQUIRED_FIELD_VALIDATION);
+        }
+
+        if display_name.is_err() {
+            builder.with_field("displayName", &REQUIRED_FIELD_VALIDATION);
         }
 
         Err(builder.build())
