@@ -1,3 +1,5 @@
+import { FieldError, ValidationError } from "./validation";
+
 import { Problem } from "./problem";
 import UrlTemplate from "url-template";
 import debug from "debug";
@@ -85,7 +87,16 @@ export async function request<B>(
       if (contentType === "application/problem+json") {
         LOGGER("Response was a Problem");
         const type = body.type as string;
-        throw new Problem(type, body.title as string, response.status, body);
+        if (
+          response.status === 422 &&
+          type === "tag:mire/2020:problems/validation_error"
+        ) {
+          throw new ValidationError(
+            body.fields.map((f: any) => new FieldError(f.fieldName, f.type))
+          );
+        } else {
+          throw new Problem(type, body.title as string, response.status, body);
+        }
       } else {
         LOGGER("Response was not a Problem");
         return {

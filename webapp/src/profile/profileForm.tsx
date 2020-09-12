@@ -1,7 +1,9 @@
+import { FormProvider, useForm } from "react-hook-form";
+import { Problem, ValidationError } from "../api/http";
 import React, { useState } from "react";
 import { User, saveUser } from "../api/users";
 
-import { useForm } from "react-hook-form";
+import { FormField } from "../components/form/input";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../currentUser";
 
@@ -27,7 +29,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   const currentUser = useUser();
 
   const { t } = useTranslation();
-  const { register, handleSubmit, setValue } = useForm<ProfileFormFields>({
+  const form = useForm<ProfileFormFields>({
     defaultValues: {
       email: user.email,
       displayName: user.displayName,
@@ -35,11 +37,13 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
       updated: t("common.formattedDateTime", { date: user.updated }),
     },
   });
+
   const [state, setState] = useState<"INITIAL" | "SAVING" | "SAVED" | "ERROR">(
     "INITIAL"
   );
 
   const onSubmit = (data: ProfileFormFields) => {
+    form.clearErrors();
     setState("SAVING");
     const newUser = {
       ...user,
@@ -57,118 +61,95 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
         }
       })
       .then((savedUser) => {
-        setValue("email", savedUser.email);
-        setValue("displayName", savedUser.displayName);
-        setValue(
+        form.setValue("email", savedUser.email);
+        form.setValue("displayName", savedUser.displayName);
+        form.setValue(
           "updated",
           t("common.formattedDateTime", { date: savedUser.updated })
         );
       })
-      .catch(() => {
+      .catch((e) => {
         setState("ERROR");
+        if (e instanceof ValidationError) {
+          e.getFieldErrors("email")
+            .map((e) => e.type)
+            .forEach((type) => form.setError("email", { type }));
+          e.getFieldErrors("displayName")
+            .map((e) => e.type)
+            .forEach((type) => form.setError("displayName", { type }));
+        } else if (e instanceof Problem) {
+          if (e.type === "tag:mire/2020:users/problems/duplicate_email") {
+            form.setError("email", { type: e.type });
+          }
+        }
       });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <fieldset disabled={state === "SAVING"}>
-        <div className="form-group">
-          <label htmlFor="userProfileDisplayName">
-            {t("profile.profile.displayName.label")}
-          </label>
-          <input
-            type="text"
-            className="form-control"
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <fieldset disabled={state === "SAVING"}>
+          <FormField
             id="userProfileDisplayName"
             name="displayName"
             autoFocus
             required
-            ref={register({ required: true })}
-            aria-describedby="userProfileDisplayNameHelp"
+            label={t("profile.profile.displayName.label")}
+            helpText={t("profile.profile.displayName.help")}
+            errorPrefix="profile.profile.displayName.errors."
           />
-          <small
-            id="userProfileDisplayNameHelp"
-            className="form-text text-muted"
-          >
-            {t("profile.profile.displayName.help")}
-          </small>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="userProfileEmail">
-            {t("profile.profile.email.label")}
-          </label>
-          <input
-            type="email"
-            className="form-control"
+          <FormField
             id="userProfileEmail"
             name="email"
+            type="email"
             required
-            ref={register({ required: true })}
-            aria-describedby="userProfileEmailHelp"
+            label={t("profile.profile.email.label")}
+            helpText={t("profile.profile.email.help")}
+            errorPrefix="profile.profile.email.errors."
           />
-          <small id="userProfileEmailHelp" className="form-text text-muted">
-            {t("profile.profile.email.help")}
-          </small>
-        </div>
 
-        <div className="form-row">
-          <div className="col-md-6 mb-3">
-            <div className="form-group">
-              <label htmlFor="userProfileCreated">
-                {t("profile.profile.created.label")}
-              </label>
-              <input
-                type="created"
-                className="form-control-plaintext"
+          <div className="form-row">
+            <div className="col-md-6 mb-3">
+              <FormField
                 id="userProfileCreated"
                 name="created"
-                ref={register}
-                aria-describedby="userProfileCreatedHelp"
+                label={t("profile.profile.created.label")}
                 readOnly
               />
             </div>
-          </div>
-          <div className="col-md-6 mb-3">
-            <div className="form-group">
-              <label htmlFor="userProfileUpdated">
-                {t("profile.profile.updated.label")}
-              </label>
-              <input
-                type="updated"
-                className="form-control-plaintext"
+            <div className="col-md-6 mb-3">
+              <FormField
                 id="userProfileUpdated"
                 name="updated"
-                ref={register}
-                aria-describedby="userProfileUpdatedHelp"
+                label={t("profile.profile.updated.label")}
                 readOnly
               />
             </div>
           </div>
-        </div>
 
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary">
-            {t("profile.profile.actions.submit")}
-          </button>
-        </div>
-      </fieldset>
+          <div className="form-group">
+            <button type="submit" className="btn btn-primary">
+              {t("profile.profile.actions.submit")}
+            </button>
+          </div>
+        </fieldset>
 
-      {state === "SAVING" && (
-        <div className="alert alert-primary" role="alert">
-          {t("profile.profile.alert.saving")}
-        </div>
-      )}
-      {state === "SAVED" && (
-        <div className="alert alert-success" role="alert">
-          {t("profile.profile.alert.saved")}
-        </div>
-      )}
-      {state === "ERROR" && (
-        <div className="alert alert-danger" role="alert">
-          {t("profile.profile.alert.error")}
-        </div>
-      )}
-    </form>
+        {state === "SAVING" && (
+          <div className="alert alert-primary" role="alert">
+            {t("profile.profile.alert.saving")}
+          </div>
+        )}
+        {state === "SAVED" && (
+          <div className="alert alert-success" role="alert">
+            {t("profile.profile.alert.saved")}
+          </div>
+        )}
+        {state === "ERROR" && (
+          <div className="alert alert-danger" role="alert">
+            {t("profile.profile.alert.error")}
+          </div>
+        )}
+      </form>
+    </FormProvider>
   );
 };

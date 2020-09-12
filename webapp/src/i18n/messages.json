@@ -38,11 +38,20 @@
       },
       "email": {
         "label": "Email Address",
-        "help": "We'll never share your email with anyone else."
+        "help": "We'll never share your email with anyone else.",
+        "errors": {
+          "required": "Please enter an email address",
+          "tag:mire/2020:validation/required_field": "Please enter an email address",
+          "tag:mire/2020:users/problems/duplicate_email": "That email address is registered to another user"
+        }
       },
       "displayName": {
         "label": "Display Name",
-        "help": "Nobody else will ever see this."
+        "help": "Nobody else will ever see this.",
+        "errors": {
+          "required": "Please enter a display name",
+          "tag:mire/2020:validation/required_field": "Please enter a display name"
+        }
       },
       "actions": {
         "submit": "Save"
