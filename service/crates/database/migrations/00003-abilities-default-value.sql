@@ -1,0 +1,1 @@
+ALTER TABLE abilities ADD COLUMN default_value INTEGER NOT NULL CHECK (default_value >= 0);

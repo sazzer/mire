@@ -11,7 +11,7 @@ A Character consists of:
 
 Abilities represent the raw abilities of a character. These are things such as Strength and Intelligence.
 
-Values for these are assigned during character creation based on the selected race, and can be adjusted by assigning characteristics during the process.
+Abilities all have a default value, and then the selected race or characteristics may adjust this either up or down.
 
 ## Skills
 
