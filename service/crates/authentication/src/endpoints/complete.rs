@@ -60,7 +60,7 @@ const FAILURE_TEMPLATE: &str = r#"
     skip(authentication_service, authorization_service)
 )]
 pub async fn complete(
-    path: Path<(ProviderId,)>,
+    path: Path<ProviderId>,
     query: Query<HashMap<String, String>>,
     authentication_service: Data<AuthenticationService>,
     authorization_service: Data<AuthorizationService>,

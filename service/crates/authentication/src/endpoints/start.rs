@@ -19,7 +19,7 @@ use actix_web::{
     skip(authentication_service)
 )]
 pub async fn start(
-    path: Path<(ProviderId,)>,
+    path: Path<ProviderId>,
     authentication_service: Data<AuthenticationService>,
 ) -> HttpResponse {
     match authentication_service.start_authentication(&path.0) {

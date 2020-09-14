@@ -17,7 +17,7 @@ use mire_problem::{Problem, NOT_FOUND};
     skip(users_service)
 )]
 pub async fn get_user(
-    path: Path<(UserId,)>,
+    path: Path<UserId>,
     authenticator: Authenticator,
     users_service: Data<UsersService>,
 ) -> Result<UserModel, Problem> {

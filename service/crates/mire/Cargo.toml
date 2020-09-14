@@ -11,18 +11,18 @@ name = "mire_lib"
 name = "mire"
 
 [dependencies]
-actix-http = "1.0.1"
+actix-http = "2.0.0"
 actix-rt = "1.1.1"
-chrono = { version = "0.4.13", features = ["serde"] }
+chrono = { version = "0.4.15", features = ["serde"] }
 config = "0.10.1"
 dotenv = "0.15.0"
 futures = "0.3.5"
 log = "0.4.11"
-serde = { version = "1.0.115", features = ["derive"] }
+serde = { version = "1.0.116", features = ["derive"] }
 tracing = "0.1.19"
 tracing-futures = "0.2.4"
 tracing-log = "0.1.1"
-tracing-subscriber = "0.2.11"
+tracing-subscriber = "0.2.12"
 
 mire-authentication = { path = "../authentication" }
 mire-authorization = { path = "../authorization" }
@@ -32,8 +32,8 @@ mire-server = { path = "../server" }
 mire-users = { path = "../users" }
 
 [dev-dependencies]
-actix-web = "2.0.0"
-assert2 = "0.3.1"
+actix-web = "3.0.1"
+assert2 = "0.3.2"
 insta = {version = "0.16.1", features=["redactions"] }
 mockito = "0.27.0"
 serde_json = { version = "1.0.57", features = ["preserve_order"] }

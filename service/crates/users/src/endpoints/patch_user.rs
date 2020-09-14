@@ -40,7 +40,7 @@ pub const DUPLICATE_EMAIL: SimpleProblemType = SimpleProblemType {
     skip(users_service, req)
 )]
 pub async fn patch_user(
-    path: Path<(UserId,)>,
+    path: Path<UserId>,
     body: Json<PatchBody>,
     req: HttpRequest,
     authenticator: Authenticator,
