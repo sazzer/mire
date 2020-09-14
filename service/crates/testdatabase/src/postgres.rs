@@ -1,9 +1,12 @@
 use std::collections::HashMap;
+use testcontainers::core::Port;
 use testcontainers::{Container, Docker, Image, WaitForMessage};
 
 #[derive(Debug)]
-pub struct PostgresContainer {
+pub struct Postgres {
     arguments: PostgresArgs,
+    env_vars: HashMap<String, String>,
+    ports: Option<Vec<Port>>,
 }
 
 #[derive(Default, Debug, Clone)]
@@ -18,21 +21,27 @@ impl IntoIterator for PostgresArgs {
     }
 }
 
-impl Default for PostgresContainer {
+impl Default for Postgres {
     fn default() -> Self {
+        let mut env_vars = HashMap::new();
+        env_vars.insert("POSTGRES_DB".to_owned(), "postgres".to_owned());
+        env_vars.insert("POSTGRES_HOST_AUTH_METHOD".into(), "trust".into());
+
         Self {
             arguments: PostgresArgs::default(),
+            env_vars,
+            ports: None,
         }
     }
 }
-
-impl Image for PostgresContainer {
+impl Image for Postgres {
     type Args = PostgresArgs;
     type EnvVars = HashMap<String, String>;
     type Volumes = HashMap<String, String>;
+    type EntryPoint = std::convert::Infallible;
 
     fn descriptor(&self) -> String {
-        "postgres:11.6-alpine".to_string()
+        "postgres:12.4-alpine".to_owned()
     }
 
     fn wait_until_ready<D: Docker>(&self, container: &Container<'_, D, Self>) {
@@ -52,10 +61,14 @@ impl Image for PostgresContainer {
     }
 
     fn env_vars(&self) -> Self::EnvVars {
-        HashMap::new()
+        self.env_vars.clone()
+    }
+
+    fn ports(&self) -> Option<Vec<Port>> {
+        self.ports.clone()
     }
 
     fn with_args(self, arguments: Self::Args) -> Self {
-        Self { arguments }
+        Self { arguments, ..self }
     }
 }
