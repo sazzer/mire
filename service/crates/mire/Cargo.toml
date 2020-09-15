@@ -30,6 +30,7 @@ mire-database = { path = "../database" }
 mire-health = { path = "../health" }
 mire-server = { path = "../server" }
 mire-users = { path = "../users" }
+mire-world = { path = "../world" }
 
 [dev-dependencies]
 actix-web = "3.0.1"

@@ -7,6 +7,7 @@ use mire_database::Database;
 use mire_health::{config::HealthConfig, Healthchecker};
 use mire_server::{Server, TestResponse};
 use mire_users::config::UsersConfig;
+use mire_world::config::WorldConfig;
 
 use std::sync::Arc;
 /// The actual service layer.
@@ -44,6 +45,8 @@ impl Service {
             authentication.with_google(&google);
         }
 
+        let world = WorldConfig::new(database.clone());
+
         let mut health = HealthConfig::default();
         health.add_component("db".to_owned(), Arc::new(database));
 
@@ -52,6 +55,7 @@ impl Service {
             authorization.server_config(),
             authentication.server_config(),
             users.server_config(),
+            world.server_config(),
         ]);
 
         Self {

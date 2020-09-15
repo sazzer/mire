@@ -1488,6 +1488,7 @@ dependencies = [
  "mire-testdata",
  "mire-testdatabase",
  "mire-users",
+ "mire-world",
  "mockito",
  "serde 1.0.116",
  "serde_json",
@@ -1640,6 +1641,35 @@ dependencies = [
  "chrono",
  "futures",
  "mire-authorization",
+ "mire-database",
+ "mire-model",
+ "mire-problem",
+ "mire-server",
+ "mire-testdata",
+ "mire-testdatabase",
+ "postgres-types",
+ "serde 1.0.116",
+ "serde_json",
+ "thiserror",
+ "tokio-postgres",
+ "tracing",
+ "tracing-futures",
+ "tracing-log",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
+name = "mire-world"
+version = "0.1.0"
+dependencies = [
+ "actix-http",
+ "actix-rt",
+ "actix-web",
+ "assert2",
+ "bytes",
+ "chrono",
+ "futures",
  "mire-database",
  "mire-model",
  "mire-problem",

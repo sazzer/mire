@@ -11,5 +11,6 @@ members = [
     "crates/server",
     "crates/testdata",
     "crates/testdatabase",
-    "crates/users"
+    "crates/users",
+    "crates/world"
 ]
