@@ -27,7 +27,7 @@ impl HealthConfig {
     /// The lambda to register details with the HTTP Server.
     #[must_use]
     pub fn server_config(&self) -> mire_server::FnConfig {
-        let service = HealthService::new(self.components.clone());
+        let service = Arc::new(HealthService::new(self.components.clone()));
 
         Arc::new(move |c| {
             c.data(service.clone());

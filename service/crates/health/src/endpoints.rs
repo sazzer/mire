@@ -4,6 +4,7 @@ use actix_web::{web::Data, HttpRequest, HttpResponse, Responder};
 use futures::future::{ok, Ready};
 use serde::Serialize;
 use std::collections::HashMap;
+use std::sync::Arc;
 
 /// HTTP Handler for checking the health of the system.
 ///
@@ -16,7 +17,7 @@ use std::collections::HashMap;
     fields(http_method = "GET", http_path = "/health"),
     skip(health_service)
 )]
-pub async fn get_health(health_service: Data<HealthService>) -> impl Responder {
+pub async fn get_health(health_service: Data<Arc<HealthService>>) -> impl Responder {
     let system_health = health_service.check_health().await;
 
     SystemHealthModel::from(system_health)
