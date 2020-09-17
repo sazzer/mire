@@ -12,7 +12,7 @@ pub struct UsersConfig {
 impl UsersConfig {
     /// Construct the users component.
     #[must_use]
-    pub const fn new(database: mire_database::Database) -> Self {
+    pub const fn new(database: Arc<mire_database::Database>) -> Self {
         let repository = UsersRepository::new(database);
         let service = UsersService { repository };
         Self { service }

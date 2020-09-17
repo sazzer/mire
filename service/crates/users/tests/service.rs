@@ -1,6 +1,7 @@
 use mire_database::Database;
 use mire_testdatabase::TestDatabase;
 use mire_users::{config::UsersConfig, UsersService};
+use std::sync::Arc;
 
 pub struct TestUsersService {
     pub test_database: TestDatabase,
@@ -12,7 +13,7 @@ impl TestUsersService {
         let _ = tracing_subscriber::fmt::try_init();
 
         let test_database = TestDatabase::new();
-        let database = Database::new(&test_database.url).await;
+        let database = Arc::new(Database::new(&test_database.url).await);
         let users_config = UsersConfig::new(database);
 
         Self {

@@ -7,12 +7,13 @@ mod update;
 
 pub use errors::SaveUserError;
 use mire_database::Database;
+use std::sync::Arc;
 
 /// Repository for accessing user data
 #[derive(Clone)]
 pub struct UsersRepository {
     /// The database connection to use
-    database: Database,
+    database: Arc<Database>,
 }
 
 impl UsersRepository {
@@ -23,7 +24,7 @@ impl UsersRepository {
     ///
     /// # Returns
     /// The Users repository
-    pub const fn new(database: Database) -> Self {
+    pub const fn new(database: Arc<Database>) -> Self {
         Self { database }
     }
 }

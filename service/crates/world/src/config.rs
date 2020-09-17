@@ -7,7 +7,7 @@ impl WorldConfig {
     /// Construct the world component.
     #[must_use]
     #[allow(clippy::needless_pass_by_value, clippy::missing_const_for_fn)]
-    pub fn new(_database: mire_database::Database) -> Self {
+    pub fn new(_database: Arc<mire_database::Database>) -> Self {
         Self {}
     }
 

@@ -29,7 +29,7 @@ impl Service {
     pub async fn new(config: Config) -> Self {
         tracing::info!("Building service");
 
-        let database = Database::new(config.database_url).await;
+        let database = Arc::new(Database::new(config.database_url).await);
         database
             .check_health()
             .await
@@ -48,7 +48,7 @@ impl Service {
         let world = WorldConfig::new(database.clone());
 
         let mut health = HealthConfig::default();
-        health.add_component("db".to_owned(), Arc::new(database));
+        health.add_component("db".to_owned(), database.clone());
 
         let server = Server::new(vec![
             health.server_config(),
