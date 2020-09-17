@@ -22,7 +22,8 @@ services:
   service:
     image: mire-service
     environment:
-      - RUST_LOG=mire_lib=debug,info
+      - RUST_LOG=debug
+      - RUST_BACKTRACE=1
       - DATABASE_URL=postgres://mire:mire@postgres/mire
       - GOOGLE_CLIENT_ID=e2eGoogleClientId
       - GOOGLE_CLIENT_SECRET=e2eGoogleClientSecret

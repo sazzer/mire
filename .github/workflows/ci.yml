@@ -172,6 +172,11 @@ jobs:
           working-directory: e2e
           wait-on: "http://localhost:38000/health"
 
+      - name: Service Logs
+        if: always()
+        working-directory: e2e
+        run: docker-compose logs service
+
       - uses: actions/upload-artifact@v1
         if: always()
         with:
