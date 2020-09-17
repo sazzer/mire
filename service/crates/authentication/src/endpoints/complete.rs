@@ -5,6 +5,7 @@ use actix_web::{
 };
 use mire_authorization::AuthorizationService;
 use std::collections::HashMap;
+use std::sync::Arc;
 use string_template::Template;
 
 const SUCCESS_TEMPLATE: &str = r#"
@@ -63,7 +64,7 @@ pub async fn complete(
     path: Path<ProviderId>,
     query: Query<HashMap<String, String>>,
     authentication_service: Data<AuthenticationService>,
-    authorization_service: Data<AuthorizationService>,
+    authorization_service: Data<Arc<AuthorizationService>>,
 ) -> HttpResponse {
     let user_result = authentication_service
         .complete_authentication(&path.0, &query.0)

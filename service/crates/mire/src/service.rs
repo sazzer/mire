@@ -15,7 +15,7 @@ pub struct Service {
     /// The HTTP Server.
     server: Server,
     /// The Authorization Service, needed for testing.
-    authorization_service: AuthorizationService,
+    authorization_service: Arc<AuthorizationService>,
 }
 
 impl Service {
