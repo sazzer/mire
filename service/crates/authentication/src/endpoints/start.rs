@@ -5,6 +5,7 @@ use actix_web::{
     web::{Data, Path},
     HttpResponse,
 };
+use std::sync::Arc;
 
 /// HTTP Handler for starting authentication with the desired provider
 ///
@@ -20,7 +21,7 @@ use actix_web::{
 )]
 pub async fn start(
     path: Path<ProviderId>,
-    authentication_service: Data<AuthenticationService>,
+    authentication_service: Data<Arc<AuthenticationService>>,
 ) -> HttpResponse {
     match authentication_service.start_authentication(&path.0) {
         Ok(StartAuthentication {

@@ -63,7 +63,7 @@ const FAILURE_TEMPLATE: &str = r#"
 pub async fn complete(
     path: Path<ProviderId>,
     query: Query<HashMap<String, String>>,
-    authentication_service: Data<AuthenticationService>,
+    authentication_service: Data<Arc<AuthenticationService>>,
     authorization_service: Data<Arc<AuthorizationService>>,
 ) -> HttpResponse {
     let user_result = authentication_service
