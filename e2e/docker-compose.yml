@@ -24,6 +24,7 @@ services:
     environment:
       - RUST_LOG=debug
       - RUST_BACKTRACE=1
+      - DOCKERIZE_ARGS=-wait tcp://postgres:5432
       - DATABASE_URL=postgres://mire:mire@postgres/mire
       - GOOGLE_CLIENT_ID=e2eGoogleClientId
       - GOOGLE_CLIENT_SECRET=e2eGoogleClientSecret
