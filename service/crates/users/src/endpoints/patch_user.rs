@@ -13,6 +13,7 @@ use mire_problem::{
 };
 use serde::Deserialize;
 use std::str::FromStr;
+use std::sync::Arc;
 
 /// The shape of the body for the patch request
 #[derive(Debug, Deserialize)]
@@ -44,7 +45,7 @@ pub async fn patch_user(
     body: Json<PatchBody>,
     req: HttpRequest,
     authenticator: Authenticator,
-    users_service: Data<UsersService>,
+    users_service: Data<Arc<UsersService>>,
 ) -> Result<UserModel, Problem> {
     let user_id = &path.0;
     authenticator

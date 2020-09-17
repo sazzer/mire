@@ -6,16 +6,18 @@ use std::sync::Arc;
 /// Configuration of the users component.
 pub struct UsersConfig {
     /// The users service to interact with users
-    pub service: UsersService,
+    pub service: Arc<UsersService>,
 }
 
 impl UsersConfig {
     /// Construct the users component.
     #[must_use]
-    pub const fn new(database: Arc<mire_database::Database>) -> Self {
+    pub fn new(database: Arc<mire_database::Database>) -> Self {
         let repository = UsersRepository::new(database);
         let service = UsersService { repository };
-        Self { service }
+        Self {
+            service: Arc::new(service),
+        }
     }
 
     /// Return a configuration function to contribute to the HTTP Server.

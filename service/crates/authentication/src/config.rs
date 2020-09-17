@@ -9,13 +9,13 @@ pub struct AuthenticationConfig {
     pub(crate) registry: Registry,
 
     /// The Users Service, to look up and register users
-    users_service: UsersService,
+    users_service: Arc<UsersService>,
 }
 
 impl AuthenticationConfig {
     /// Construct the authentication component.
     #[must_use]
-    pub fn new(users_service: UsersService) -> Self {
+    pub fn new(users_service: Arc<UsersService>) -> Self {
         let registry = Registry::default();
         Self {
             registry,

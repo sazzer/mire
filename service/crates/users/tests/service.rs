@@ -5,7 +5,7 @@ use std::sync::Arc;
 
 pub struct TestUsersService {
     pub test_database: TestDatabase,
-    pub users_service: UsersService,
+    pub users_service: Arc<UsersService>,
 }
 
 impl TestUsersService {

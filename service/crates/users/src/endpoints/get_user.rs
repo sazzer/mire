@@ -4,6 +4,7 @@ use crate::UserId;
 use actix_web::web::{Data, Path};
 use mire_authorization::Authenticator;
 use mire_problem::{Problem, NOT_FOUND};
+use std::sync::Arc;
 
 /// HTTP Handler for getting the details of a User by ID.
 ///
@@ -19,7 +20,7 @@ use mire_problem::{Problem, NOT_FOUND};
 pub async fn get_user(
     path: Path<UserId>,
     authenticator: Authenticator,
-    users_service: Data<UsersService>,
+    users_service: Data<Arc<UsersService>>,
 ) -> Result<UserModel, Problem> {
     let user_id = &path.0;
     authenticator
