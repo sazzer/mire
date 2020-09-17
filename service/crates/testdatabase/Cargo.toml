@@ -5,8 +5,6 @@ authors = ["Graham Cox <graham@grahamcox.co.uk>"]
 edition = "2018"
 
 [dependencies]
-bb8 = "0.4.2"
-bb8-postgres = "0.4.0"
 lazy_static = "1.4.0"
 postgres-types = { version = "0.1.2", features = ["derive", "with-uuid-0_8", "with-chrono-0_4", "with-serde_json-1"] }
 testcontainers = "0.10.0"
@@ -14,3 +12,5 @@ tokio-postgres = { version = "0.5.5", features = ["with-uuid-0_8", "with-chrono-
 tracing = "0.1.19"
 
 mire-testdata = { path = "../testdata" }
+deadpool = "0.5.2"
+deadpool-postgres = "0.5.6"

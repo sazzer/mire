@@ -1,14 +1,12 @@
 use super::migrate::migrate;
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager;
+use deadpool::managed::{Object, PoolError};
+use deadpool_postgres::{ClientWrapper, Manager, ManagerConfig, Pool, RecyclingMethod};
 use std::str::FromStr;
-use tokio_postgres::config::Config;
 
 /// Wrapper around the actual database connection pool.
 #[derive(Clone)]
 pub struct Database {
-    #[allow(dead_code)]
-    pub(super) pool: Pool<PostgresConnectionManager<tokio_postgres::NoTls>>,
+    pub(super) pool: Pool,
 }
 
 impl Database {
@@ -26,12 +24,13 @@ impl Database {
         let url = url.into();
         tracing::info!(url = ?url, "Connecting to database");
 
-        let config = Config::from_str(&url).unwrap();
-        let pg_mgr = PostgresConnectionManager::new(config, tokio_postgres::NoTls);
-        let pool = Pool::builder()
-            .build(pg_mgr)
-            .await
-            .expect("Failed to create database connection pool");
+        let pg_config = tokio_postgres::Config::from_str(&url).unwrap();
+
+        let mgr_config = ManagerConfig {
+            recycling_method: RecyclingMethod::Fast,
+        };
+        let mgr = Manager::from_config(pg_config, tokio_postgres::NoTls, mgr_config);
+        let pool = Pool::new(mgr, 16);
 
         let result = Self { pool };
         migrate(&result).await;
@@ -48,10 +47,8 @@ impl Database {
     /// If the pool is unable to return a viable connection
     pub async fn checkout(
         &self,
-    ) -> Result<
-        bb8::PooledConnection<'_, PostgresConnectionManager<tokio_postgres::NoTls>>,
-        bb8::RunError<tokio_postgres::Error>,
-    > {
+    ) -> Result<Object<ClientWrapper, tokio_postgres::Error>, PoolError<tokio_postgres::Error>>
+    {
         let conn = self.pool.get().await?;
 
         Ok(conn)
