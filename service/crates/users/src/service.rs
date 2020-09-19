@@ -8,9 +8,7 @@ pub use create::CreateUserError;
 pub use update::*;
 
 /// Service for interacting with user resources
-#[derive(Clone)]
 pub struct UsersService {
     /// The repository for accessing user data
-    #[allow(dead_code)]
     pub(super) repository: UsersRepository,
 }

@@ -10,7 +10,6 @@ use mire_database::Database;
 use std::sync::Arc;
 
 /// Repository for accessing user data
-#[derive(Clone)]
 pub struct UsersRepository {
     /// The database connection to use
     database: Arc<Database>,

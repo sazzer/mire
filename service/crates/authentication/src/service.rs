@@ -14,7 +14,6 @@ use mire_users::UsersService;
 use std::sync::Arc;
 
 /// The authentication service that manages all authentication details
-#[derive(Clone)]
 pub struct AuthenticationService {
     registry: Registry,
     users_service: Arc<UsersService>,

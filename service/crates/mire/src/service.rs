@@ -50,6 +50,8 @@ impl Service {
         let mut health = HealthConfig::default();
         health.add_component("db".to_owned(), database.clone());
 
+        let authorization_service = authorization.service.clone();
+
         let server = Server::new(vec![
             health.server_config(),
             authorization.server_config(),
@@ -60,7 +62,7 @@ impl Service {
 
         Self {
             server,
-            authorization_service: authorization.service,
+            authorization_service,
         }
     }
 

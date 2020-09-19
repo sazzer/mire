@@ -16,9 +16,8 @@ impl AuthenticationConfig {
     /// Construct the authentication component.
     #[must_use]
     pub fn new(users_service: Arc<UsersService>) -> Self {
-        let registry = Registry::default();
         Self {
-            registry,
+            registry: Registry::default(),
             users_service,
         }
     }
@@ -28,10 +27,10 @@ impl AuthenticationConfig {
     /// # Returns
     /// The lambda to register details with the HTTP Server.
     #[must_use]
-    pub fn server_config(&self) -> mire_server::FnConfig {
+    pub fn server_config(self) -> mire_server::FnConfig {
         let service = Arc::new(crate::service::AuthenticationService::new(
-            self.registry.clone(),
-            self.users_service.clone(),
+            self.registry,
+            self.users_service,
         ));
 
         Arc::new(move |c| {

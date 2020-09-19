@@ -9,7 +9,6 @@ pub struct WorldConfig {
 impl WorldConfig {
     /// Construct the world component.
     #[must_use]
-    #[allow(clippy::needless_pass_by_value, clippy::missing_const_for_fn)]
     pub fn new(database: Arc<mire_database::Database>) -> Self {
         Self {
             abilities_service: Arc::new(AbilitiesService {
@@ -23,9 +22,8 @@ impl WorldConfig {
     /// # Returns
     /// The lambda to register details with the HTTP Server.
     #[must_use]
-    #[allow(clippy::unused_self)]
-    pub fn server_config(&self) -> mire_server::FnConfig {
-        let abilities_service = self.abilities_service.clone();
+    pub fn server_config(self) -> mire_server::FnConfig {
+        let abilities_service = self.abilities_service;
 
         Arc::new(move |c| {
             c.data(abilities_service.clone());

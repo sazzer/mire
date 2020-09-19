@@ -10,10 +10,8 @@ pub use errors::VerifyError;
 pub use signing_key::SigningKey;
 
 /// The service layer for managing authorization of principals
-#[derive(Clone)]
 pub struct AuthorizationService {
     /// The validity duration of generated security contexts
-    #[allow(dead_code)]
     pub(super) security_context_duration: Duration,
 
     /// The key with which to sign security contexts

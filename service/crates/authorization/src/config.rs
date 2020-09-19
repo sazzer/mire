@@ -26,8 +26,8 @@ impl AuthorizationConfig {
     /// # Returns
     /// The lambda to register details with the HTTP Server.
     #[must_use]
-    pub fn server_config(&self) -> mire_server::FnConfig {
-        let service = self.service.clone();
+    pub fn server_config(self) -> mire_server::FnConfig {
+        let service = self.service;
 
         Arc::new(move |c| {
             c.data(service.clone());

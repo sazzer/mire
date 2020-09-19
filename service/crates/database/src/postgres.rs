@@ -4,7 +4,6 @@ use deadpool_postgres::{ClientWrapper, Manager, ManagerConfig, Pool, RecyclingMe
 use std::str::FromStr;
 
 /// Wrapper around the actual database connection pool.
-#[derive(Clone)]
 pub struct Database {
     pub(super) pool: Pool,
 }

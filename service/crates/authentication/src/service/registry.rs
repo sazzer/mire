@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 /// Registry of authentication providers that we can use
-#[derive(Clone, Default)]
+#[derive(Default)]
 pub struct Registry {
     /// The map of authentication providers that are known
     providers: HashMap<ProviderId, Arc<dyn Provider>>,

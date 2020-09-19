@@ -6,7 +6,6 @@ use mire_testdatabase::TestDatabase;
 /// The test wrapper around the service being tested
 pub struct TestSubject {
     service: mire_lib::Service,
-    #[allow(dead_code)]
     database: TestDatabase,
 }
 

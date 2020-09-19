@@ -2,7 +2,6 @@ use super::{model::ComponentHealth, model::SystemHealth, Healthchecker};
 use std::{collections::HashMap, sync::Arc};
 
 /// Service layer for checking the health of the system.
-#[derive(Clone)]
 pub struct HealthService {
     /// The map of components to check the health of.
     components: HashMap<String, Arc<dyn Healthchecker>>,
