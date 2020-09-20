@@ -57,15 +57,16 @@ describe("<Authentication>", () => {
       "twitter",
     ]);
 
-    const { container } = render(<Authentication />);
+    const { container, findByText } = render(<Authentication />);
     await waitFor(
       () => expect(listAuthenticationProvidersMock).toHaveBeenCalledTimes(1),
       {
         container,
       }
     );
+    await findByText("Sign In with Facebook");
 
-    expect(container).toMatchInlineSnapshot(`
+    await expect(container).toMatchInlineSnapshot(`
       <div>
         <div
           aria-labelledby="authenticationLabel"
