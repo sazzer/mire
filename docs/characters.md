@@ -3,15 +3,15 @@
 A Character consists of:
 
 - A Race
-- A set of Ability scores
+- A set of Stat scores
 - A set of Skill values
 - A set of Characteristics
 
-## Abilities
+## Stats
 
-Abilities represent the raw abilities of a character. These are things such as Strength and Intelligence.
+Stats represent the raw stats of a character. These are things such as Strength and Intelligence.
 
-Abilities all have a default value, and then the selected race or characteristics may adjust this either up or down.
+Stats all have a default value, and then the selected race or characteristics may adjust this either up or down.
 
 ## Skills
 
@@ -42,7 +42,7 @@ When using an Unassigned skill, the value used is calculated as the first parent
 
 Thus the lack of any particular skill means that it can still be used, but significantly underpowered. The more ability in similar skills, the better this will be.
 
-All Skills are associated with one or more Abilities. When performing skill checks, the average of these ability scores are used as well as the skill level. For example, Longsword might only depend on Strength, whereas Intimidation might depend on both Strength and Charisma.
+All Skills are associated with one or more Stats. When performing skill checks, the average of these stat scores are used as well as the skill level. For example, Longsword might only depend on Strength, whereas Intimidation might depend on both Strength and Charisma.
 
 ### Side Note - Character Level
 
@@ -52,11 +52,11 @@ This is used for display purposes, but is also used for characteristics.
 
 ## Characteristics
 
-Characteristics represent all other ways to improve a character. These can be similar to D20 feats, to underlying character abilities - e.g. Spellcaster - or to simply be increased skill or ability scores.
+Characteristics represent all other ways to improve a character. These can be similar to D20 feats, to underlying character stats - e.g. Spellcaster - or to simply be increased skill or stat scores.
 
 Every characteristic has a points cost, and a set of requirements. These requirements are some combination of:
 
-- Ability score - max or min value
+- Stat score - max or min value
 - Skill score - max or min value
 - Presence or absence of other characteristics
 - Particular race
@@ -70,7 +70,7 @@ Player Selectable Characteristics are purchased using Characteristic Points. The
 
 Races represent the race of the character. This has some affect in gameplay - certain things act differently for different races. This also affects the characteristics that are available to select.
 
-Further, the race that is selected will cause different ability scores to be assigned during character creation.
+Further, the race that is selected will cause different stat scores to be assigned during character creation.
 
 ## Character Creation
 

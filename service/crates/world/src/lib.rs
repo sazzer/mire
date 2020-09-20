@@ -1,4 +1,4 @@
-mod abilities;
+mod stats;
 pub mod config;
 
-pub use abilities::*;
+pub use stats::*;

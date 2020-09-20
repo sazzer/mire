@@ -1,9 +1,9 @@
-use crate::abilities::{repository::AbilitiesRepository, AbilitiesService};
+use crate::stats::{repository::StatsRepository, StatsService};
 use std::sync::Arc;
 
 /// Configuration of the world component.
 pub struct WorldConfig {
-    abilities_service: Arc<AbilitiesService>,
+    stats_service: Arc<StatsService>,
 }
 
 impl WorldConfig {
@@ -11,8 +11,8 @@ impl WorldConfig {
     #[must_use]
     pub fn new(database: Arc<mire_database::Database>) -> Self {
         Self {
-            abilities_service: Arc::new(AbilitiesService {
-                repository: AbilitiesRepository::new(database),
+            stats_service: Arc::new(StatsService {
+                repository: StatsRepository::new(database),
             }),
         }
     }
@@ -23,10 +23,10 @@ impl WorldConfig {
     /// The lambda to register details with the HTTP Server.
     #[must_use]
     pub fn server_config(self) -> mire_server::FnConfig {
-        let abilities_service = self.abilities_service;
+        let stats_service = self.stats_service;
 
         Arc::new(move |c| {
-            c.data(abilities_service.clone());
+            c.data(stats_service.clone());
         })
     }
 }
