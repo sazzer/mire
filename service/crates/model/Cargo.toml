@@ -6,4 +6,10 @@ edition = "2018"
 
 [dependencies]
 chrono = { version = "0.4.15", features = ["serde"] }
+strum = "0.19.2"
+strum_macros = "0.19.2"
+thiserror = "1.0.20"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
+
+[dev-dependencies]
+assert2 = "0.3.2"
