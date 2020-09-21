@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 /// Configuration of the world component.
 pub struct WorldConfig {
-    stats_service: Arc<StatsService>,
+    pub stats_service: Arc<StatsService>,
 }
 
 impl WorldConfig {

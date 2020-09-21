@@ -1,3 +1,5 @@
+mod get;
+
 use super::repository::StatsRepository;
 
 /// Service layer for interacting with Stat data
