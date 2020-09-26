@@ -1,4 +1,5 @@
 use crate::stats::{repository::StatsRepository, StatsService};
+use actix_web::web;
 use std::sync::Arc;
 
 /// Configuration of the world component.
@@ -27,6 +28,11 @@ impl WorldConfig {
 
         Arc::new(move |c| {
             c.data(stats_service.clone());
+
+            c.service(
+                web::scope("/stats")
+                    .route("/{id}", web::get().to(super::stats::endpoints::get_stat)),
+            );
         })
     }
 }
