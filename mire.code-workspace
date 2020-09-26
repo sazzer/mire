@@ -1,0 +1,19 @@
+{
+  "folders": [
+	{
+		"path": "service"
+	},
+	{
+		"path": ".github"
+	},
+	{
+		"path": "webapp"
+	},
+	{
+		"path": "e2e"
+	},
+	{
+		"path": "docs"
+	}
+]
+}
