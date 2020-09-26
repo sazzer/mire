@@ -1,5 +1,4 @@
-mod service;
-
+use crate::service;
 use assert2::{check, let_assert};
 use mire_world::StatId;
 
