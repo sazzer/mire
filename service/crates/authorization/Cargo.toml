@@ -15,7 +15,7 @@ thiserror = "1.0.20"
 tracing = "0.1.19"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
-mire-problem = { path = "../problem" }
+mire-http = { path = "../http" }
 mire-server = { path = "../server" }
 
 [dev-dependencies]

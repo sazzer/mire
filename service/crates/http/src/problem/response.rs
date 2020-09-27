@@ -1,4 +1,4 @@
-use crate::Problem;
+use super::Problem;
 use actix_web::{
     error::ResponseError,
     http::{header, StatusCode},

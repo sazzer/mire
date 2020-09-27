@@ -3,7 +3,7 @@ use crate::{AuthorizationService, SignedSecurityContext};
 use actix_http::http::StatusCode;
 use actix_web::{dev, http::header, web::Data, Error, FromRequest, HttpRequest};
 use futures::future::{err, ok, Ready};
-use mire_problem::{Problem, SimpleProblemType};
+use mire_http::problem::{Problem, SimpleProblemType};
 use std::sync::Arc;
 
 /// Problem type to indicate that the request has invalid authentication details.

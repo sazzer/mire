@@ -3,7 +3,7 @@ use crate::service::UsersService;
 use crate::UserId;
 use actix_web::web::{Data, Path};
 use mire_authorization::Authenticator;
-use mire_problem::{Problem, NOT_FOUND};
+use mire_http::problem::{Problem, NOT_FOUND};
 use std::sync::Arc;
 
 /// HTTP Handler for getting the details of a User by ID.

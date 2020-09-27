@@ -20,8 +20,8 @@ tracing-futures = "0.2.4"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
 mire-database = { path = "../database" }
+mire-http = { path = "../http" }
 mire-model = { path = "../model" }
-mire-problem = { path = "../problem" }
 mire-server = { path = "../server" }
 
 [dev-dependencies]

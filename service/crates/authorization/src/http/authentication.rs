@@ -1,7 +1,7 @@
 use super::Authenticator;
 use crate::{PrincipalId, SecurityContext};
 use actix_http::http::StatusCode;
-use mire_problem::{Problem, SimpleProblemType};
+use mire_http::problem::{Problem, SimpleProblemType};
 
 /// Problem type to indicate that the request has invalid authentication details.
 pub const FORBIDDEN: SimpleProblemType = SimpleProblemType {

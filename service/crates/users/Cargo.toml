@@ -21,8 +21,8 @@ uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
 mire-authorization = { path = "../authorization" }
 mire-database = { path = "../database" }
+mire-http = { path = "../http" }
 mire-model = { path = "../model" }
-mire-problem = { path = "../problem" }
 mire-server = { path = "../server" }
 
 [dev-dependencies]

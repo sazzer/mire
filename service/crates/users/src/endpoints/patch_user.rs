@@ -7,7 +7,7 @@ use actix_web::{
     web::{Data, HttpRequest, Json, Path},
 };
 use mire_authorization::Authenticator;
-use mire_problem::{
+use mire_http::problem::{
     Problem, SimpleProblemType, ValidationErrorBuilder, INCORRECT_VERSION, MISSING_ETAG, NOT_FOUND,
     REQUIRED_FIELD_VALIDATION, UNEXPECTED_ERROR,
 };

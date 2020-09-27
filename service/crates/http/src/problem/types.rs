@@ -1,4 +1,4 @@
-use crate::{FieldValidationType, ProblemType, ProblemTypeStatus};
+use super::{FieldValidationType, ProblemType, ProblemTypeStatus};
 use actix_http::http::StatusCode;
 use std::fmt::{Display, Formatter};
 

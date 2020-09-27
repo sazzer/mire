@@ -1566,7 +1566,7 @@ dependencies = [
  "chrono",
  "futures",
  "jsonwebtoken",
- "mire-problem",
+ "mire-http",
  "mire-server",
  "serde 1.0.116",
  "thiserror",
@@ -1606,6 +1606,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "mire-http"
+version = "0.1.0"
+dependencies = [
+ "actix-http",
+ "actix-web",
+ "futures",
+ "serde 1.0.116",
+ "serde_json",
+]
+
+[[package]]
 name = "mire-model"
 version = "0.1.0"
 dependencies = [
@@ -1615,17 +1626,6 @@ dependencies = [
  "strum_macros",
  "thiserror",
  "uuid",
-]
-
-[[package]]
-name = "mire-problem"
-version = "0.1.0"
-dependencies = [
- "actix-http",
- "actix-web",
- "futures",
- "serde 1.0.116",
- "serde_json",
 ]
 
 [[package]]
@@ -1680,8 +1680,8 @@ dependencies = [
  "futures",
  "mire-authorization",
  "mire-database",
+ "mire-http",
  "mire-model",
- "mire-problem",
  "mire-server",
  "mire-testdata",
  "mire-testdatabase",
@@ -1709,8 +1709,8 @@ dependencies = [
  "chrono",
  "futures",
  "mire-database",
+ "mire-http",
  "mire-model",
- "mire-problem",
  "mire-server",
  "mire-testdata",
  "mire-testdatabase",

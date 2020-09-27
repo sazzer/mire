@@ -1,7 +1,7 @@
 use super::model::StatModel;
 use crate::{StatId, StatsService};
 use actix_web::web::{Data, Path};
-use mire_problem::{Problem, NOT_FOUND};
+use mire_http::problem::{Problem, NOT_FOUND};
 use std::sync::Arc;
 
 /// HTTP Handler for getting the details of a Stat by ID
