@@ -1612,6 +1612,7 @@ dependencies = [
  "actix-http",
  "actix-web",
  "futures",
+ "mire-model",
  "serde 1.0.116",
  "serde_json",
 ]

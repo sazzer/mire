@@ -31,6 +31,7 @@ impl WorldConfig {
 
             c.service(
                 web::scope("/stats")
+                    .route("", web::get().to(super::stats::endpoints::list_stats))
                     .route("/{id}", web::get().to(super::stats::endpoints::get_stat)),
             );
         })

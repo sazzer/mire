@@ -30,7 +30,6 @@ async fn list_one_stat() {
 
     check!(stats[0].name == strength.name);
     check!(stats[0].description == strength.description);
-    check!(stats[0].default_value == strength.default_value as u32);
 }
 
 #[actix_rt::test]
