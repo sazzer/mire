@@ -1,4 +1,5 @@
 mod get;
+mod list;
 
 use super::repository::StatsRepository;
 

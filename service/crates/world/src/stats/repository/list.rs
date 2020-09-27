@@ -1,5 +1,6 @@
 use super::StatsRepository;
 use crate::Stat;
+use mire_model::Page;
 
 impl StatsRepository {
     /// List all of the stats that exist in the data store.
@@ -8,12 +9,12 @@ impl StatsRepository {
     /// # Returns
     /// The collection of all stats in the repository.
     #[allow(dead_code)]
-    pub async fn list(&self) -> Vec<Stat> {
+    pub async fn list(&self) -> Page<Stat> {
         tracing::debug!("Listing stats");
         let conn = self.database.checkout().await.unwrap();
 
-        let stats = conn
-            .query("SELECT * FROM stats ORDER BY stat_id", &[])
+        let stats: Vec<Stat> = conn
+            .query("SELECT * FROM stats ORDER BY name", &[])
             .await
             .unwrap()
             .into_iter()
@@ -22,6 +23,6 @@ impl StatsRepository {
 
         tracing::debug!("Found stats: {:?}", stats);
 
-        stats
+        stats.into()
     }
 }
