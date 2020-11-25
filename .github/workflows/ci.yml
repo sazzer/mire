@@ -1,9 +1,7 @@
 name: CI
 
 on:
-  push:
-  schedule:
-    - cron: "0 2 * * *"
+  push
 
 jobs:
   build-service:
